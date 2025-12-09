@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+:root {
+  --mono-0: #003580;
+  --mono-1: #0051c2;
+  --mono-2: #005bdb;
+  --mono-3: #0066f5;
+  --mono-4: #0f73ff;
+  --mono-5: #2982ff;
+  --mono-6: #4291ff;
+  --mono-7: #5ca0ff;
+  --mono-8: #80B5FF;
+  --analog-1: #0febff;
+  --analog-2: #0f73ff;
+  --analog-3: #230fff;
+  --primary-color: var(--mono-4);
+  --background: #e7f1ff;
+  --foreground: #000e23;
+  --font-comic-sans: "Comic Sans MS", "Comic Sans", cursive;
+  --font-consolas: "Consolas", "Courier New", monospace;
+
+  --font-mistral: "Mistral", "Brush Script MT", cursive;
+  --font-inkfree: "Ink Free", "Segoe Script", "Comic Sans MS", cursive;
+}
+
+@theme inline {
+  /* Background & text */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand / primary */
+  --color-primary: var(--primary-color);
+
+  /* Mono palette */
+  --color-mono-0: var(--mono-0);
+  --color-mono-1: var(--mono-1);
+  --color-mono-2: var(--mono-2);
+  --color-mono-3: var(--mono-3);
+  --color-mono-4: var(--mono-4);
+  --color-mono-5: var(--mono-5);
+  --color-mono-6: var(--mono-6);
+  --color-mono-7: var(--mono-7);
+  --color-mono-8: var(--mono-8);
+
+  /* Analog palette */
+  --color-analog-1: var(--analog-1);
+  --color-analog-2: var(--analog-2);
+  --color-analog-3: var(--analog-3);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --font-geist: var(--font-geist-sans);
+  --font-geist-mono: var(--font-geist-mono);
+
+  --font-comic: var(--font-comic-sans);
+  --font-consolas: var(--font-consolas);
+  --font-oswald: var(--font-oswald);
+  --font-mistral: var(--font-mistral);
+  --font-inkfree: var(--font-inkfree);
+
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mono-8: #003580;
+    --mono-7: #0051c2;
+    --mono-6: #005bdb;
+    --mono-5: #0066f5;
+    --mono-4: #0f73ff;
+    --mono-3: #2982ff;
+    --mono-2: #4291ff;
+    --mono-1: #5ca0ff;
+    --mono-0: #80B5FF;
+    --analog-3: #0febff;
+    --analog-2: #0f73ff;
+    --analog-1: #230fff;
+    --background: #000e23;
+    --foreground: #cfe3ff;
+  }
+}
+
+.dark {
+  --mono-0: #80B5FF;
+  --mono-1: #5ca0ff;
+  --mono-2: #4291ff;
+  --mono-3: #2982ff;
+  --mono-4: #0f73ff;
+  --mono-5: #0066f5;
+  --mono-6: #005bdb;
+  --mono-7: #0051c2;
+  --mono-8: #003580;
+  --analog-1: #230fff;
+  --analog-2: #0f73ff;
+  --analog-3: #0febff;
+  --background: #000e23;
+  --foreground: #cfe3ff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mask-linear-fade {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.scrollbar-custom {
+  scrollbar-width: thin; /* Thin scrollbar */
+  scrollbar-color: var(--mono-6) rgba(0, 0, 0, 0); /* Color for thumb and track (thumb: blue, track: white) */
+}
+
+/* Debugging */
+/* *,
+*::before,
+*::after {
+  outline: 2px solid lime;
+} */
