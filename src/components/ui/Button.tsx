@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { Glow, GlowCapture } from "@codaworks/react-glow";
-import Tilt from "react-parallax-tilt";
+import { Glow, GlowCapture } from "@codaworks/react-glow"
+import Tilt from "react-parallax-tilt"
 
 export const Button = ({
     children,
@@ -56,5 +56,5 @@ export const Button = ({
                 </button>
             </Tilt>
         </GlowCapture>
-    );
-};
+    )
+}

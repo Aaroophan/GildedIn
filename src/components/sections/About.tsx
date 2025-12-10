@@ -7,8 +7,12 @@ import Loading from '../ui/Loading'
 import { Glow, GlowCapture } from '@codaworks/react-glow'
 import * as LucideIcons from "lucide-react"
 import FadingBackground from '../ui/FadingBackground'
+import { useParams } from "next/navigation"
 
 export const About = () => {
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
+
     const ref = useRef<HTMLDivElement>(null)
     const isInView = useInView(ref, { once: false })
 
@@ -27,7 +31,7 @@ export const About = () => {
 
         try {
             const aboutService = AboutService.getInstance()
-            const result = await aboutService.About("Aaroophan")
+            const result = await aboutService.About(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 setData(result)

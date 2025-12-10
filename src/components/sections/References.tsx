@@ -8,8 +8,11 @@ import Loading from "../ui/Loading"
 import { GlowCapture } from "@codaworks/react-glow"
 import { Mail, Phone, Building2, GraduationCap, Quote } from "lucide-react"
 import { LazySection } from "../providers/LazySection"
+import { useParams } from "next/navigation"
 
 export const References = () => {
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
     const [references, setReferences] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -18,7 +21,7 @@ export const References = () => {
         setIsLoading(true)
         try {
             const referenceService = ReferenceService.getInstance()
-            const result = await referenceService.Reference("Aaroophan")
+            const result = await referenceService.Reference(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 if (result.References) {

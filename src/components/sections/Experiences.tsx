@@ -1,61 +1,64 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Briefcase, Calendar, MapPin, Award, ChevronDown, ChevronUp } from "lucide-react";
-import { ExperienceService } from "@/models/Services/Experience";
-import ErrorMessage from "../ui/ErrorMessage";
-import Loading from "../ui/Loading";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { Briefcase, Calendar, MapPin, Award, ChevronDown, ChevronUp } from "lucide-react"
+import { ExperienceService } from "@/models/Services/Experience"
+import ErrorMessage from "../ui/ErrorMessage"
+import Loading from "../ui/Loading"
+import Image from "next/image"
+import { useParams } from "next/navigation"
 
 export const Experiences = () => {
-    const [experiences, setExperiences] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
+    const [experiences, setExperiences] = useState<any[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
     const GetData = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
         try {
-            const experienceService = ExperienceService.getInstance();
-            const result = await experienceService.Experience("Aaroophan");
+            const experienceService = ExperienceService.getInstance()
+            const result = await experienceService.Experience(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 if (result.Experiences) {
-                    setExperiences(result.Experiences);
+                    setExperiences(result.Experiences)
                 }
-                setError(null);
+                setError(null)
             } else {
-                setError(result.Message);
+                setError(result.Message)
             }
         } catch (error) {
-            setError(error instanceof Error ? error.message : "Unknown error occurred");
+            setError(error instanceof Error ? error.message : "Unknown error occurred")
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
-    };
+    }
 
     useEffect(() => {
-        GetData();
-    }, []);
+        GetData()
+    }, [])
 
-    if (isLoading) return <Loading />;
-    if (error) return <ErrorMessage message={error} />;
-    if (!experiences || experiences.length === 0) return null;
+    if (isLoading) return <Loading />
+    if (error) return <ErrorMessage message={error} />
+    if (!experiences || experiences.length === 0) return null
 
-    return <ExperienceTimeline experiences={experiences} />;
-};
+    return <ExperienceTimeline experiences={experiences} />
+}
 
 const ExperienceTimeline = ({ experiences }: { experiences: any[] }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
-    });
+    })
 
-    const scaleY = useTransform(scrollYProgress, [0, 2], [0, 2.5]);
+    const scaleY = useTransform(scrollYProgress, [0, 2], [0, 2.5])
 
     return (
-        <section ref={containerRef} className="py-24 relative overflow-hidden">
+        <section ref={containerRef} className="py-10 md:py-24 relative overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -74,7 +77,7 @@ const ExperienceTimeline = ({ experiences }: { experiences: any[] }) => {
 
                 <div className="relative max-w-8xl mx-auto font-comic">
                     {/* Central Line */}
-                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-2 rounded-full bg-[var(--mono-4)]/0 -translate-x-1/2 hidden md:block">
+                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 md:w-2 rounded-full bg-[var(--mono-4)]/0 -translate-x-1/2 hidden md:block">
                         <motion.div
                             style={{ scaleY, transformOrigin: "top" }}
                             className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[var(--mono-4)] via-[var(--mono-4)]/50 to-[var(--mono-4)]/10 animate-pulse rounded-full"
@@ -101,14 +104,14 @@ const ExperienceTimeline = ({ experiences }: { experiences: any[] }) => {
                 </div>
             </div>
         </section>
-    );
-};
+    )
+}
 
 const ExperienceCard = ({ experience, index }: { experience: any, index: number }) => {
-    const isLeft = index % 2 === 1;
+    const isLeft = index % 2 === 1
     // Safe check in case Date is missing or undefined
-    const isCurrent = experience.Date ? experience.Date.includes("Present") : false;
-    const [isExpanded, setIsExpanded] = useState(false);
+    const isCurrent = experience.Date ? experience.Date.includes("Present") : false
+    const [isExpanded, setIsExpanded] = useState(false)
 
     return (
         <div className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${!isLeft ? 'md:flex-row-reverse' : ''}`}>
@@ -116,7 +119,7 @@ const ExperienceCard = ({ experience, index }: { experience: any, index: number 
             {/* Timeline Dot */}
             <div className="absolute left-4 md:left-1/2 w-6 h-6 rounded-full bg-[var(--background)] border-2 border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8">
                 <div className="absolute inset-0 rounded-full bg-[var(--mono-4)]/20 animate-ping" />
-                
+
             </div>
 
             {/* Content Spacer */}
@@ -128,7 +131,7 @@ const ExperienceCard = ({ experience, index }: { experience: any, index: number 
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`cursor-default flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-10' : 'md:pr-10'}`}
+                className={`cursor-default flex-1 md:w-1/2 pl-10 md:pl-0 ${isLeft ? 'md:pl-10' : 'md:pr-10'}`}
             >
                 <div className={`group relative p-6 rounded-2xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/20 to-[var(--mono-4)]/0 border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-lg backdrop-blur-sm`}>
                     {isCurrent && (
@@ -209,5 +212,5 @@ const ExperienceCard = ({ experience, index }: { experience: any, index: number 
                 </div>
             </motion.div>
         </div>
-    );
-};
+    )
+}

@@ -1,61 +1,64 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { GraduationCap, Calendar, Award, School } from "lucide-react";
-import { EducationService } from "@/models/Services/Education";
-import ErrorMessage from "../ui/ErrorMessage";
-import Loading from "../ui/Loading";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { GraduationCap, Calendar, Award, School } from "lucide-react"
+import { EducationService } from "@/models/Services/Education"
+import ErrorMessage from "../ui/ErrorMessage"
+import Loading from "../ui/Loading"
+import Image from "next/image"
+import { useParams } from "next/navigation"
 
 export const Educations = () => {
-    const [educations, setEducations] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
+    const [educations, setEducations] = useState<any[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
     const GetData = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
         try {
-            const educationService = EducationService.getInstance();
-            const result = await educationService.Education("Aaroophan");
+            const educationService = EducationService.getInstance()
+            const result = await educationService.Education(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 if (result.Educations) {
-                    setEducations(result.Educations);
+                    setEducations(result.Educations)
                 }
-                setError(null);
+                setError(null)
             } else {
-                setError(result.Message);
+                setError(result.Message)
             }
         } catch (error) {
-            setError(error instanceof Error ? error.message : "Unknown error occurred");
+            setError(error instanceof Error ? error.message : "Unknown error occurred")
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
-    };
+    }
 
     useEffect(() => {
-        GetData();
-    }, []);
+        GetData()
+    }, [])
 
-    if (isLoading) return <Loading />;
-    if (error) return <ErrorMessage message={error} />;
-    if (!educations || educations.length === 0) return null;
+    if (isLoading) return <Loading />
+    if (error) return <ErrorMessage message={error} />
+    if (!educations || educations.length === 0) return null
 
-    return <EducationTimeline educations={educations} />;
-};
+    return <EducationTimeline educations={educations} />
+}
 
 const EducationTimeline = ({ educations }: { educations: any[] }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
-    });
+    })
 
-    const scaleY = useTransform(scrollYProgress, [0, 2], [0, 3.5]);
+    const scaleY = useTransform(scrollYProgress, [0, 2], [0, 3.5])
 
     return (
-        <section ref={containerRef} className="py-24 relative overflow-hidden">
+        <section ref={containerRef} className="py-10 md:py-24 relative overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -74,7 +77,7 @@ const EducationTimeline = ({ educations }: { educations: any[] }) => {
 
                 <div className="relative max-w-8xl mx-auto font-comic">
                     {/* Central Line */}
-                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-2 rounded-full bg-[var(--mono-4)]/0 -translate-x-1/2 hidden md:block">
+                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 md:w-2 rounded-full bg-[var(--mono-4)]/0 -translate-x-1/2 hidden md:block">
                         <motion.div
                             style={{ scaleY, transformOrigin: "top" }}
                             className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[var(--mono-4)] via-[var(--mono-4)]/50 to-[var(--mono-4)]/10 animate-pulse rounded-full"
@@ -101,13 +104,13 @@ const EducationTimeline = ({ educations }: { educations: any[] }) => {
                 </div>
             </div>
         </section>
-    );
-};
+    )
+}
 
 const EducationCard = ({ education, index }: { education: any, index: number }) => {
-    const isLeft = index % 2 === 1;
+    const isLeft = index % 2 === 1
     // Check if education is "Present" or ongoing
-    const isCurrent = education.Date ? education.Date.includes("Present") : false;
+    const isCurrent = education.Date ? education.Date.includes("Present") : false
 
     return (
         <div className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${!isLeft ? 'md:flex-row-reverse' : ''}`}>
@@ -126,7 +129,7 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`cursor-default flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-10' : 'md:pr-10'}`}
+                className={`cursor-default flex-1 md:w-1/2 pl-10 md:pl-0 ${isLeft ? 'md:pl-10' : 'md:pr-10'}`}
             >
                 <div className={`group relative p-4 rounded-2xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/20 to-[var(--mono-4)]/0 border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-lg backdrop-blur-sm`}>
                     {isCurrent && (
@@ -137,40 +140,40 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
 
                     <div className="flex flex-col gap-3">
                         <div className="flex gap-5">
-                        {education.Image && (
-                            <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-[var(--mono-4)]/30 group-hover:scale-105 group-hover:translate-x-1 transition-all duration-200 cursor-default">
-                                <Image
-                                    src={education.Image}
-                                    alt={education.Name}
-                                    fill
-                                    className="object-cover"
-                                    onError={(e) => {
-                                        // Fallback to Briefcase on error - tough to do with Next/Image directly in this structure without state, 
-                                        // but we can try just hiding it? Or just let it fail to transparent.
-                                        // Actually, best to just render Image.
-                                    }}
-                                />
-                            </div>
-                        )}
-                        <div className="flex flex-col gap-6">
-                            <div className="flex items-center justify-between flex-wrap gap-2">
-                                <h3 className="text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--mono-4)] group-hover:scale-105 group-hover:translate-x-3 transition-all duration-200 cursor-default">
-                                    {education.Title}
-                                </h3>
-                            </div>
-                            <div className="flex items-center text-md text-[var(--foreground)] font-medium group-hover:scale-105 group-hover:translate-x-5 transition-all duration-200 cursor-default">
-                                <GraduationCap className="w-5 h-5 mr-2 text-[var(--mono-4)]" />
-                                {education.Name}
-                            </div>
-                            <span className="flex items-center text-md text-[var(--foreground)] font-medium group-hover:scale-105 group-hover:translate-x-7 transition-all duration-200 cursor-default">
-                                <Calendar className="w-5 h-5 mr-2 text-[var(--mono-4)]" />
-                                <i>{education.Date}</i>
-                            </span>
+                            {education.Image && (
+                                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-[var(--mono-4)]/30 group-hover:scale-105 group-hover:translate-x-1 transition-all duration-200 cursor-default">
+                                    <Image
+                                        src={education.Image}
+                                        alt={education.Name}
+                                        fill
+                                        className="object-cover"
+                                        onError={(e) => {
+                                            // Fallback to Briefcase on error - tough to do with Next/Image directly in this structure without state, 
+                                            // but we can try just hiding it? Or just let it fail to transparent.
+                                            // Actually, best to just render Image.
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            <div className="flex flex-col gap-6">
+                                <div className="flex items-center justify-between flex-wrap gap-2">
+                                    <h3 className="text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--mono-4)] group-hover:scale-105 group-hover:translate-x-3 transition-all duration-200 cursor-default">
+                                        {education.Title}
+                                    </h3>
+                                </div>
+                                <div className="flex items-center text-md text-[var(--foreground)] font-medium group-hover:scale-105 group-hover:translate-x-5 transition-all duration-200 cursor-default">
+                                    <GraduationCap className="w-5 h-5 mr-2 text-[var(--mono-4)]" />
+                                    {education.Name}
+                                </div>
+                                <span className="flex items-center text-md text-[var(--foreground)] font-medium group-hover:scale-105 group-hover:translate-x-7 transition-all duration-200 cursor-default">
+                                    <Calendar className="w-5 h-5 mr-2 text-[var(--mono-4)]" />
+                                    <i>{education.Date}</i>
+                                </span>
 
-                            {/* We don't have separate location data in EducationService yet, but School icon fits generic institution location context if needed. 
+                                {/* We don't have separate location data in EducationService yet, but School icon fits generic institution location context if needed. 
                                 For now, I'll omit location if it's not in data, or use School icon if we want to show something else. 
                                 Based on service, we only have Name, Title, Date, Description. */}
-                        </div>
+                            </div>
                         </div>
 
                         {education.Description && education.Description.length > 0 && (
@@ -187,5 +190,5 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
                 </div>
             </motion.div>
         </div>
-    );
-};
+    )
+}

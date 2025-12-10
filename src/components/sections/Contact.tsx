@@ -8,8 +8,11 @@ import ErrorMessage from "../ui/ErrorMessage"
 import Loading from "../ui/Loading"
 import { GlowCapture } from "@codaworks/react-glow"
 import { Button } from "../ui/Button"
+import { useParams } from "next/navigation"
 
 export const Contacts = () => {
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
     const [contact, setContact] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -27,7 +30,7 @@ export const Contacts = () => {
         setIsLoading(true)
         try {
             const contactService = ContactService.getInstance()
-            const result = await contactService.Contact("Aaroophan")
+            const result = await contactService.Contact(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 if (result.Contact) {
@@ -73,7 +76,7 @@ export const Contacts = () => {
     const displayEmail = contact.Email ? contact.Email.replace("mailto:", "") : ""
 
     return (
-        <section className="py-24 relative overflow-hidden" id="Contact">
+        <section className="py-10 md:py-24 relative overflow-hidden" id="Contact">
             <GlowCapture>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <motion.div
@@ -127,7 +130,7 @@ export const Contacts = () => {
                                     </div>
                                     <div>
                                         <p className="text-sm text-[var(--foreground)]/60 font-medium">WhatsApp</p>
-                                        <p className="text-lg text-[var(--foreground)] font-semibold">Start a Chat at { contact.Phone.split("wa.me/")[1] || contact.Phone}</p>
+                                        <p className="text-lg text-[var(--foreground)] font-semibold">Start a Chat at {contact.Phone.split("wa.me/")[1] || contact.Phone}</p>
                                     </div>
                                 </a>
 

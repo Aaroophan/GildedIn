@@ -1,7 +1,7 @@
 import LogRocket from 'logrocket'
-import { MessageService } from './Messages';
-import { APIURLService } from './API';
-// import { SHA512 } from 'crypto-js';
+import { MessageService } from './Messages'
+import { APIURLService } from './API'
+// import { SHA512 } from 'crypto-js'
 
 export class AuthService {
     private static instance: AuthService
@@ -44,7 +44,7 @@ export class AuthService {
     private constructor() {
         this.APIURLService = APIURLService.getInstance()
         this.messageService = MessageService.getInstance()
-        this.initializeFromSessionStorage();
+        this.initializeFromSessionStorage()
     }
 
     public static getInstance(): AuthService {
@@ -55,58 +55,58 @@ export class AuthService {
     }
 
     private initializeFromSessionStorage(): void {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') return
 
         // Restore pending user from session storage
-        const pendingUserID = sessionStorage.getItem('CurrentPendingUserID');
+        const pendingUserID = sessionStorage.getItem('CurrentPendingUserID')
         if (pendingUserID) {
-            const storedUser = sessionStorage.getItem(`PendingUser_${pendingUserID}`);
+            const storedUser = sessionStorage.getItem(`PendingUser_${pendingUserID}`)
             if (storedUser) {
-                this.PendingUser = JSON.parse(storedUser);
-                this.User_ID = pendingUserID;
+                this.PendingUser = JSON.parse(storedUser)
+                this.User_ID = pendingUserID
             }
-            const storedMethod = sessionStorage.getItem(`TwoFAMethod_${pendingUserID}`);
+            const storedMethod = sessionStorage.getItem(`TwoFAMethod_${pendingUserID}`)
             if (storedMethod !== null) {
-                this.TwoFAMethod = parseInt(storedMethod) as 1 | 2 | 3;
+                this.TwoFAMethod = parseInt(storedMethod) as 1 | 2 | 3
             }
         }
 
         // Restore authenticated user from session storage
-        const storedAuthUser = sessionStorage.getItem('AuthenticatedUser');
+        const storedAuthUser = sessionStorage.getItem('AuthenticatedUser')
         if (storedAuthUser) {
             try {
-                const authData = JSON.parse(storedAuthUser);
-                this.isAuthenticated = true;
-                this.currentUser = authData.currentUser;
-                this.MenuItems = authData.menuItems || [];
-                this.Permissions = authData.permissions || this.Permissions;
-                this.User_ID = authData.userId || '';
-                this.User_Session_Token = authData.userSessionToken || '';
-                this.IP_Address = authData.ipAddress || this.IP_Address;
+                const authData = JSON.parse(storedAuthUser)
+                this.isAuthenticated = true
+                this.currentUser = authData.currentUser
+                this.MenuItems = authData.menuItems || []
+                this.Permissions = authData.permissions || this.Permissions
+                this.User_ID = authData.userId || ''
+                this.User_Session_Token = authData.userSessionToken || ''
+                this.IP_Address = authData.ipAddress || this.IP_Address
 
                 if (authData.qrImage) {
-                    this.QRImage = authData.qrImage;
+                    this.QRImage = authData.qrImage
                 }
 
                 // Re-initialize LogRocket for the authenticated user
                 if (this.User_ID && process.env.NEXT_PUBLIC_LOG_ROCKET_APP_ID) {
-                    LogRocket.init(process.env.NEXT_PUBLIC_LOG_ROCKET_APP_ID);
+                    LogRocket.init(process.env.NEXT_PUBLIC_LOG_ROCKET_APP_ID)
                     LogRocket.identify(this.User_ID, {
                         User_ID: this.User_ID,
                         email: this.currentUser?.User_Email_Address || ''
-                    });
+                    })
                 }
 
-                this.notifySubscribers();
+                this.notifySubscribers()
             } catch (error) {
-                console.error('Failed to parse stored authentication data:', error);
-                this.clearAuthenticatedSession();
+                console.error('Failed to parse stored authentication data:', error)
+                this.clearAuthenticatedSession()
             }
         }
     }
 
     private saveAuthenticatedSession(): void {
-        if (typeof window === 'undefined' || !this.isAuthenticated || !this.currentUser) return;
+        if (typeof window === 'undefined' || !this.isAuthenticated || !this.currentUser) return
 
         const authData = {
             currentUser: this.currentUser,
@@ -116,15 +116,15 @@ export class AuthService {
             userSessionToken: this.User_Session_Token,
             ipAddress: this.IP_Address,
             qrImage: this.QRImage
-        };
+        }
 
-        sessionStorage.setItem('AuthenticatedUser', JSON.stringify(authData));
+        sessionStorage.setItem('AuthenticatedUser', JSON.stringify(authData))
     }
 
     private clearAuthenticatedSession(): void {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') return
 
-        sessionStorage.removeItem('AuthenticatedUser');
+        sessionStorage.removeItem('AuthenticatedUser')
     }
 
     public async login(email: string, password: string): Promise<{
@@ -189,7 +189,7 @@ export class AuthService {
                 LogRocket.identify(this.User_ID, {
                     User_ID: this.User_ID,
                     email: email
-                });
+                })
 
                 const Generate2FAData: any = await this.Generate2FA()
 
@@ -223,7 +223,7 @@ export class AuthService {
                 }
             }
         } catch (error) {
-            console.error(error instanceof Error ? error.message || "Internal Server Error" : "Internal Server Error");
+            console.error(error instanceof Error ? error.message || "Internal Server Error" : "Internal Server Error")
             const Response = {
                 Status: 500,
                 Message: `500 - Internal Server Error${error instanceof Error && error.message ? '\n' + error.message : ''}`
@@ -235,20 +235,6 @@ export class AuthService {
 
     public async Generate2FA(): Promise<{ Status: number; Message?: string }> {
         try {
-            // Test code
-            if (this.User_ID === "TESTUSERFE") {
-                const data = {
-                    "Status": 200,
-                    "Message": "Test 2FA"
-                }
-                const Response = {
-                    Status: data.Status,
-                    Message: data.Message
-                }
-
-                return Response
-            }
-
             const requestData = {
                 User_ID: this.User_ID,
                 User_Session_Token: this.User_Session_Token,
@@ -352,7 +338,7 @@ export class AuthService {
                 this.messageService.setMessage(data.Status, data.Message)
 
                 // Save authenticated session to sessionStorage
-                this.saveAuthenticatedSession();
+                this.saveAuthenticatedSession()
 
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem('CurrentPendingUserID')
@@ -421,7 +407,7 @@ export class AuthService {
         // this.messageService.setMessage(this.messageService.getMessage().Status, this.messageService.getMessage().Message+"\nLogged Out")
 
         // Clear all session storage
-        this.clearAuthenticatedSession();
+        this.clearAuthenticatedSession()
         if (typeof window !== 'undefined') {
             const pendingUserID = sessionStorage.getItem('CurrentPendingUserID')
             if (pendingUserID) {
@@ -435,7 +421,7 @@ export class AuthService {
         }
 
         this.notifySubscribers()
-        // LogRocket.identify('anonymous');
+        // LogRocket.identify('anonymous')
         LogRocket.startNewSession()
     }
 
@@ -478,7 +464,7 @@ export class AuthService {
         this.MenuItems = data.Menu_Items
 
         // Save to session storage when setting current user
-        this.saveAuthenticatedSession();
+        this.saveAuthenticatedSession()
 
         this.notifySubscribers()
         return this.currentUser
@@ -513,9 +499,9 @@ export class AuthService {
         IP_Address?: string,
         User_Session_Token?: string
     }): void {
-        if (User_ID) this.User_ID = User_ID;
-        if (IP_Address) this.IP_Address = IP_Address;
-        if (User_Session_Token) this.User_Session_Token = User_Session_Token;
+        if (User_ID) this.User_ID = User_ID
+        if (IP_Address) this.IP_Address = IP_Address
+        if (User_Session_Token) this.User_Session_Token = User_Session_Token
     }
 
     public getQRImg(): string {
@@ -526,7 +512,7 @@ export class AuthService {
         this.QRImage = QRImage
         // Update session storage if authenticated
         if (this.isAuthenticated) {
-            this.saveAuthenticatedSession();
+            this.saveAuthenticatedSession()
         }
     }
 
@@ -538,7 +524,7 @@ export class AuthService {
                 this.IP_Address = ipData.ip
                 // Update session storage if authenticated
                 if (this.isAuthenticated) {
-                    this.saveAuthenticatedSession();
+                    this.saveAuthenticatedSession()
                 }
                 return this.IP_Address
             }
@@ -571,7 +557,7 @@ export class AuthService {
         this.Permissions = GridPermissions
         // Update session storage if authenticated
         if (this.isAuthenticated) {
-            this.saveAuthenticatedSession();
+            this.saveAuthenticatedSession()
         }
         return this.Permissions
     }
