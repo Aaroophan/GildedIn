@@ -83,8 +83,8 @@ export class ExperienceService {
                             "Ensured data integrity by writing PostgreSQL and MongoDB scripts to validate backend data from Finacle against in-bank systems.",
                             "Performed manual testing on 40+ core-banking workflows including Customers, Savings, and Fixed Deposits, ensuring functional stability.",
                             "Created 500+ test cases and detailed QA documentation covering both predefined and new Lime workflows.",
-                            "Identified, documented, and reported 30+ workflow bugs via JIRA; performed regression testing after system updates.",
-                            "Developed a sanction list module with database lookups and validation scripts; collaborated with Legal & Compliance on risk score security setups.",
+                            "Identified, documented, and reported 30+ workflow bugs via JIRA performed regression testing after system updates.",
+                            "Developed a sanction list module with database lookups and validation scripts collaborated with Legal & Compliance on risk score security setups.",
                             "Conducted UAT training sessions for 200+ users across AFC branches and provided continuous support post-deployment.",
                             "Trained 2 interns using customized guides and practical exercises reducing onboarding time by ~80%."
                         ]

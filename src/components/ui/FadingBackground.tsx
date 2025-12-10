@@ -37,7 +37,7 @@ export default function FadingBackground({ Value }: { Value: string }) {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
 
 		const currentBg = backgrounds[index]
-		if (!currentBg) return;
+		if (!currentBg) return
 
 		// If current background is NOT a video, wait 5 seconds then advance
 		if (!isVideo(currentBg)) {

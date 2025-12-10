@@ -1,5 +1,7 @@
 "use client"
 
+import { useParams } from "next/navigation"
+
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
@@ -7,16 +9,6 @@ import { Menu, X, Sun, Moon, Briefcase, Code, User, FileText, Send, Award, Gradu
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks"
 import { toggleTheme } from "@/models/store/themeSlice"
 import { Button } from "../ui/Button"
-
-const navItems = [
-    { name: "Home", href: "/", icon: null },
-    { name: "About", href: "#about", icon: User },
-    { name: "Technologies", href: "#tech", icon: Code },
-    { name: "Projects", href: "#projects", icon: Briefcase },
-    { name: "Experience", href: "#experience", icon: Award },
-    { name: "Education", href: "#education", icon: GraduationCap },
-    { name: "Contact", href: "#contact", icon: Send },
-]
 
 const letterAnimation = {
     rest: { y: 0, rotate: 0 },
@@ -42,6 +34,20 @@ const navItemVariants = {
 }
 
 export default function Header() {
+    const params = useParams<{ username?: string }>()
+    const username = params?.username || "Aaroophan"
+
+    const navItems = [
+        { name: "Home", href: `/${username}`, icon: null },
+        { name: "About", href: `/${username}/About`, icon: User },
+        { name: "Technologies", href: `/${username}/Technologies`, icon: Code },
+        { name: "Projects", href: `/${username}/Projects`, icon: Briefcase },
+        { name: "Experience", href: `/${username}/Experience`, icon: Award },
+        { name: "Education", href: `/${username}/Education`, icon: GraduationCap },
+        { name: "Reference", href: `/${username}/Reference`, icon: FileText },
+        { name: "Contact", href: `/${username}/Contact`, icon: Send },
+    ]
+
     const [scrolled, setScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const { scrollY } = useScroll()
@@ -68,7 +74,7 @@ export default function Header() {
             >
                 <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="text-2xl font-bold font-oswald tracking-tight flex overflow-hidden">
+                    <Link href={`/${username}`} className="text-2xl font-bold font-oswald tracking-tight flex overflow-hidden">
                         {"GildedIn".split("").map((char, index) => (
                             <motion.span
                                 key={index}
@@ -126,23 +132,6 @@ export default function Header() {
                             <ThemeIcon size={20} />
                         </motion.button>
 
-                        {/* CTA
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 1, type: "spring" }}
-                        >
-                            <Button
-                                type="button"
-                                classname={`w-40 disabled:opacity-75 text-foreground dark:text-foreground font-bold py-1 px-6 m-1 text-lg font-inkfree`}
-                                disabled={false}
-                                rounded="rounded-xl"
-                                onclick={() => { alert("Building") }}
-                                tooltip="Your Portfolio"
-                            >
-                                Your Portfolio
-                            </Button>
-                        </motion.div> */}
                     </div>
 
                     {/* Mobile Menu Toggle */}

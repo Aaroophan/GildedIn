@@ -5,6 +5,7 @@ import ErrorMessage from '../ui/ErrorMessage'
 import Loading from '../ui/Loading'
 import { Glow, GlowCapture } from '@codaworks/react-glow'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
 
 // Marquee component for infinite scrolling
 const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any[], direction?: "left" | "right", speed?: number }) => {
@@ -42,7 +43,7 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
                                 height={50}
                                 className="max-w-full max-h-full object-contain"
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50?text=' + name;
+                                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50?text=' + name
                                 }}
                                 loading="lazy"
                             />
@@ -56,6 +57,8 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
 }
 
 export const Technologies = () => {
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
     const [Data, setData] = useState<any>()
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -69,7 +72,7 @@ export const Technologies = () => {
 
         try {
             const technologiesService = TechnologiesService.getInstance()
-            const result = await technologiesService.Technologies("Aaroophan")
+            const result = await technologiesService.Technologies(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 setData(result)

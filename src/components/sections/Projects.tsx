@@ -8,8 +8,11 @@ import { ExternalLink, Github, Play, ChevronDown, ChevronUp } from 'lucide-react
 import { GlowCapture } from '@codaworks/react-glow'
 import Modal from '../ui/Modal'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
 
 export const Projects = () => {
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
     const containerRef = useRef<HTMLDivElement>(null)
     const isContainerInView = useInView(containerRef, { once: false, amount: 0.2 })
 
@@ -42,7 +45,7 @@ export const Projects = () => {
 
         try {
             const projectsService = ProjectsService.getInstance()
-            const result = await projectsService.Projects("Aaroophan")
+            const result = await projectsService.Projects(endpoint)
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 setData(result)
@@ -67,7 +70,7 @@ export const Projects = () => {
     return (
         <section
             id="Projects"
-            className="py-20 bg-gradient-to-b from-[var(--foreground)]/0 to-[var(--foreground)]/5 backdrop-blur-sm rounded-lg font-comic"
+            className="py-10 md:py-20 bg-gradient-to-b from-[var(--foreground)]/0 to-[var(--foreground)]/5 backdrop-blur-sm rounded-lg font-comic"
             ref={containerRef}
         >
             <GlowCapture>
@@ -140,7 +143,7 @@ export const Projects = () => {
                                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                                 onError={(e) => {
                                                     // Fallback image
-                                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
                                                 }}
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -256,7 +259,7 @@ export const Projects = () => {
                                     alt={selectedProject.Name}
                                     className="w-full h-full object-cover"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
                                     }}
                                 />
                             </div>

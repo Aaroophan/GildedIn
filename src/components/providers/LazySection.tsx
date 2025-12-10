@@ -1,12 +1,12 @@
-import { useRef, useState, useEffect, ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { useRef, useState, useEffect, ReactNode } from 'react'
+import { motion } from 'framer-motion'
 
 interface LazySectionProps {
-    children: ReactNode;
-    threshold?: number;
-    className?: string;
-    fallback?: ReactNode;
-    delay?: number;
+    children: ReactNode
+    threshold?: number
+    className?: string
+    fallback?: ReactNode
+    delay?: number
 }
 
 export const LazySection = ({
@@ -16,30 +16,30 @@ export const LazySection = ({
     fallback,
     delay = 0
 }: LazySectionProps) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [shouldRender, setShouldRender] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(false)
+    const [shouldRender, setShouldRender] = useState(false)
+    const ref = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
-                        setIsVisible(true);
-                        setShouldRender(true);
-                    }, delay);
-                    observer.disconnect();
+                        setIsVisible(true)
+                        setShouldRender(true)
+                    }, delay)
+                    observer.disconnect()
                 }
             },
             { threshold }
-        );
+        )
 
         if (ref.current) {
-            observer.observe(ref.current);
+            observer.observe(ref.current)
         }
 
-        return () => observer.disconnect();
-    }, [threshold, delay]);
+        return () => observer.disconnect()
+    }, [threshold, delay])
 
     return (
         <div ref={ref} className={className}>
@@ -57,5 +57,5 @@ export const LazySection = ({
                 )
             )}
         </div>
-    );
-};
+    )
+}

@@ -1,6 +1,6 @@
 export class MessageService {
     private static instance: MessageService
-    private subscribers: (() => void)[] = [];
+    private subscribers: (() => void)[] = []
     private Status: number = 0
     private Message: string = ""
 
@@ -23,7 +23,7 @@ export class MessageService {
     public setMessage(NewStatus: number, NewMessage: string): { Status: number, Message: string } {
         this.Status = NewStatus
         this.Message = NewMessage
-        this.notifySubscribers();
+        this.notifySubscribers()
         return {
             Status: this.Status,
             Message: this.Message
@@ -31,14 +31,14 @@ export class MessageService {
     }
 
     public subscribe(callback: () => void): void {
-        this.subscribers.push(callback);
+        this.subscribers.push(callback)
     }
 
     public unsubscribe(callback: () => void): void {
-        this.subscribers = this.subscribers.filter(sub => sub !== callback);
+        this.subscribers = this.subscribers.filter(sub => sub !== callback)
     }
 
     private notifySubscribers(): void {
-        this.subscribers.forEach(callback => callback());
+        this.subscribers.forEach(callback => callback())
     }
 }
