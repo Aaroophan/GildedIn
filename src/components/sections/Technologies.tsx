@@ -1,4 +1,6 @@
-import { motion, useInView } from 'framer-motion'
+"use client"
+
+import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { TechnologiesService } from '@/models/Services/Technologies'
 import ErrorMessage from '../ui/ErrorMessage'
@@ -6,16 +8,18 @@ import Loading from '../ui/Loading'
 import { Glow, GlowCapture } from '@codaworks/react-glow'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
+import GridBackground from '../ui/GridBackground'
+import TechCorners from '../ui/TechCorners'
+import FadingBackground from '../ui/FadingBackground'
+import { LazySection } from '../providers/LazySection'
 
 // Marquee component for infinite scrolling
 const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any[], direction?: "left" | "right", speed?: number }) => {
     return (
         <div className="relative flex overflow-hidden select-none gap-5 mask-linear-fade">
-            <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-[var(--background)] to-transparent w-20" />
-            <div className="absolute right-0 top-0 bottom-0 z-10 pointer-events-none bg-gradient-to-l from-[var(--background)] to-transparent w-20" />
 
             <motion.div
-                className="flex flex-nowrap gap-5 py-2"
+                className="flex flex-nowrap gap-5"
                 animate={{
                     x: direction === "left" ? ["0%", "-25%"] : ["-25%", "0%"],
                 }}
@@ -33,22 +37,25 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
                 {[...skills, ...skills, ...skills, ...skills].map(([icon, name]: any, index: number) => (
                     <div
                         key={`${name}-${index}`}
-                        className="flex-shrink-0 flex flex-col items-center justify-center p-4 rounded-lg border-l-2 border-[var(--mono-4)] shadow-lg cursor-pointer bg-[var(--mono-4)]/5 backdrop-blur-lg w-42 h-32 hover:border-l-0 transition-all duration-300"
+                        className="relative flex-shrink-0 flex flex-col items-center justify-center rounded-lg bg-[var(--mono-4)]/5 w-48 h-30 group cursor-pointer hover:bg-[var(--mono-4)]/5 transition-colors duration-300"
                     >
-                        <div className="w-24 h-12 mb-3 flex items-center justify-center cursor-default">
+                        <TechCorners Padding={0} Width={4} Height={2} />
+
+                        <div className="w-16 h-16 mb-3 relative grayscale-10 group-hover:grayscale-0 transition-all duration-300">
                             <Image
                                 src={icon}
                                 alt={name}
-                                width={50}
-                                height={50}
-                                className="max-w-full max-h-full object-contain"
+                                fill
+                                className="object-contain drop-shadow-md"
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50?text=' + name
                                 }}
                                 loading="lazy"
                             />
                         </div>
-                        <span className="text-lg font-inkfree font-bold text-[var(--foreground)] text-center line-clamp-2">{name}</span>
+                        <span className="text-lg font-inkfree font-bold text-[var(--foreground)]/80 text-center line-clamp-2 group-hover:text-[var(--mono-4)] transition-colors">
+                            {name}
+                        </span>
                     </div>
                 ))}
             </motion.div>
@@ -58,11 +65,11 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
 
 export const Technologies = () => {
     const params = useParams<{ username?: string }>()
+    const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
     const [Data, setData] = useState<any>()
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [isVisible, setIsVisible] = useState<Boolean>(false)
 
     // Create refs for each category
     const categoryRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -94,56 +101,68 @@ export const Technologies = () => {
     if (error) return <ErrorMessage message={error} />
     if (isLoading) return <Loading />
 
+    // Prepare data for GridBackground (inject Name)
+    const backgroundData = { ...Data, Name: decodedUsername }
+
     return (
-        <section id="Technologies" className="py-20 bg-gradient-to-b from-[var(--foreground)]/5 to-[var(--foreground)]/0 backdrop-blur-sm rounded-lg font-comic overflow-hidden">
-            <GlowCapture><Glow color="var(--mono-4)" >
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-8xl">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-center font-comic text-4xl md:text-5xl font-bold pb-6 bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent cursor-default"
-                    >
-                        {"Skills & Technologies".split('').map((letter, idx) => (
-                            <motion.span
-                                key={idx}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.05, delay: idx * 0.05 }}
-                                className="rounded-md hover:text-[var(--mono-4)] dark:hover:text-[var(--mono-4)] transition-colors"
-                            >
-                                {letter}
-                            </motion.span>
-                        ))}
-                    </motion.h2>
+        <section id="Technologies" className="relative min-h-screen py-20 px-4 overflow-hidden font-comic text-[var(--foreground)]">
+            <GridBackground Data={backgroundData} Name={Technologies.name} Code={Technologies.toString()} />
 
-                    <div className="space-y-12">
-                        {Data.Technologies.map(([category, skills]: any, categoryIndex: number) => (
-                            <div
-                                key={category}
-                                ref={el => { categoryRefs.current[categoryIndex] = el }}
-                            >
-                                <motion.h3
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true, amount: 0.3 }}
-                                    transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-                                    className="text-xl font-bold mb-6 border-l-4 border-[var(--mono-4)] pl-3 bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent rounded-lg cursor-default"
-                                >
-                                    {category}
-                                </motion.h3>
-
-                                {/* Pass skills to Marquee - alternate direction for visual interest if desired, or keep uniform */}
-                                <SkillsMarquee
-                                    skills={skills}
-                                    direction={categoryIndex % 2 === 0 ? "left" : "right"}
-                                    speed={50 + (skills.length * 2)} // Adjust speed based on content length to keep reasonable pace
-                                />
+            <GlowCapture>
+                <Glow color='var(--mono-4)'>
+                    <div className="container max-w-8xl mx-auto relative z-10 px-4">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-center mb-16 relative"
+                        >
+                            <div className="inline-block">
+                                <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
+                                    Skills & Technologies
+                                </h2>
+                                <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
+                                    <motion.div
+                                        initial={{ x: "-100%" }}
+                                        whileInView={{ x: "200%" }}
+                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-0 left-0 w-1/3 h-full bg-[var(--mono-4)] opacity-50 blur-[2px]"
+                                    />
+                                </div>
                             </div>
-                        ))}
+                        </motion.div>
+
+                        <div className="space-y-16">
+                            {Data.Technologies.map(([category, skills]: any, categoryIndex: number) => (
+                                <div
+                                    key={category}
+                                    ref={el => { categoryRefs.current[categoryIndex] = el }}
+                                    className="relative"
+                                >
+                                    <LazySection threshold={0.1} delay={categoryIndex * 100} fallback={<div className="w-full h-25 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />}>
+                                        <div className="relative">
+                                            {/* Category Header with Tech Styling */}
+                                            <div className="flex items-center gap-4 mb-6 pl-4 border-l-4 border-[var(--mono-4)]">
+                                                <h3 className="text-2xl font-bold font-comic text-[var(--foreground)] tracking-widest">
+                                                    {category}
+                                                </h3>
+                                                <div className="h-px flex-1 bg-gradient-to-r from-[var(--mono-4)]/30 to-transparent" />
+                                            </div>
+
+                                            {/* Marquee with Themed Cards */}
+                                            <SkillsMarquee
+                                                skills={skills}
+                                                direction={categoryIndex % 2 === 0 ? "left" : "right"}
+                                                speed={40 + (skills.length * 1.5)}
+                                            />
+                                        </div>
+                                    </LazySection>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </Glow></GlowCapture>
+                </Glow>
+            </GlowCapture>
         </section>
     )
 }

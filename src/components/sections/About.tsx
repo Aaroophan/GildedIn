@@ -1,3 +1,5 @@
+"use client"
+
 import { motion, useInView } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { LazySection } from '../providers/LazySection'
@@ -8,9 +10,12 @@ import { Glow, GlowCapture } from '@codaworks/react-glow'
 import * as LucideIcons from "lucide-react"
 import FadingBackground from '../ui/FadingBackground'
 import { useParams } from "next/navigation"
+import GridBackground from '../ui/GridBackground'
+import TechCorners from '../ui/TechCorners'
 
 export const About = () => {
     const params = useParams<{ username?: string }>()
+    const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
 
     const ref = useRef<HTMLDivElement>(null)
@@ -59,255 +64,249 @@ export const About = () => {
     if (error) return <ErrorMessage message={error} />
     if (isLoading) return <Loading />
 
+    // Prepare data for GridBackground (inject Name)
+    const backgroundData = { ...Data, Name: decodedUsername }
+
     return (
-        <section id="about" className="snap-start py-8 cursor-default px-4">
+        <section id="about" className="relative min-h-screen py-20 px-4 overflow-hidden font-mono text-[var(--foreground)]">
             <FadingBackground Value="Images" />
-            <GlowCapture><Glow color='var(--mono-4)'>
-                <div className="container max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 rounded-xl border-l-4 border-[var(--mono-4)] shadow-lg hover:shadow-xl cursor-default bg-[var(--mono-4)]/5 backdrop-blur-xs py-2" ref={ref}>
-                    {/* Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <h2 className="text-3xl font-bold mb-2 text-center bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent">
-                            {"Beyond the Code".split('').map((letter, idx) => (
-                                <motion.span
-                                    key={idx}
-                                    initial={{ opacity: 0 }}
-                                    animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                                    transition={{ duration: 0.05, delay: idx * 0.05 }}
-                                    className="rounded-md hover:text-[var(--mono-4)] transition-colors"
-                                >
-                                    {letter}
-                                </motion.span>
-                            ))}
-                        </h2>
-                        <p className="text-center text-[var(--foreground)]/70 mb-5 font-comic">
-                            Getting to know the person behind the keyboard
-                        </p>
-                    </motion.div>
+            <GridBackground Data={backgroundData} Name={About.name} Code={About.toString()} />
 
-                    {/* Tabs */}
-                    <div className="flex flex-wrap justify-center gap-4 mb-10">
-                        {['about', 'values', 'interests', 'trivia'].map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab as any)}
-                                className={`font-inkfree font-bold w-30 px-5 py-1 rounded-full transition-all duration-300 ${activeTab === tab
-                                    ? 'bg-[var(--mono-4)] text-white shadow-lg'
-                                    : 'bg-[var(--mono-4)]/10 text-[var(--foreground)] hover:bg-[var(--mono-4)]/20'
-                                    }`}
-                            >
-                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                            </button>
-                        ))}
-                    </div>
+            <GlowCapture>
+                <Glow color='var(--mono-4)'>
+                    <div className="container max-w-7xl mx-auto relative z-10" ref={ref}>
 
-                    {/* Content Sections */}
-                    <div className="min-h-[80vh] max-h-[80vh] font-comic ">
-                        {/* About Tab */}
-                        {activeTab === 'about' && (
-                            <div className="max-w-7xl mx-auto flex flex-col gap-4 text-justify">
-                                {paragraphs.map((paragraph: string, index: number) => (
-                                    <LazySection
-                                        key={index}
-                                        threshold={0.2}
-                                        delay={index * 150}
-                                        className="relative"
-                                        fallback={<div className="h-10 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />}
-                                    >
-                                        <motion.p
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                                            className="leading-relaxed whitespace-pre-line bg-gradient-to-br from-[var(--background)] via-[var(--background)] to-[var(--background)] dark:from-[var(--foreground)] dark:via-[var(--foreground)] dark:to-[var(--foreground)] bg-clip-text text-[var(--background)] dark:text-[var(--foreground)] text-md"
-                                        >
-                                            {paragraph}
-                                        </motion.p>
-                                    </LazySection>
-                                ))}
-                            </div>
-                            // </Glow>
-                        )}
+                        {/* Main Dossier Panel */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8 }}
+                            className="relative p-6 sm:p-10 rounded-xl bg-[var(--background)]/25 backdrop-blur-sm border border-[var(--foreground)]/10 shadow-2xl"
+                        >
+                            <TechCorners Padding={2} Width={6} Height={6} />
 
-                        {/* Values Tab */}
-                        {activeTab === 'values' && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-                                {values?.map((value: any, index: number) => {
-                                    // @ts-ignore
-                                    const Icon = LucideIcons[value.icon] || LucideIcons.HelpCircle
-                                    return (
-                                        <LazySection
-                                            key={index}
-                                            threshold={0.1}
-                                            delay={index * 100}
-                                            fallback={
-                                                <div className="h-35 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />
-                                            }
-                                        >
-                                            <motion.div
-                                                initial={{ opacity: 0, x: -20 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                                className="group p-6 rounded-xl bg-gradient-to-br from-[var(--mono-4)]/20 to-transparent border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/30 transition-all duration-300 backdrop-blur-sm"
-                                            >
-                                                <div className="flex items-start gap-4">
-                                                    <div className={`p-3 rounded-lg bg-gradient-to-br ${value.color} text-white`}>
-                                                        <Icon className="w-6 h-6" />
-                                                    </div>
-                                                    <div>
-                                                        <h3 className="text-xl font-bold mb-2 text-[var(--foreground)] group-hover:text-[var(--mono-4)] transition-colors">
-                                                            {value.title}
-                                                        </h3>
-                                                        <p className="text-[var(--foreground)]/70">
-                                                            {value.description}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        </LazySection>
-                                    )
-                                })}
-                            </div>
-                        )}
-
-                        {/* Interests Tab */}
-                        {interests && (activeTab === 'interests') && (
-                            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-                                {interests?.map((interest: any, index: number) => {
-                                    // @ts-ignore
-                                    const Icon = LucideIcons[interest.icon] || LucideIcons.HelpCircle
-                                    return (
-                                        <LazySection
-                                            key={index}
-                                            threshold={0.05}
-                                            delay={index * 50}
-                                            fallback={
-                                                <div className="h-40 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />
-                                            }
-                                        >
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                whileInView={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3, delay: index * 0.05 }}
-                                                className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-[var(--mono-4)]/20 to-transparent border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/30 transition-all duration-300"
-                                            >
-                                                <div className={`p-3 rounded-full bg-gradient-to-br ${interest.color} text-white mb-4`}>
-                                                    <Icon className="w-6 h-6" />
-                                                </div>
-                                                <h4 className="font-semibold text-[var(--foreground)] mb-2 text-center">
-                                                    {interest.name}
-                                                </h4>
-                                                <div className="w-full bg-[var(--mono-4)]/10 rounded-full h-2 overflow-hidden">
-                                                    <motion.div
-                                                        initial={{ width: 0 }}
-                                                        whileInView={{ width: `${interest.level}%` }}
-                                                        transition={{ duration: 1, delay: 0.5 }}
-                                                        className={`h-full bg-gradient-to-r ${interest.color} rounded-full`}
-                                                    />
-                                                </div>
-                                                <span className="text-xs mt-2 text-[var(--foreground)]/60">
-                                                    {interest.level}% enthusiasm
-                                                </span>
-                                            </motion.div>
-                                        </LazySection>
-                                    )
-                                })}
-                            </div>
-                        )}
-
-                        {/* Trivia Tab */}
-                        {activeTab === 'trivia' && (
-                            <div className="max-w-6xl mx-auto">
-                                <LazySection threshold={0.1}>
-                                    <motion.div
-                                        initial={{ opacity: 0 }}
-                                        whileInView={{ opacity: 1 }}
-                                        className="text-center mb-8"
-                                    >
-                                        <h3 className="text-2xl font-bold mb-2 text-[var(--foreground)]">
-                                            Fun Facts & Trivia
-                                        </h3>
-                                        <p className="text-[var(--foreground)]/70">
-                                            Random things that make me, me
-                                        </p>
-                                    </motion.div>
-                                </LazySection>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {funFacts?.map((fact: any, index: number) => {
-                                        // @ts-ignore
-                                        const Icon = LucideIcons[fact.icon] || LucideIcons.HelpCircle
-                                        return (
-                                            <LazySection
-                                                key={index}
-                                                threshold={0.05}
-                                                delay={index * 100}
-                                                fallback={
-                                                    <div className="h-32 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />
-                                                }
-                                            >
-                                                <motion.div
-                                                    initial={{ opacity: 0, rotateY: 90 }}
-                                                    whileInView={{ opacity: 1, rotateY: 0 }}
-                                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                                    className="group p-6 rounded-xl bg-gradient-to-br from-[var(--mono-4)]/20 to-transparent border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:scale-[1.02]"
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`p-3 rounded-lg bg-gradient-to-br ${fact.color} text-white group-hover:scale-110 transition-transform`}>
-                                                            <Icon className="w-6 h-6" />
-                                                        </div>
-                                                        <p className="text-[var(--foreground)] font-medium">
-                                                            {fact.fact}
-                                                        </p>
-                                                    </div>
-                                                </motion.div>
-                                            </LazySection>
-                                        )
-                                    })}
+                            {/* Header Section */}
+                            <div className="mb-12 text-center relative">
+                                <div className="absolute top-0 right-0 text-[10px] sm:text-xs text-[var(--mono-4)] tracking-widest opacity-60 font-bold border border-[var(--mono-4)]/30 px-2 py-1 rounded">
+                                    REF: CONFIDENTIAL
                                 </div>
 
-                                {/* Daily Routine Visualization */}
-                                <LazySection threshold={0.2} delay={500}>
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        className="mt-10 p-6 rounded-xl bg-gradient-to-br from-[var(--mono-4)]/10 to-[var(--mono-4)]/5 border border-[var(--mono-4)]/20"
-                                    >
-                                        <h4 className="font-bold text-lg mb-4 text-[var(--foreground)] flex items-center gap-2">
-                                            <LucideIcons.Clock className="w-5 h-5" />
-                                            Typical Day Rhythm
-                                        </h4>
-                                        <div className="space-y-3">
-                                            {dayRythm?.map((item, idx) => (
-                                                <div key={idx} className="flex items-center gap-4">
-                                                    <span className="text-sm font-medium text-[var(--foreground)]/70 min-w-20">
-                                                        {item.time}
-                                                    </span>
-                                                    <div className={`flex-1 ${item.color}/25 rounded-full h-2 overflow-hidden`}>
-                                                        <motion.div
-                                                            initial={{ width: 0 }}
-                                                            whileInView={{ width: "100%" }}
-                                                            transition={{ duration: 4, delay: idx * 0.2 }}
-                                                            className={`h-full ${item.color} rounded-full`}
-                                                        />
-                                                    </div>
-                                                    <span className="text-sm text-[var(--foreground)]/70">
-                                                        {item.activity}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </motion.div>
-                                </LazySection>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={isInView !== null ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <h2 className="text-4xl sm:text-5xl font-bold mb-4 font-oswald tracking-wide bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)]/50 bg-clip-text text-transparent uppercase inline-block">
+                                        {"Who Am I ?".split('').map((letter, idx) => (
+                                            <motion.span
+                                                key={idx}
+                                                initial={{ opacity: 0 }}
+                                                animate={isInView !== null ? { opacity: 1 } : { opacity: 0 }}
+                                                transition={{ duration: 0.05, delay: idx * 0.03 }}
+                                                className="hover:text-[var(--mono-4)] transition-colors"
+                                            >
+                                                {letter}
+                                            </motion.span>
+                                        ))}
+                                    </h2>
+                                    <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
+                                        <motion.div
+                                            initial={{ x: "-100%" }}
+                                            whileInView={{ x: "200%" }}
+                                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                            className="absolute top-0 left-0 w-1/3 h-full bg-[var(--mono-4)] opacity-50 blur-[2px]"
+                                        />
+                                    </div>
+                                </motion.div>
                             </div>
-                        )}
+
+                            {/* Navigation Tabs (Access Keys) */}
+                            <div className="flex flex-wrap justify-center gap-4 mb-12">
+                                {['about', 'values', 'interests', 'trivia'].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab as any)}
+                                        className={`
+                                        relative px-6 py-2 rounded-lg font-inkfree text-md font-bold tracking-wider transition-all duration-300
+                                        border group overflow-hidden
+                                        ${activeTab === tab
+                                                ? 'bg-[var(--mono-4)]/20 border-[var(--mono-4)] text-[var(--foreground)] shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)]'
+                                                : 'bg-transparent border-[var(--foreground)]/20 text-[var(--foreground)]/80 hover:text-[var(--mono-4)] hover:border-[var(--mono-4)]/50'
+                                            }
+                                    `}
+                                    >
+                                        <div className={`absolute left-0 top-0 h-full w-1 bg-[var(--mono-4)] transition-opacity duration-300 ${activeTab === tab ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`} />
+                                        {tab === 'about' && "About Me"}
+                                        {tab === 'values' && "Core Values"}
+                                        {tab === 'interests' && "Interests"}
+                                        {tab === 'trivia' && "Trivia"}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Content Area */}
+                            <div className="min-h-[60vh] relative">
+
+                                {/* About Tab */}
+                                {activeTab === 'about' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, filter: 'blur(5px)' }}
+                                        animate={{ opacity: 1, filter: 'blur(0px)' }}
+                                        transition={{ duration: 0.5 }}
+                                        className="max-w-4xl mx-auto space-y-6 text-justify"
+                                    >
+                                        {paragraphs.map((paragraph: string, index: number) => (
+                                            <LazySection
+                                                key={index}
+                                                threshold={0.1}
+                                                delay={index * 100}
+                                                className="relative pl-6 border-l border-[var(--mono-4)]/30 hover:border-[var(--mono-4)] transition-colors duration-300"
+                                                fallback={<div className="h-20 bg-[var(--mono-4)]/5 animate-pulse rounded" />}
+                                            >
+                                                <div className="animate-pulse absolute top-0 left-[-4px] w-2 h-2 rounded-full bg-[var(--mono-4)] opacity-50" />
+                                                <p className="whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black">
+                                                    {paragraph}
+                                                </p>
+                                            </LazySection>
+                                        ))}
+                                    </motion.div>
+                                )}
+
+                                {/* Values Tab */}
+                                {activeTab === 'values' && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                                        {values?.map((value: any, index: number) => {
+                                            // @ts-ignore
+                                            const Icon = LucideIcons[value.icon] || LucideIcons.HelpCircle
+                                            return (
+                                                <LazySection key={index} delay={index * 100} threshold={0.1}>
+                                                    <motion.div
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        whileInView={{ opacity: 1, x: 0 }}
+                                                        className="relative group p-6 h-full flex flex-col bg-[var(--background)]/50 border border-[var(--foreground)]/10 hover:border-[var(--mono-4)]/50 transition-all duration-300 rounded-lg hover:shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.1)]"
+                                                    >
+                                                        <TechCorners Padding={2} Width={4} Height={2} />
+                                                        <div className="flex items-start gap-4 mb-4">
+                                                            <div className={`p-3 rounded bg-[var(--mono-4)]/10 text-[var(--mono-4)] group-hover:scale-110 transition-transform duration-300`}>
+                                                                <Icon className="w-6 h-6" />
+                                                            </div>
+                                                            <h3 className="text-2xl font-bold font-comic text-[var(--foreground)] mt-2">
+                                                                {value.title}
+                                                            </h3>
+                                                        </div>
+                                                        <div className="h-px w-full bg-gradient-to-r from-[var(--mono-4)]/50 to-transparent mb-4" />
+                                                        <p className="text-md font-comic text-[var(--foreground)]/70 leading-relaxed">
+                                                            {value.description}
+                                                        </p>
+                                                    </motion.div>
+                                                </LazySection>
+                                            )
+                                        })}
+                                    </div>
+                                )}
+
+                                {/* Interests Tab */}
+                                {interests && (activeTab === 'interests') && (
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                                        {interests?.map((interest: any, index: number) => {
+                                            // @ts-ignore
+                                            const Icon = LucideIcons[interest.icon] || LucideIcons.HelpCircle
+                                            return (
+                                                <LazySection key={index} delay={index * 50} threshold={0.1}>
+                                                    <TechCorners Padding={0} Width={4} Height={2} />
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 20 }}
+                                                        whileInView={{ opacity: 1, y: 0 }}
+                                                        className="flex items-center gap-4 p-4 border border-[var(--foreground)]/10 bg-[var(--background)]/30 rounded hover:border-[var(--mono-4)]/30 transition-colors"
+                                                    >
+                                                        <div className={`p-2 rounded bg-[var(--mono-4)]/10 text-[var(--mono-4)]`}>
+                                                            <Icon className="w-8 h-8" />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div className="flex justify-between items-center mb-1">
+                                                                <span className="font-bold font-comic text-md text-[var(--foreground)]">{interest.name}</span>
+                                                                <span className="font-mono text-md text-[var(--foreground)]/50">{interest.level}%</span>
+                                                            </div>
+                                                            <div className="w-full h-2 bg-[var(--foreground)]/10 rounded-full overflow-hidden">
+                                                                <motion.div
+                                                                    initial={{ width: 0 }}
+                                                                    whileInView={{ width: `${interest.level}%` }}
+                                                                    transition={{ duration: 1, delay: 0.2 }}
+                                                                    className={`h-full bg-[var(--mono-4)]/80 rounded-full shadow-[0_0_10px_var(--mono-4)]`}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
+                                                </LazySection>
+                                            )
+                                        })}
+                                    </div>
+                                )}
+
+                                {/* Trivia Tab */}
+                                {activeTab === 'trivia' && (
+                                    <div className="max-w-6xl mx-auto space-y-12">
+
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            {funFacts?.map((fact: any, index: number) => {
+                                                // @ts-ignore
+                                                const Icon = LucideIcons[fact.icon] || LucideIcons.HelpCircle
+                                                return (
+                                                    <LazySection key={index} delay={index * 100}>
+                                                        <motion.div
+                                                            whileHover={{ scale: 1.02 }}
+                                                            className="h-full p-6 border border-[var(--foreground)]/10 bg-[var(--background)]/20 rounded-lg relative overflow-hidden group"
+                                                        >
+                                                            <TechCorners Padding={0} Width={4} Height={2} />
+                                                            <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                                                <Icon className="w-16 h-16" />
+                                                            </div>
+                                                            <div className="relative z-10 flex flex-col gap-2">
+                                                                <Icon className="w-6 h-6 text-[var(--mono-4)] mb-2" />
+                                                                <p className="font-comic text-md text-[var(--foreground)]/80">{fact.fact}</p>
+                                                            </div>
+                                                        </motion.div>
+                                                    </LazySection>
+                                                )
+                                            })}
+                                        </div>
+
+                                        {/* Daily Routine Visualization */}
+                                        <LazySection threshold={0.2}>
+                                            <div className="p-8 border border-[var(--mono-4)]/20 bg-[var(--background)]/30 rounded-xl relative">
+                                                <div className="absolute -top-3 left-4 bg-[var(--background)] px-2 text-[var(--mono-4)] text-xs font-bold font-mono tracking-widest border border-[var(--mono-4)]/20 rounded">
+                                                    Typical Day
+                                                </div>
+                                                <div className="space-y-4 font-mono text-sm">
+                                                    {dayRythm?.map((item, idx) => (
+                                                        <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 group">
+                                                            <div className="min-w-24 text-[var(--mono-4)]/80 text-xs font-bold">{item.time}</div>
+                                                            <div className="flex-1 h-8 bg-[var(--foreground)]/5 rounded overflow-hidden relative border border-[var(--foreground)]/5 group-hover:border-[var(--mono-4)]/30 transition-colors">
+                                                                <div className="absolute inset-y-0 left-4 flex items-center z-10 text-[var(--foreground)]/90 text-md font-comic tracking-wide px-2">
+                                                                    {item.activity}
+                                                                </div>
+                                                                <motion.div
+                                                                    initial={{ width: 0 }}
+                                                                    whileInView={{ width: "100%" }}
+                                                                    transition={{ duration: 1.5, delay: idx * 0.1 }}
+                                                                    className={`h-full ${item.color.replace('bg-', 'bg-opacity-20 bg-')} w-full absolute top-0 left-0`}
+                                                                >
+                                                                    <div className={`h-full w-1 bg-[var(--mono-4)] absolute right-0 top-0 shadow-[0_0_10px_var(--mono-4)] opacity-50`} />
+                                                                </motion.div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </LazySection>
+                                    </div>
+                                )}
+
+                            </div>
+                        </motion.div>
                     </div>
-                </div>
-            </Glow></GlowCapture>
+                </Glow>
+            </GlowCapture>
         </section>
     )
 }

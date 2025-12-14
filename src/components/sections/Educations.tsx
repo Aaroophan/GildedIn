@@ -2,15 +2,19 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { GraduationCap, Calendar, Award, School } from "lucide-react"
+import { GraduationCap, Calendar, Award, ChevronDown, ChevronUp, ChevronRight } from "lucide-react"
 import { EducationService } from "@/models/Services/Education"
 import ErrorMessage from "../ui/ErrorMessage"
 import Loading from "../ui/Loading"
 import Image from "next/image"
 import { useParams } from "next/navigation"
+import GridBackground from "../ui/GridBackground"
+import TechCorners from "../ui/TechCorners"
+import { GlowCapture, Glow } from "@codaworks/react-glow"
 
 export const Educations = () => {
     const params = useParams<{ username?: string }>()
+    const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
     const [educations, setEducations] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -45,7 +49,20 @@ export const Educations = () => {
     if (error) return <ErrorMessage message={error} />
     if (!educations || educations.length === 0) return null
 
-    return <EducationTimeline educations={educations} />
+    // Prepare data for GridBackground (inject Name)
+    const backgroundData = { Educations: educations.length, Name: decodedUsername }
+
+    return (
+        <section id="Education" className="relative min-h-screen py-20 px-4 overflow-hidden font-comic text-[var(--foreground)]">
+            <GridBackground Data={backgroundData} Name={Educations.name} Code={Educations.toString()} />
+
+            <GlowCapture>
+                <Glow color='var(--mono-4)'>
+                    <EducationTimeline educations={educations} />
+                </Glow>
+            </GlowCapture>
+        </section>
+    )
 }
 
 const EducationTimeline = ({ educations }: { educations: any[] }) => {
@@ -55,55 +72,60 @@ const EducationTimeline = ({ educations }: { educations: any[] }) => {
         offset: ["start end", "end start"]
     })
 
-    const scaleY = useTransform(scrollYProgress, [0, 2], [0, 3.5])
+    const scaleY = useTransform(scrollYProgress, [0, 2], [0, 2.5])
 
     return (
-        <section ref={containerRef} className="py-10 md:py-24 relative overflow-hidden">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div ref={containerRef} className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Header */}
+            <div className="mb-24 text-center relative">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-16"
+                    transition={{ duration: 0.5 }}
+                    className="inline-block"
                 >
-                    <h2 className="font-comic text-4xl md:text-5xl font-bold pb-6 bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent cursor-default">
-                        Education
+                    <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
+                        Academic Qualifications
                     </h2>
-                    <p className="font-comic text-lg text-gray-400 max-w-2xl mx-auto bg-gradient-to-br from-[var(--foreground)]/75 via-[var(--foreground)]/75 to-[var(--foreground)]/75 bg-clip-text text-transparent cursor-default">
-                        My academic journey and qualifications.
-                    </p>
+                    <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
+                        <motion.div
+                            initial={{ x: "-100%" }}
+                            whileInView={{ x: "200%" }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute top-0 left-0 w-1/3 h-full bg-[var(--mono-4)] opacity-50 blur-[2px]"
+                        />
+                    </div>
                 </motion.div>
+            </div>
 
-                <div className="relative max-w-8xl mx-auto font-comic">
-                    {/* Central Line */}
-                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 md:w-2 rounded-full bg-[var(--mono-4)]/0 -translate-x-1/2 hidden md:block">
-                        <motion.div
-                            style={{ scaleY, transformOrigin: "top" }}
-                            className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[var(--mono-4)] via-[var(--mono-4)]/50 to-[var(--mono-4)]/10 animate-pulse rounded-full"
+            <div className="relative max-w-8xl mx-auto">
+                {/* Central Line - styled as a data pipe */}
+                <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 md:w-0.5 -translate-x-1/2 hidden md:block border-l-2 border-dashed border-[var(--mono-4)]/30">
+                    <motion.div
+                        style={{ scaleY, transformOrigin: "top" }}
+                        className="absolute top-0 left-[-2px] w-[3px] h-full bg-[var(--mono-4)] opacity-50 shadow-[0_0_10px_var(--mono-4)]"
+                    />
+                </div>
+
+                {/* Mobile Line */}
+                <div className="absolute left-4 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-[var(--mono-4)]/30 md:hidden">
+                    <motion.div
+                        style={{ scaleY, transformOrigin: "top" }}
+                        className="absolute top-0 left-[-2px] w-[3px] h-full bg-[var(--mono-4)] opacity-50"
+                    />
+                </div>
+
+                <div className="flex flex-col gap-16 md:gap-24">
+                    {educations.map((education, index) => (
+                        <EducationCard
+                            key={index}
+                            education={education}
+                            index={index}
                         />
-                    </div>
-
-                    {/* Mobile Line */}
-                    <div className="absolute left-4 top-0 bottom-0 w-2 rounded-full bg-[var(--mono-4)]/0 md:hidden">
-                        <motion.div
-                            style={{ scaleY, transformOrigin: "top" }}
-                            className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[var(--mono-4)] via-[var(--mono-4)]/50 to-[var(--mono-4)]/10"
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-4">
-                        {educations.map((education, index) => (
-                            <EducationCard
-                                key={index}
-                                education={education}
-                                index={index}
-                            />
-                        ))}
-                    </div>
+                    ))}
                 </div>
             </div>
-        </section>
+        </div>
     )
 }
 
@@ -111,13 +133,16 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
     const isLeft = index % 2 === 1
     // Check if education is "Present" or ongoing
     const isCurrent = education.Date ? education.Date.includes("Present") : false
+    const [isExpanded, setIsExpanded] = useState(false)
 
     return (
         <div className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${!isLeft ? 'md:flex-row-reverse' : ''}`}>
 
-            {/* Timeline Dot */}
-            <div className="absolute left-4 md:left-1/2 w-6 h-6 rounded-full bg-[var(--background)] border-2 border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8">
-                <div className="absolute inset-0 rounded-full bg-[var(--mono-4)]/20 animate-ping" />
+            {/* Timeline Node - styled as a tech connector */}
+            <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-md bg-[var(--background)] border border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8 flex items-center justify-center shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)]">
+                <div className="w-4 h-4 rounded-sm bg-[var(--mono-4)] animate-pulse shadow-[0_0_8px_var(--mono-4)]" />
+                {/* Connector Lines */}
+                <div className={`hidden md:block absolute top-1/2 w-10 h-px bg-[var(--mono-4)]/50 ${isLeft ? 'right-full' : 'left-full'}`} />
             </div>
 
             {/* Content Spacer */}
@@ -127,64 +152,68 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
             <motion.div
                 initial={{ opacity: 0, x: isLeft ? -50 : 50, y: 20 }}
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`cursor-default flex-1 md:w-1/2 pl-10 md:pl-0 ${isLeft ? 'md:pl-10' : 'md:pr-10'}`}
+                className={`cursor-default flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-16' : 'md:pr-16'}`}
             >
-                <div className={`group relative p-4 rounded-2xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/20 to-[var(--mono-4)]/0 border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-lg backdrop-blur-sm`}>
+                <div className={`group relative p-6 sm:p-8 rounded-xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/15 to-[var(--mono-4)]/0 backdrop-blur-xs border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.1)]`}>
+                    <TechCorners Padding={2} Width={6} Height={6} />
+
                     {isCurrent && (
-                        <div className="absolute -top-3 right-6 px-3 py-1 text-xs font-semibold text-[var(--foreground)] bg-gradient-to-bl from-[var(--mono-4)]/80 to-[var(--mono-4)]/20 border border-[var(--mono-4)]/90 hover:border-[var(--mono-4)]/70 transition-all duration-300 rounded-full shadow-lg  group-hover:scale-105 transition-all duration-200 cursor-default animate-pulse">
+                        <div className="absolute -top-3 right-6 px-3 py-1 text-[10px] font-bold tracking-widest text-[var(--background)] bg-[var(--mono-4)] border border-[var(--mono-4)] animate-pulse shadow-[0_0_10px_var(--mono-4)] uppercase rounded-lg">
                             Studying
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-3">
-                        <div className="flex gap-5">
+                    <div className="flex flex-col gap-6">
+                        <div className="flex flex-col sm:flex-row gap-5 items-start">
                             {education.Image && (
-                                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-[var(--mono-4)]/30 group-hover:scale-105 group-hover:translate-x-1 transition-all duration-200 cursor-default">
-                                    <Image
-                                        src={education.Image}
-                                        alt={education.Name}
-                                        fill
-                                        className="object-cover"
-                                        onError={(e) => {
-                                            // Fallback to Briefcase on error - tough to do with Next/Image directly in this structure without state, 
-                                            // but we can try just hiding it? Or just let it fail to transparent.
-                                            // Actually, best to just render Image.
-                                        }}
-                                    />
+                                <div className="relative w-24 h-24 shrink-0 rounded border border-[var(--mono-4)]/30 overflow-hidden group-hover:border-[var(--mono-4)] transition-colors p-1 bg-[var(--background)]/50">
+                                    <div className="w-full h-full relative overflow-hidden">
+                                        <Image
+                                            src={education.Image}
+                                            alt={education.Name}
+                                            fill
+                                            className="rounded-md object-cover group-hover:grayscale-0 transition-all duration-500"
+                                            onError={(e) => { }}
+                                        />
+                                    </div>
+                                    {/* Corner markers for image */}
+                                    <div className="absolute top-0 left-0 w-1 h-1 bg-[var(--mono-4)]" />
+                                    <div className="absolute bottom-0 right-0 w-1 h-1 bg-[var(--mono-4)]" />
                                 </div>
                             )}
-                            <div className="flex flex-col gap-6">
-                                <div className="flex items-center justify-between flex-wrap gap-2">
-                                    <h3 className="text-lg font-bold text-[var(--foreground)] group-hover:text-[var(--mono-4)] group-hover:scale-105 group-hover:translate-x-3 transition-all duration-200 cursor-default">
-                                        {education.Title}
-                                    </h3>
-                                </div>
-                                <div className="flex items-center text-md text-[var(--foreground)] font-medium group-hover:scale-105 group-hover:translate-x-5 transition-all duration-200 cursor-default">
+
+                            <div className="flex flex-col gap-2 w-full">
+                                <h3 className="text-lg md:text-xl font-bold font-comic text-[var(--foreground)] uppercase tracking-wide group-hover:text-[var(--mono-4)] transition-colors">
+                                    {education.Title}
+                                </h3>
+
+                                <div className="flex items-center text-md md:text-lg font-bold font-comic text-[var(--foreground)]/80">
                                     <GraduationCap className="w-5 h-5 mr-2 text-[var(--mono-4)]" />
                                     {education.Name}
                                 </div>
-                                <span className="flex items-center text-md text-[var(--foreground)] font-medium group-hover:scale-105 group-hover:translate-x-7 transition-all duration-200 cursor-default">
-                                    <Calendar className="w-5 h-5 mr-2 text-[var(--mono-4)]" />
-                                    <i>{education.Date}</i>
-                                </span>
 
-                                {/* We don't have separate location data in EducationService yet, but School icon fits generic institution location context if needed. 
-                                For now, I'll omit location if it's not in data, or use School icon if we want to show something else. 
-                                Based on service, we only have Name, Title, Date, Description. */}
+                                <div className="flex flex-wrap gap-y-2 gap-x-4 mt-2 text-sm font-mono text-[var(--foreground)]/60">
+                                    <div className="flex items-center text-[var(--mono-4)]">
+                                        <Calendar className="w-4 h-4 mr-2" />
+                                        {education.Date}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         {education.Description && education.Description.length > 0 && (
-                            <ul className="space-y-2 mt-4">
-                                {education.Description.map((desc: string, i: number) => (
-                                    <li key={i} className="flex items-start text-sm text-[var(--foreground)]/70 group-hover:text-[var(--foreground)] transition-all hover:translate-x-5 duration-300">
-                                        <Award className="w-4 h-4 mr-2.5 text-blue-500 mt-0.5 shrink-0" />
-                                        <span className="text-sm hover:text-[var(--mono-4)] cursor-default">{desc}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <div className="relative border-t border-[var(--mono-4)]/10">
+                                <ul className="space-y-3">
+                                    {education.Description.map((desc: string, i: number) => (
+                                        <li key={i} className="flex items-start text-sm md:text-md text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors group/item">
+                                            <span className="text-[var(--mono-4)] mr-3 mt-1 text-[10px] group-hover/item:text-[var(--foreground)] font-mono">{`${i < 9 ? '0' : ''}${i + 1}`}</span>
+                                            <span className="leading-relaxed">{desc}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         )}
                     </div>
                 </div>

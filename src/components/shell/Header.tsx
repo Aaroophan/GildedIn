@@ -1,8 +1,7 @@
 "use client"
 
 import { useParams } from "next/navigation"
-
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
 import { Menu, X, Sun, Moon, Briefcase, Code, User, FileText, Send, Award, GraduationCap } from "lucide-react"
@@ -11,11 +10,12 @@ import { toggleTheme } from "@/models/store/themeSlice"
 import { Button } from "../ui/Button"
 
 const letterAnimation = {
-    rest: { y: 0, rotate: 0 },
+    rest: { y: 0, opacity: 0.8 },
     hover: {
-        y: -5,
-        rotate: [0, -10, 10, -5, 5, 0],
-        transition: { duration: 0.5, type: "spring" as const, stiffness: 300 },
+        y: -3,
+        opacity: 1,
+        textShadow: "0 0 8px var(--mono-4)",
+        transition: { duration: 0.3 },
     },
 }
 
@@ -64,9 +64,9 @@ export default function Header() {
     return (
         <>
             <motion.header
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                    ? "bg-[var(--background)]/50 backdrop-blur-md shadow-md py-2"
-                    : "bg-transparent py-4"
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-inkfree font-bold ${scrolled
+                    ? "bg-[var(--background)]/70 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-2 border-b border-[var(--mono-4)]/10"
+                    : "bg-transparent py-4 border-b border-transparent"
                     }`}
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
@@ -74,7 +74,7 @@ export default function Header() {
             >
                 <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
                     {/* Logo */}
-                    <Link href={`/${username}`} className="text-2xl font-bold font-oswald tracking-tight flex overflow-hidden">
+                    <Link href={`/${username}`} className="text-2xl font-bold font-oswald tracking-tight flex overflow-hidden group">
                         {"GildedIn".split("").map((char, index) => (
                             <motion.span
                                 key={index}
@@ -89,7 +89,7 @@ export default function Header() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <nav className={`hidden lg:flex items-center gap-6 ${!scrolled && `bg-[var(--background)]/50 backdrop-blur-sm py-1 px-5 rounded-full`}`}>
+                    <nav className={`hidden xl:flex items-center gap-6 ${!scrolled && `bg-[var(--background)]/30 backdrop-blur-sm py-1 px-5 rounded-full border border-[var(--mono-4)]/5`}`}>
                         {navItems.map((item, i) => (
                             <motion.div
                                 key={item.name}
@@ -100,19 +100,19 @@ export default function Header() {
                             >
                                 <Link
                                     href={item.href}
-                                    className="font-bold font-inkfree text-sm text-[var(--foreground)] opacity-80 hover:opacity-100 transition-opacity relative group flex items-center gap-2"
+                                    className="text-md text-[var(--foreground)]/80 hover:text-[var(--mono-4)] transition-all relative group flex items-center gap-2"
                                 >
                                     {item.icon && (
-                                        <item.icon size={16} />
+                                        <item.icon size={16} className="text-[var(--foreground)] opacity-70 group-hover:opacity-100 transition-opacity" />
                                     )}
                                     <motion.span
-                                        whileHover={{ scale: 1.1 }}
+                                        whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         className="inline-block"
                                     >
                                         {item.name}
                                     </motion.span>
-                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full rounded-full" />
+                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--mono-4)] transition-all group-hover:w-full rounded-full opacity-50" />
                                 </Link>
                             </motion.div>
                         ))}
@@ -126,16 +126,15 @@ export default function Header() {
                             whileHover={{ rotate: 90, scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                            className="p-2 rounded-full text-[var(--foreground)] hover:bg-[var(--mono-2)]/10 dark:hover:bg-[var(--mono-6)]/10 transition-colors"
+                            className="p-2 rounded-full text-[var(--foreground)] hover:bg-[var(--mono-4)]/10 hover:text-[var(--mono-4)] transition-colors"
                             aria-label="Toggle Theme"
                         >
                             <ThemeIcon size={20} />
                         </motion.button>
-
                     </div>
 
                     {/* Mobile Menu Toggle */}
-                    <div className="lg:hidden flex items-center gap-4">
+                    <div className="xl:hidden flex items-center gap-4">
                         <motion.button
                             onClick={() => dispatch(toggleTheme())}
                             whileTap={{ rotate: 180 }}
@@ -146,7 +145,7 @@ export default function Header() {
 
                         <button
                             onClick={() => setMobileMenuOpen(true)}
-                            className="p-2 text-[var(--foreground)]"
+                            className="p-2 text-[var(--foreground)] hover:text-[var(--mono-4)] transition-colors"
                             aria-label="Open Menu"
                         >
                             <Menu size={28} />
@@ -163,21 +162,26 @@ export default function Header() {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed inset-0 z-50 bg-white dark:bg-[#000e23] flex flex-col p-6 lg:hidden"
+                        className="fixed inset-0 z-50 bg-[var(--background)]/95 backdrop-blur-xl border-l border-[var(--mono-4)]/20 flex flex-col p-6 xl:hidden font-inkfree font-bold"
                     >
-                        <div className="flex items-center justify-between mb-8">
-                            <span className="text-2xl font-bold font-oswald bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                                Menu
+                        {/* Grid Background Overlay for Menu */}
+                        <div className="absolute inset-0 z-[-1] opacity-5 pointer-events-none"
+                            style={{ backgroundImage: 'radial-gradient(var(--mono-4) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+
+                        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--mono-4)]/10">
+                            <span className="text-2xl font-bold font-oswald text-[var(--foreground)] uppercase tracking-widest flex items-center gap-2">
+                                <span className="w-2 h-2 bg-[var(--mono-4)] rounded-full animate-pulse" />
+                                Navigation
                             </span>
                             <button
                                 onClick={() => setMobileMenuOpen(false)}
-                                className="p-2 text-[var(--foreground)] hover:text-red-500 transition-colors"
+                                className="p-2 text-[var(--foreground)] hover:text-[var(--mono-4)] hover:rotate-90 transition-all duration-300"
                             >
                                 <X size={28} />
                             </button>
                         </div>
 
-                        <nav className="flex flex-col gap-4">
+                        <nav className="flex flex-col gap-2 overflow-y-auto">
                             {navItems.map((item, i) => (
                                 <motion.div
                                     key={item.name}
@@ -188,30 +192,16 @@ export default function Header() {
                                     <Link
                                         href={item.href}
                                         onClick={() => setMobileMenuOpen(false)}
-                                        className="group flex items-center gap-4 text-2xl font-inkfree font-bold text-[var(--foreground)] p-2 hover:bg-[var(--mono-2)]/5 rounded-xl transition-all"
+                                        className="group flex items-center gap-4 text-xl text-[var(--foreground)]/80 p-4 hover:bg-[var(--mono-4)]/10 rounded-xl transition-all border border-transparent hover:border-[var(--mono-4)]/20"
                                     >
-                                        {item.icon && (
-                                            <item.icon className="text-primary opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all" size={24} />
-                                        )}
-                                        <span className="group-hover:translate-x-2 transition-transform">{item.name}</span>
+                                        <div className="p-2 rounded-lg bg-[var(--mono-4)]/5 text-[var(--mono-4)] group-hover:scale-110 transition-transform">
+                                            {item.icon && <item.icon size={20} />}
+                                        </div>
+                                        <span className="group-hover:translate-x-2 transition-transform group-hover:text-[var(--foreground)]">{item.name}</span>
+                                        <div className="ml-auto w-1 h-1 rounded-full bg-[var(--mono-4)] opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>
                                 </motion.div>
                             ))}
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                                className="mt-6"
-                            >
-                                <Button
-                                    type="button"
-                                    classname="w-full py-4 text-lg font-bold bg-primary text-white shadow-xl"
-                                    onclick={() => setMobileMenuOpen(false)}
-                                >
-                                    Create Your Portfolio
-                                </Button>
-                            </motion.div>
                         </nav>
                     </motion.div>
                 )}
