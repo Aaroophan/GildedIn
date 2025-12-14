@@ -14,15 +14,15 @@ import { useParams } from 'next/navigation'
 import GridBackground from '../ui/GridBackground'
 import TechCorners from '../ui/TechCorners'
 
-export const Projects = () => {
+export const Projects = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
     const containerRef = useRef<HTMLDivElement>(null)
     const isContainerInView = useInView(containerRef, { once: false, amount: 0.2 })
 
-    const [Data, setData] = useState<any>()
-    const [isLoading, setIsLoading] = useState(true)
+    const [Data, setData] = useState<any>(initialData)
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
 
     // Modal state
@@ -66,7 +66,9 @@ export const Projects = () => {
     }
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     if (error) return <ErrorMessage message={error} />

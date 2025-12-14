@@ -100,11 +100,11 @@ function TimelyGreeting({ Data }: { Data: string }) {
 	)
 }
 
-export default function Hero() {
+export default function Hero({ initialData }: { initialData?: any }) {
 	const params = useParams<{ username?: string }>()
 	const endpoint = `/${params?.username || ""}`
-	const [Data, setData] = useState<any>()
-	const [isLoading, setIsLoading] = useState(true)
+	const [Data, setData] = useState<any>(initialData)
+	const [isLoading, setIsLoading] = useState(!initialData)
 	const [error, setError] = useState<string | null>(null)
 	const [currentTagIndex, setCurrentTagIndex] = useState(0)
 	const [isVisible, setIsVisible] = useState<Boolean>(false)
@@ -156,7 +156,9 @@ export default function Hero() {
 	}
 
 	useEffect(() => {
-		GetData()
+		if (!initialData) {
+			GetData()
+		}
 	}, [])
 
 	if (error) return <ErrorMessage message={error} />

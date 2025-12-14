@@ -12,12 +12,12 @@ import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 import { GlowCapture, Glow } from "@codaworks/react-glow"
 
-export const Experiences = () => {
+export const Experiences = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
-    const [experiences, setExperiences] = useState<any[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [experiences, setExperiences] = useState<any[]>(initialData?.Experiences || [])
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
 
     const GetData = async () => {
@@ -42,7 +42,9 @@ export const Experiences = () => {
     }
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     if (isLoading) return <Loading />
@@ -214,7 +216,7 @@ const ExperienceCard = ({ experience, index }: { experience: any, index: number 
                                 <ul className="space-y-3">
                                     {(isExpanded ? experience.Description : experience.Description.slice(0, 3)).map((desc: string, i: number) => (
                                         <li key={i} className="flex items-start text-sm md:text-md text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors group/item">
-                                            <span className="text-[var(--mono-4)] mr-3 mt-1 text-[10px] group-hover/item:text-[var(--foreground)] font-mono">{`${i<9 ? '0' : ''}${i + 1}`}</span>
+                                            <span className="text-[var(--mono-4)] mr-3 mt-1 text-[10px] group-hover/item:text-[var(--foreground)] font-mono">{`${i < 9 ? '0' : ''}${i + 1}`}</span>
                                             <span className="leading-relaxed">{desc}</span>
                                         </li>
                                     ))}

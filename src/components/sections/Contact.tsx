@@ -11,12 +11,12 @@ import { useParams } from "next/navigation"
 import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 
-export const Contacts = () => {
+export const Contacts = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
-    const [contact, setContact] = useState<any>(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [contact, setContact] = useState<any>(initialData?.Contact || null)
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
 
     // Form State
@@ -50,7 +50,9 @@ export const Contacts = () => {
     }
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

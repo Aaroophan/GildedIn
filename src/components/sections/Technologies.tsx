@@ -63,12 +63,12 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
     )
 }
 
-export const Technologies = () => {
+export const Technologies = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
-    const [Data, setData] = useState<any>()
-    const [isLoading, setIsLoading] = useState(true)
+    const [Data, setData] = useState<any>(initialData)
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
 
     // Create refs for each category
@@ -95,7 +95,9 @@ export const Technologies = () => {
     }
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     if (error) return <ErrorMessage message={error} />

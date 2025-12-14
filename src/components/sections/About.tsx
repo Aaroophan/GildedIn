@@ -13,7 +13,7 @@ import { useParams } from "next/navigation"
 import GridBackground from '../ui/GridBackground'
 import TechCorners from '../ui/TechCorners'
 
-export const About = () => {
+export const About = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
@@ -21,15 +21,15 @@ export const About = () => {
     const ref = useRef<HTMLDivElement>(null)
     const isInView = useInView(ref, { once: false })
 
-    const [Data, setData] = useState<any>()
-    const [isLoading, setIsLoading] = useState(true)
+    const [Data, setData] = useState<any>(initialData)
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
     const [activeTab, setActiveTab] = useState<'about' | 'values' | 'interests' | 'trivia'>('about')
 
-    const [funFacts, setFunFacts] = useState<any[]>([])
-    const [values, setValues] = useState<any[]>([])
-    const [interests, setInterests] = useState<any[]>([])
-    const [dayRythm, setDayRythm] = useState<any[]>([])
+    const [funFacts, setFunFacts] = useState<any[]>(initialData?.FunFacts || [])
+    const [values, setValues] = useState<any[]>(initialData?.Values || [])
+    const [interests, setInterests] = useState<any[]>(initialData?.Interests || [])
+    const [dayRythm, setDayRythm] = useState<any[]>(initialData?.Day || [])
 
     const GetData = async () => {
         setIsLoading(true)
@@ -58,7 +58,9 @@ export const About = () => {
     const paragraphs = Data?.About?.Description.split('\n\n')
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     if (error) return <ErrorMessage message={error} />

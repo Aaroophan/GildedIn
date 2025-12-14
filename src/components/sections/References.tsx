@@ -12,12 +12,12 @@ import { useParams } from "next/navigation"
 import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 
-export const References = () => {
+export const References = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
-    const [references, setReferences] = useState<any[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [references, setReferences] = useState<any[]>(initialData?.References || [])
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
 
     const GetData = async () => {
@@ -42,7 +42,9 @@ export const References = () => {
     }
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     if (isLoading) return <Loading />

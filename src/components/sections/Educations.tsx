@@ -12,12 +12,12 @@ import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 import { GlowCapture, Glow } from "@codaworks/react-glow"
 
-export const Educations = () => {
+export const Educations = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
     const endpoint = `/${params?.username || ""}`
-    const [educations, setEducations] = useState<any[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [educations, setEducations] = useState<any[]>(initialData?.Educations || [])
+    const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
 
     const GetData = async () => {
@@ -42,7 +42,9 @@ export const Educations = () => {
     }
 
     useEffect(() => {
-        GetData()
+        if (!initialData) {
+            GetData()
+        }
     }, [])
 
     if (isLoading) return <Loading />
