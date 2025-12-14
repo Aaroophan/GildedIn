@@ -27,8 +27,31 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-	title: "GildedIn",
-	description: "GildedIn is a no-code portfolio platform that instantly gives users their own personalized space on the web through automatically generated dynamic routes. Upon signing up, GildedIn creates a unique URL like ...com/Username with nested sections such as Projects or About, functioning as mini websites that showcase a user’s profile, work, and visual preferences. Users can log in at any time to update their content, add projects, upload media, or tweak design settings through an intuitive dashboard, with all changes appearing in real time no coding or deployment required. Designed for users who don’t have the time to build a portfolio from scratch or need a substitute portfolio instantly, GildedIn combines responsive design, real-time editing, and optional animations or 3D visuals to make creating and maintaining a professional, visually rich portfolio effortless.",
+	title: {
+		default: "GildedIn | Your Instant Portfolio",
+		template: "%s | GildedIn",
+	},
+	description: "GildedIn is a no-code portfolio platform that instantly gives users their own personalized space on the web through automatically generated dynamic routes.",
+	metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://www.gildedin.com'),
+	openGraph: {
+		title: 'GildedIn | Your Instant Portfolio',
+		description: 'Create your professional portfolio instantly without coding. Dynamic routes, premium themes, and real-time updates.',
+		url: 'https://www.gildedin.com',
+		siteName: 'GildedIn',
+		locale: 'en_US',
+		type: 'website',
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: 'GildedIn',
+		description: 'Instant no-code portfolios for professionals.',
+		creator: '@Aaroophan',
+	},
+	icons: {
+		icon: '/favicon.ico',
+		shortcut: '/favicon.ico',
+		apple: '/images/Profile_1-min.JPG',
+	},
 }
 
 export default function RootLayout({

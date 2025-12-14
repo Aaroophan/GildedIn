@@ -13,7 +13,6 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import GridBackground from '../ui/GridBackground'
 import TechCorners from '../ui/TechCorners'
-import FadingBackground from '../ui/FadingBackground'
 
 export const Projects = () => {
     const params = useParams<{ username?: string }>()
@@ -128,7 +127,7 @@ export const Projects = () => {
                                             <div className="w-full h-96 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />
                                         }
                                     >
-                                        <motion.div
+                                        <motion.article
                                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                             whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                             viewport={{ once: true, amount: 0.1 }}
@@ -208,7 +207,7 @@ export const Projects = () => {
                                                     <span className="text-[10px] font-mono text-[var(--mono-4)] uppercase">ACCESS_PROJECT</span>
                                                 </div>
                                             </div>
-                                        </motion.div>
+                                        </motion.article>
                                     </LazySection>
                                 </div>
                             ))}

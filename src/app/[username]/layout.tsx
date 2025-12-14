@@ -8,8 +8,27 @@ export async function generateMetadata(
     const decodedUsername = decodeURIComponent(username)
 
     return {
-        title: `${decodedUsername}'s Portfolio | GildedIn`,
-        description: `Welcome to ${decodedUsername}'s personalized portfolio on GildedIn. Check out their projects, skills, and experiences.`,
+        title: `${decodedUsername}'s Portfolio`,
+        description: `Explore ${decodedUsername}'s projects, skills, and professional journey on GildedIn.`,
+        openGraph: {
+            title: `${decodedUsername} - Portfolio`,
+            description: `Check out ${decodedUsername}'s portfolio on GildedIn.`,
+            type: 'profile',
+            images: [
+                {
+                    url: `/images/Profile_1-min.JPG`, // Ideally dynamic based on user
+                    width: 1200,
+                    height: 630,
+                    alt: `${decodedUsername}'s Profile Picture`,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${decodedUsername} - Portfolio`,
+            description: `Check out ${decodedUsername}'s latest work.`,
+            images: [`/images/Profile_1-min.JPG`], // Ideally dynamic
+        },
     }
 }
 
@@ -29,8 +48,27 @@ export default async function UserLayout({
     }
 
     const mobileFontStyle = `@media (max-width: 640px) { .font-comic, .font-inkfree { font-family: var(--font-roboto), sans-serif !important; } }`;
+
+    // JSON-LD for Search Engines
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: await Promise.resolve(params).then(p => decodeURIComponent(p.username)),
+        url: `https://aaroophan.vercel.app/${(await params).username}`,
+        image: 'https://aaroophan.vercel.app/images/Profile_1-min.JPG', // Placeholder for now
+        sameAs: [
+            // Example links - ideally fetched from user data
+            "https://www.linkedin.com/in/Aaroophan",
+            "https://github.com/Aaroophan"
+        ]
+    }
+
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <style>{mobileFontStyle}</style>
             {children}
         </>
