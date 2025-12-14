@@ -10,6 +10,9 @@ import { GlowCapture, Glow } from "@codaworks/react-glow"
 import { useParams } from "next/navigation"
 import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
+import WireframeGlobe from "../ui/WireframeGlobe"
+import RainEffect from "../ui/RainEffect"
+import ParticleNetwork from "../ui/ParticleNetwork"
 
 export const Contacts = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
@@ -84,7 +87,9 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
     return (
         <section className="relative min-h-screen py-20 px-4 overflow-hidden font-comic text-[var(--foreground)]" id="Contact">
             <GridBackground Data={backgroundData} Name={Contacts.name} Code={Contacts.toString()} />
-
+            {/* <ParticleNetwork /> */}
+            {/* <RainEffect /> */}
+            <WireframeGlobe />
             <GlowCapture>
                 <Glow color='var(--mono-4)'>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

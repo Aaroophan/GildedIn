@@ -4,7 +4,7 @@ import { useParams } from "next/navigation"
 import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
-import { Menu, X, Sun, Moon, Briefcase, Code, User, FileText, Send, Award, GraduationCap } from "lucide-react"
+import { Menu, X, Sun, Moon, Briefcase, Code, User, FileText, Send, Award, GraduationCap, Info } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks"
 import { toggleTheme } from "@/models/store/themeSlice"
 import { Button } from "../ui/Button"
@@ -119,7 +119,8 @@ export default function Header() {
                     </nav>
 
                     {/* Actions */}
-                    <div className="hidden lg:flex items-center gap-4">
+                    <div className="hidden lg:flex items-center gap-6">
+
                         {/* Theme Toggle */}
                         <motion.button
                             onClick={() => dispatch(toggleTheme())}
@@ -131,10 +132,22 @@ export default function Header() {
                         >
                             <ThemeIcon size={20} />
                         </motion.button>
+
+                        {/* Info Button */}
+                        <Link href={`/login`}>
+                            <motion.button
+                                whileHover={{ scale: 1.1, rotate: 10 }}
+                                whileTap={{ scale: 0.9 }}
+                                className="p-1 rounded-full text-[var(--foreground)] bg-[var(--mono-4)] hover:bg-[var(--mono-4)]/10 hover:text-[var(--mono-4)] transition-colors animate-ping"
+                                aria-label="Information"
+                            >
+                                <Info size={25} />
+                            </motion.button>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Toggle */}
-                    <div className="xl:hidden flex items-center gap-4">
+                    <div className="xl:hidden flex items-center gap-6">
                         <motion.button
                             onClick={() => dispatch(toggleTheme())}
                             whileTap={{ rotate: 180 }}
@@ -142,6 +155,18 @@ export default function Header() {
                         >
                             <ThemeIcon size={20} />
                         </motion.button>
+
+                        {/* Info Button */}
+                        <Link href={`/login`}>
+                            <motion.button
+                                whileHover={{ scale: 1.1, rotate: 10 }}
+                                whileTap={{ scale: 0.9 }}
+                                className="p-1 rounded-full text-[var(--foreground)] bg-[var(--mono-4)] hover:bg-[var(--mono-4)]/10 hover:text-[var(--mono-4)] transition-colors animate-ping"
+                                aria-label="Information"
+                            >
+                                <Info size={15} />
+                            </motion.button>
+                        </Link>
 
                         <button
                             onClick={() => setMobileMenuOpen(true)}

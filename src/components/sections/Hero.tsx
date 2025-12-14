@@ -14,6 +14,7 @@ import { Glow, GlowCapture } from "@codaworks/react-glow"
 import { useParams } from "next/navigation"
 import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
+import HeroScene from "../ui/HeroScene"
 
 function TimelyGreeting({ Data }: { Data: string }) {
 	const [greetingData, setGreetingData] = useState({
@@ -205,6 +206,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 	return (
 		<section id="Hero" className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden font-mono">
 			<FadingBackground Value="Backgrounds" />
+			{/* <HeroScene /> */}
 			<GridBackground Data={Data} Name={Hero.name} Code={Hero.toString().split("SPLITHERE")[1]} />
 
 			<header className="container mx-auto px-4 relative z-10 flex flex-col items-center cursor-default">

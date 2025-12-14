@@ -144,6 +144,28 @@ export class AuthService {
                 console.error('Failed to fetch IP_Address address', error)
             }
 
+            // MOCK LOGIN FOR DEMO
+            if (email.toLowerCase() === 'arophn@gmail.com' && password === 'TEST1234') {
+                const mockUser = {
+                    Status: 200,
+                    Message: "Login Successful",
+                    User_First_Name: "Aaroophan",
+                    User_Last_Name: "Developer",
+                    User_Email_Address: "arophn@gmail.com",
+                    User_Session_Token: "USER_SESSION_TOKEN",
+                    User_Current_Role: "Admin",
+                    Menu_Items: []
+                }
+
+                this.setCurrentUser(mockUser)
+                return {
+                    Status: 200,
+                    Message: "Login Successful",
+                    User_ID: "mock-user-id-123",
+                    TwoFAMethod: undefined
+                }
+            }
+
             const Username = email
             const Password = password //'0x' + SHA512(process.env.NEXT_PUBLIC_SALT + password + process.env.NEXT_PUBLIC_SALT).toString() //To be changed
 

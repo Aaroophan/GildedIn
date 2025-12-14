@@ -43,7 +43,7 @@ export default async function UserLayout({
     params: Promise<{ username: string }>
 }) {
     const { username } = await params
-    if (!ALLOWED_USERS.includes(username)) {
+    if (!ALLOWED_USERS.includes(username) && username.toLowerCase() !== 'login') {
         redirect(`/${DEFAULT_USER}`)
     }
 

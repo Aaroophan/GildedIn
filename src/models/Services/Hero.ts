@@ -51,10 +51,10 @@ export class HeroService {
                     "Animation Enthusiast",
                     "Full Stack Developer",
                     "Associate Software Engineer",
+                    "MSc in Computer Science",
                     "Next.js, React, JavaScript/TypeScript",
                     "Node, Python (FastAPI), C# (.NET)",
                     "SQL, PostgreSQL, MongoDB",
-                    "MERN Stack Enthusiast",
                     "Agile Team Player"
                 ],
                 "Links": [

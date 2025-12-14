@@ -10,6 +10,8 @@ import { Experiences } from "@/components/sections/Experiences"
 import { Educations } from "@/components/sections/Educations"
 import { Contacts } from "@/components/sections/Contact"
 import { References } from "@/components/sections/References"
+import RainEffect from "../ui/RainEffect"
+import { div } from "framer-motion/client"
 
 interface LandingPageClientProps {
     heroData?: any
@@ -90,6 +92,7 @@ export default function LandingPageClient({
     return (
         <GlowCapture>
             <div ref={containerRef} className="relative">
+                {/* <RainEffect /> */}
                 {/* Hero Section - Fixed initially */}
                 <div
                     ref={heroRef}

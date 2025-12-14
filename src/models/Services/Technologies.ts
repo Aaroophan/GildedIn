@@ -134,9 +134,45 @@ export class TechnologiesService {
                                 "Three"
                             ],
                             [
-                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg",
-                                "Blazor"
-                            ]
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/serilog/serilog-original.svg",
+                                "Serilog"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rabbitmq/rabbitmq-original.svg",
+                                "RabbitMQ"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jwt/jwt-original.svg",
+                                "JWT"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oauth2/oauth2-original.svg",
+                                "OAuth2"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webhooks/webhooks-original.svg",
+                                "Webhooks"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg",
+                                "MaterialUI"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/shadcn/shadcn-original.svg",
+                                "ShadcnUI"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/framer/framer-original.svg",
+                                "Framer"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg",
+                                "Redux"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zustand/zustand-original.svg",
+                                "Zustand"
+                            ],
                         ]
                     ],
                     [
@@ -163,8 +199,20 @@ export class TechnologiesService {
                                 "Firebase"
                             ],
                             [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg",
+                                "Supabase"
+                            ],
+                            [
                                 "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg",
                                 "Oracle"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg",
+                                "SQLite"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
+                                "Redis"
                             ]
                         ]
                     ],
@@ -182,6 +230,26 @@ export class TechnologiesService {
                             [
                                 "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/androidstudio/androidstudio-original.svg",
                                 "Android Studio"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+                                "Figma"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+                                "Docker"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg",
+                                "Jenkins"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+                                "Git"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+                                "GitHub"
                             ],
                             [
                                 "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg",
@@ -210,6 +278,10 @@ export class TechnologiesService {
                             [
                                 "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/trello/trello-plain.svg",
                                 "Trello"
+                            ],
+                            [
+                                "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openproject/openproject-original.svg",
+                                "OpenProject"
                             ],
                             [
                                 "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zendesk/zendesk-original.svg",

@@ -37,7 +37,7 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
                 {[...skills, ...skills, ...skills, ...skills].map(([icon, name]: any, index: number) => (
                     <div
                         key={`${name}-${index}`}
-                        className="relative flex-shrink-0 flex flex-col items-center justify-center rounded-lg bg-[var(--mono-4)]/5 w-28 h-20 lg:w-48 lg:h-30 group cursor-pointer hover:bg-[var(--mono-4)]/5 transition-colors duration-300"
+                        className="relative flex-shrink-0 flex flex-col items-center justify-center rounded-lg bg-[var(--mono-4)]/5 w-28 h-20 lg:w-48 lg:h-30 group cursor-pointer hover:bg-[var(--mono-4)]/5 transition-colors duration-300 backdrop-blur-xl"
                     >
                         <TechCorners Padding={0} Width={4} Height={2} />
 
@@ -48,7 +48,6 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
                                 fill
                                 className="object-contain drop-shadow-md"
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50?text=' + name
                                 }}
                                 loading="lazy"
                             />
