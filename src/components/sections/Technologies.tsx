@@ -16,10 +16,10 @@ import { LazySection } from '../providers/LazySection'
 // Marquee component for infinite scrolling
 const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any[], direction?: "left" | "right", speed?: number }) => {
     return (
-        <div className="relative flex overflow-hidden select-none gap-5 mask-linear-fade">
+        <div className="relative flex overflow-hidden select-none gap-3 sm:gap-5 mask-linear-fade">
 
             <motion.div
-                className="flex flex-nowrap gap-5"
+                className="flex flex-nowrap gap-3 sm:gap-5"
                 animate={{
                     x: direction === "left" ? ["0%", "-25%"] : ["-25%", "0%"],
                 }}
@@ -37,11 +37,11 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
                 {[...skills, ...skills, ...skills, ...skills].map(([icon, name]: any, index: number) => (
                     <div
                         key={`${name}-${index}`}
-                        className="relative flex-shrink-0 flex flex-col items-center justify-center rounded-lg bg-[var(--mono-4)]/5 w-48 h-30 group cursor-pointer hover:bg-[var(--mono-4)]/5 transition-colors duration-300"
+                        className="relative flex-shrink-0 flex flex-col items-center justify-center rounded-lg bg-[var(--mono-4)]/5 w-28 h-20 lg:w-48 lg:h-30 group cursor-pointer hover:bg-[var(--mono-4)]/5 transition-colors duration-300"
                     >
                         <TechCorners Padding={0} Width={4} Height={2} />
 
-                        <div className="w-16 h-16 mb-3 relative grayscale-10 group-hover:grayscale-0 transition-all duration-300">
+                        <div className="w-10 h-10 lg:w-16 lg:h-16 mb-2 lg:mb-3 relative grayscale-10 group-hover:grayscale-0 transition-all duration-300">
                             <Image
                                 src={icon}
                                 alt={name}
@@ -53,7 +53,7 @@ const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any
                                 loading="lazy"
                             />
                         </div>
-                        <span className="text-lg font-inkfree font-bold text-[var(--foreground)]/80 text-center line-clamp-2 group-hover:text-[var(--mono-4)] transition-colors">
+                        <span className="text-sm lg:text-lg font-inkfree font-bold text-[var(--foreground)]/80 text-center line-clamp-2 group-hover:text-[var(--mono-4)] transition-colors px-1">
                             {name}
                         </span>
                     </div>
@@ -105,20 +105,21 @@ export const Technologies = () => {
     const backgroundData = { ...Data, Name: decodedUsername }
 
     return (
-        <section id="Technologies" className="relative min-h-screen py-20 px-4 overflow-hidden font-comic text-[var(--foreground)]">
+        <section id="Technologies" className="relative min-h-screen py-10 lg:py-20 px-2 lg:px-4 overflow-hidden font-comic text-[var(--foreground)]">
             <GridBackground Data={backgroundData} Name={Technologies.name} Code={Technologies.toString()} />
 
             <GlowCapture>
                 <Glow color='var(--mono-4)'>
-                    <div className="container max-w-8xl mx-auto relative z-10 px-4">
+                    <div className="container max-w-8xl mx-auto relative z-10 px-2 lg:px-4">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.5 }}
-                            className="text-center mb-16 relative"
+                            className="text-center mb-8 lg:mb-16 relative"
                         >
                             <div className="inline-block">
-                                <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
+                                <h2 className="text-3xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
                                     Skills & Technologies
                                 </h2>
                                 <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
@@ -132,18 +133,18 @@ export const Technologies = () => {
                             </div>
                         </motion.div>
 
-                        <div className="space-y-16">
+                        <div className="space-y-8 lg:space-y-16">
                             {Data.Technologies.map(([category, skills]: any, categoryIndex: number) => (
                                 <div
                                     key={category}
                                     ref={el => { categoryRefs.current[categoryIndex] = el }}
                                     className="relative"
                                 >
-                                    <LazySection threshold={0.1} delay={categoryIndex * 100} fallback={<div className="w-full h-25 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />}>
+                                    <LazySection threshold={0.01} delay={categoryIndex * 100} fallback={<div className="w-full h-25 bg-[var(--mono-4)]/10 animate-pulse rounded-xl" />}>
                                         <div className="relative">
                                             {/* Category Header with Tech Styling */}
-                                            <div className="flex items-center gap-4 mb-6 pl-4 border-l-4 border-[var(--mono-4)]">
-                                                <h3 className="text-2xl font-bold font-comic text-[var(--foreground)] tracking-widest">
+                                            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 pl-2 sm:pl-4 border-l-4 border-[var(--mono-4)]">
+                                                <h3 className="text-xl sm:text-2xl font-bold font-comic text-[var(--foreground)] tracking-widest">
                                                     {category}
                                                 </h3>
                                                 <div className="h-px flex-1 bg-gradient-to-r from-[var(--mono-4)]/30 to-transparent" />

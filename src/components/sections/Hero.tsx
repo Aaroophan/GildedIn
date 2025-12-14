@@ -179,7 +179,7 @@ export default function Hero() {
 					transition: { duration: 0.2 }
 				}}
 				className="
-                    relative group flex items-center justify-center p-6 
+                    relative group flex items-center justify-center mt-4 lg:mt-0 lg:p-6 p-2 
                     rounded-full bg-[var(--mono-1)]/10 backdrop-blur-sm 
                     border border-[var(--foreground)]/10 hover:border-[var(--mono-4)]/50
                     text-[var(--foreground)]/75 hover:text-[var(--mono-4)] transition-all duration-300
@@ -206,7 +206,7 @@ export default function Hero() {
 			<GridBackground Data={Data} Name={Hero.name} Code={Hero.toString().split("SPLITHERE")[1]} />
 
 			<header className="container mx-auto px-4 relative z-10 flex flex-col items-center cursor-default">
-				<div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-150">
+				<div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-100">
 					<div className="hidden lg:block w-64 h-64 sm:w-80 sm:h-80" />
 					<div className="flex flex-col items-center justify-center">
 						{/* Main Dossier Card */}
@@ -224,10 +224,11 @@ export default function Hero() {
 								animate={{ opacity: 1, scale: 1, y: 0 }}
 								transition={{ duration: 0.8, ease: "easeOut" }}
 								className="
-									relative p-8 sm:p-10 lg:py-16 rounded-2xl
+									relative p-8 sm:p-5 lg:py-10 rounded-2xl
 									bg-[var(--background)]/20 backdrop-blur-md
 									border border-[var(--foreground)]/10
 									shadow-2xl
+									w-full lg:w-auto
 								"
 							>
 
@@ -238,7 +239,7 @@ export default function Hero() {
 									CASE_FILE_#: {Array.from(Data.Name.split(' ')[0]).map((char: any) => char.charCodeAt(0).toString(16).toUpperCase()).join("")}
 								</div>
 
-								<div className="flex flex-col items-center text-center gap-6">
+								<div className="flex flex-col items-center text-center gap-4">
 
 									{/* Greeting Note */}
 									<motion.div
@@ -255,10 +256,10 @@ export default function Hero() {
 									{/* Name Title */}
 									<div className="relative mt-4">
 										<h1 className="
-											font-oswald font-bold text-5xl sm:text-7xl lg:text-9xl 
+											font-oswald font-bold text-6xl sm:text-7xl lg:text-9xl 
 											tracking-wibdest bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text
 											cursor-default select-none
-											drop-shadow-lg lg:px-15
+											drop-shadow-lg lg:px-4
 										">
 											{Data.Name.split(' ').map((SplitName: string, ind: number) => (
 												<React.Fragment key={`name-part-${ind}`}>
@@ -273,7 +274,7 @@ export default function Hero() {
 																type: "spring",
 																stiffness: 100
 															}}
-															className="rounded-md hover:text-[var(--mono-4)]  transition-colors"
+															className="rounded-md hover:text-[var(--mono-4)] transition-colors"
 														>
 															{letter}
 														</motion.span>
@@ -288,10 +289,10 @@ export default function Hero() {
 											initial={{ width: "0%" }}
 											animate={{ width: "100%" }}
 											transition={{ delay: 3, duration: 3, ease: "easeInOut" }}
-											className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent opacity-50 mt-5"
+											className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent opacity-50 mt-5 animate-pulse"
 										/>
 									</div>
-									<h2 className="font-mono font-bold text-center cursor-default lg:text-xl bg-gradient-to-br bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent">
+									<h2 className="h-15 lg:h-auto font-mono font-bold text-center cursor-default lg:text-xl bg-gradient-to-br bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent">
 										{Data.Tags[currentTagIndex].split("").map((letter: string, index: number) => (
 											<motion.span
 												key={index}
@@ -309,8 +310,8 @@ export default function Hero() {
 						</Tilt>
 
 						{/* Evidence Links (Socials) */}
-						<div className="mt-12 lg:mt-16 w-full max-w-5xl relative">
-							<div className="flex flex-wrap justify-center lg:justify-center gap-3 lg:gap-10 lg:mt-10">
+						<div className="mt-2 w-full max-w-5xl relative">
+							<div className="flex flex-wrap justify-center lg:justify-center gap-3 lg:gap-10 lg:mt-10 font-bold">
 								{Socials}
 							</div>
 						</div>

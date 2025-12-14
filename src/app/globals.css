@@ -111,26 +111,37 @@ body {
 }
 
 .mask-linear-fade-y {
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
+  mask-image: linear-gradient(to bottom,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent);
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent);
 }
 
 
 .scrollbar-custom {
-  scrollbar-width: thin; /* Thin scrollbar */
-  scrollbar-color: var(--mono-6) rgba(0, 0, 0, 0); /* Color for thumb and track (thumb: blue, track: white) */
+  scrollbar-width: thin;
+  /* Thin scrollbar */
+  scrollbar-color: var(--mono-6) rgba(0, 0, 0, 0);
+  /* Color for thumb and track (thumb: blue, track: white) */
+}
+
+@media (max-width: 640px) {
+
+  .font-comic,
+  .font-inkfree {
+    font-family: var(--font-roboto), sans-serif !important;
+  }
+
+  .mask-linear-fade {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
 }
 
 /* Debugging */

@@ -28,8 +28,10 @@ export default async function UserLayout({
         redirect(`/${DEFAULT_USER}`)
     }
 
+    const mobileFontStyle = `@media (max-width: 640px) { .font-comic, .font-inkfree { font-family: var(--font-roboto), sans-serif !important; } }`;
     return (
         <>
+            <style>{mobileFontStyle}</style>
             {children}
         </>
     )
