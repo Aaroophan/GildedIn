@@ -30,10 +30,12 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode
 }>) {
+	const mobileFontStyle = `@media (max-width: 640px) { .mobile-font-override { font-family: 'Comic Sans MS', 'Comic Sans' !important; } }`;
 	return (
 		<html lang="en">
 			<head>
 				<link rel="icon" type="image/jpeg" href="/images/Profile_1-min.JPG" />
+				<style>{mobileFontStyle}</style>
 			</head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
