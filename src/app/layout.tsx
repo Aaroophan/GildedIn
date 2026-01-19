@@ -113,7 +113,6 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<head>
-
 				<style>{mobileFontStyle}</style>
 				<script
 					type="application/ld+json"
@@ -179,10 +178,10 @@ export default function RootLayout({
 					}}
 				/>
 			</head>
-			<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ""} />
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${roboto.variable} antialiased`}
 			>
+				<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ""} />
 				<ReduxProvider>
 					<ThemeProvider>
 						<Header />
