@@ -110,17 +110,17 @@ export class ProjectsService {
                         {
                             "Name": "Link",
                             "Icon": "link",
-                            "Href": "https://aaroophan.onrender.com/"
+                            "Href": "https://aaroophan.dev"
                         },
                         {
                             "Name": "GitHub",
                             "Icon": "github",
-                            "Href": "https://github.com/Aaroophan/anaphora"
+                            "Href": "https://github.com/Aaroophan/GildedIn"
                         }
                         ],
                         "Date": "June 2025",
                         "Description": "Developed a fully customizable, data-driven portfolio system where each user has a unique URL and personalized content. Enabled real-time content updates, interactive animations, responsive layouts, and 3D visual elements—all without requiring code changes. Prioritized performance, accessibility, and seamless user experience across devices.",
-                        "Technologies": "React, TypeScript, Tailwind, Framer-Motion, Zod, GitHub"
+                        "Technologies": "Next.js, TypeScript, Tailwind, Framer-Motion, Redux, GitHub"
                     },
                     {
                         "Image": "/images/Tic-Tac-Bot-min.JPG",

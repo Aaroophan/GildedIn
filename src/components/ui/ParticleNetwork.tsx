@@ -82,14 +82,11 @@ const ParticleConnections = ({ count = 100, radius = 1.5, maxDistance = 1.5 }) =
                         count={count}
                         array={positions}
                         itemSize={3}
+                        args={[positions, 3]}
                     />
                 </bufferGeometry>
                 <pointsMaterial
                     size={0.15}
-                    color="var(--mono-4)" // Will be computed style but for now let's hope CSS vars work or we hardcode
-                    // Actually CSS vars like this won't work in WebGL context directly often unless handled. 
-                    // We'll pass a hex prop or handle it. For now let's assume standard behavior or fix later.
-                    // Better to use a standard color for safety.
                     color="#2a9d8f"
                     transparent
                     opacity={0.8}
@@ -105,6 +102,7 @@ const ParticleConnections = ({ count = 100, radius = 1.5, maxDistance = 1.5 }) =
                         array={linePositions}
                         itemSize={3}
                         usage={THREE.DynamicDrawUsage}
+                        args={[linePositions, 3]}
                     />
                 </bufferGeometry>
                 <lineBasicMaterial

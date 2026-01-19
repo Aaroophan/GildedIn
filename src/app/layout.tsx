@@ -115,6 +115,69 @@ export default function RootLayout({
 			<head>
 
 				<style>{mobileFontStyle}</style>
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify({
+							"@context": "https://schema.org",
+							"@type": "Person",
+							"name": "Aaroophan Varatharajan",
+							"alternateName": "Aaroophan",
+							"url": "https://aaroophan.dev",
+							"jobTitle": [
+								"Full Stack Software Engineer",
+								"Full Stack Developer",
+								"Software Engineer",
+								"React Developer",
+								"Next Developer"
+							],
+							"alumniOf": [
+								"University of Moratuwa",
+								"University of Bedfordshire",
+								"SLIIT City Uni"
+							],
+							"sameAs": [
+								"https://linkedin.com/in/aaroophan",
+								"https://github.com/Aaroophan",
+								"https://aaroophan.medium.com",
+								"https://www.aaroophan.dev",
+								"https://instagram.com/aaroophan",
+								"https://twitter.com/aaroophan",
+								"https://www.youtube.com/@aaroophan",
+								"https://harkbase.onrender.com",
+								"https://github.com/Aaroophan/HarkBase",
+								"https://OneWorkLoc.vercel.app",
+								"https://github.com/Aaroophan/OneWorkLoc",
+								"https://skrineplae.vercel.app",
+								"https://github.com/Aaroophan/SkrinePlae",
+								"https://aaroophan.dev",
+								"https://github.com/Aaroophan/GildedIn",
+								"https://aaroophan.github.io/Tic-Tac-Bot/",
+								"https://github.com/Aaroophan/Tic-Tac-Bot",
+								"https://aaroophan.github.io/Grid-ify/",
+								"https://github.com/Aaroophan/Grid-ify",
+								"https://aaroophan.github.io/SVG-ify/",
+								"https://github.com/Aaroophan/SVG-ify",
+								"https://aaroophan.github.io/PixelPainter/",
+								"https://github.com/Aaroophan/PixelPainter",
+								"https://mend-tale-game.onrender.com/",
+								"https://github.com/Aaroophan/Mend-Tale-Game",
+								"https://mend-tale-game.onrender.com/",
+								"https://cis-domeytoe-game.onrender.com/",
+								"https://github.com/Aaroophan/CIS-Domeytoe-Game",
+								"https://www.youtube.com/watch?v=Q0trwCC5dgE",
+								"https://loc-dev-assessment.onrender.com/",
+								"https://github.com/Aaroophan/loc-dev-assessment",
+								"https://3d2y-genin-com.stackstaging.com/",
+								"https://github.com/NeroBrutal/EveryMoveApp",
+								"https://baratiebakery-asv.stackstaging.com/",
+								"https://github.com/Aaroophan/BaratieBakery",
+								"https://www.youtube.com/watch?v=Q0trwCC5dgE",
+								"https://github.com/Aaroophan/PaperClips"
+							]
+						})
+					}}
+				/>
 			</head>
 			<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ""} />
 			<body
