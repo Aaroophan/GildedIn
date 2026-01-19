@@ -16,7 +16,7 @@ export async function generateMetadata(
             type: 'profile',
             images: [
                 {
-                    url: `/images/Profile_1-min.JPG`, // Ideally dynamic based on user
+                    url: `/images/Aaroophan-Main.png`, // Ideally dynamic based on user
                     width: 1200,
                     height: 630,
                     alt: `${decodedUsername}'s Profile Picture`,
@@ -27,7 +27,7 @@ export async function generateMetadata(
             card: 'summary_large_image',
             title: `${decodedUsername} - Portfolio`,
             description: `Check out ${decodedUsername}'s latest work.`,
-            images: [`/images/Profile_1-min.JPG`], // Ideally dynamic
+            images: [`/images/Aaroophan-Main.png`], // Ideally dynamic
         },
     }
 }
@@ -55,7 +55,7 @@ export default async function UserLayout({
         '@type': 'Person',
         name: await Promise.resolve(params).then(p => decodeURIComponent(p.username)),
         url: `https://aaroophan.vercel.app/${(await params).username}`,
-        image: 'https://aaroophan.vercel.app/images/Profile_1-min.JPG', // Placeholder for now
+        image: 'https://aaroophan.vercel.app/images/Aaroophan-Main.png', // Placeholder for now
         sameAs: [
             // Example links - ideally fetched from user data
             "https://www.linkedin.com/in/Aaroophan",

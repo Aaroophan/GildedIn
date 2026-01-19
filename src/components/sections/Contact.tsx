@@ -21,8 +21,8 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
     const [contact, setContact] = useState<any>(initialData?.Contact || null)
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
+    const [Title, setTitle] = useState<string>(initialData?.Title || "")
 
-    // Form State
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -41,6 +41,7 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
                 if (result.Contact) {
                     setContact(result.Contact)
                 }
+                setTitle(result.Title)
                 setError(null)
             } else {
                 setError(result.Message)
@@ -100,8 +101,8 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
                             transition={{ duration: 0.8 }}
                             className="text-center mb-16"
                         >
-                            <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
-                                Get in Touch
+                            <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
+                                {Title}
                             </h2>
                             <div className="h-2 w-full max-w-lg mx-auto bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative mb-6">
                                 <motion.div

@@ -13,7 +13,6 @@ import TechCorners from '../ui/TechCorners'
 import FadingBackground from '../ui/FadingBackground'
 import { LazySection } from '../providers/LazySection'
 
-// Marquee component for infinite scrolling
 const SkillsMarquee = ({ skills, direction = "left", speed = 20 }: { skills: any[], direction?: "left" | "right", speed?: number }) => {
     return (
         <div className="relative flex overflow-hidden select-none gap-3 sm:gap-5 mask-linear-fade">
@@ -69,6 +68,7 @@ export const Technologies = ({ initialData }: { initialData?: any }) => {
     const [Data, setData] = useState<any>(initialData)
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
+    const [Title, setTitle] = useState<string>(initialData?.Title || "")
 
     // Create refs for each category
     const categoryRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -82,6 +82,7 @@ export const Technologies = ({ initialData }: { initialData?: any }) => {
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 setData(result)
+                setTitle(result.Title)
                 setError(null)
             } else {
                 setError(result.Message)
@@ -120,8 +121,8 @@ export const Technologies = ({ initialData }: { initialData?: any }) => {
                             className="text-center mb-8 lg:mb-16 relative"
                         >
                             <div className="inline-block">
-                                <h2 className="text-3xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
-                                    Skills & Technologies
+                                <h2 className="text-3xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
+                                    {Title}
                                 </h2>
                                 <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
                                     <motion.div

@@ -44,6 +44,7 @@ export class ProjectsService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
+                Title: "Personal Projects Archive",
                 "Projects": [
                     {
                         "Image": "/images/HarkBase-min.JPG",

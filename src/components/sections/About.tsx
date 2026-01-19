@@ -12,6 +12,7 @@ import FadingBackground from '../ui/FadingBackground'
 import { useParams } from "next/navigation"
 import GridBackground from '../ui/GridBackground'
 import TechCorners from '../ui/TechCorners'
+import Image from 'next/image'
 
 export const About = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
@@ -71,7 +72,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
     return (
         <section id="about" className="relative min-h-screen py-20 px-4 overflow-hidden font-mono text-[var(--foreground)]">
-            <FadingBackground Value="Images" />
+            {/* <FadingBackground Value="Images" /> */}
             <GridBackground Data={backgroundData} Name={About.name} Code={About.toString()} />
 
             <GlowCapture>
@@ -89,7 +90,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
                             {/* Header Section */}
                             <div className="mb-12 text-center relative">
-                                <div className="absolute top-0 right-0 text-[10px] sm:text-xs text-[var(--mono-4)] tracking-widest opacity-60 font-bold border border-[var(--mono-4)]/30 px-2 py-1 rounded">
+                                <div className="absolute top-0 right-0 text-[10px] sm:text-xs text-[var(--mono-4)] tracking-widest opacity-60 font-bold border border-[var(--mono-4)]/30 px-2 py-1 rounded cursor-default">
                                     REF: CONFIDENTIAL
                                 </div>
 
@@ -98,8 +99,8 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                     animate={isInView !== null ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                                     transition={{ duration: 0.5 }}
                                 >
-                                    <h2 className="text-4xl sm:text-5xl font-bold mb-4 font-oswald tracking-wide bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)]/50 bg-clip-text text-transparent uppercase inline-block">
-                                        {"Who Am I ?".split('').map((letter, idx) => (
+                                    <h2 className="text-4xl sm:text-5xl font-bold mb-4 font-oswald tracking-wide bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)]/50 bg-clip-text text-transparent inline-block cursor-default">
+                                        {Data.Title.split('').map((letter: string, idx: number) => (
                                             <motion.span
                                                 key={idx}
                                                 initial={{ opacity: 0 }}
@@ -133,7 +134,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                         border group overflow-hidden
                                         ${activeTab === tab
                                                 ? 'bg-[var(--mono-4)]/20 border-[var(--mono-4)] text-[var(--foreground)] shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)]'
-                                                : 'bg-transparent border-[var(--foreground)]/20 text-[var(--foreground)]/80 hover:text-[var(--mono-4)] hover:border-[var(--mono-4)]/50'
+                                                : 'bg-transparent border-[var(--foreground)]/20 text-[var(--foreground)]/80 hover:text-[var(--mono-4)] hover:border-[var(--mono-4)]/50 animate-pulse'
                                             }
                                     `}
                                     >
@@ -155,22 +156,47 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                         initial={{ opacity: 0, filter: 'blur(5px)' }}
                                         animate={{ opacity: 1, filter: 'blur(0px)' }}
                                         transition={{ duration: 0.5 }}
-                                        className="max-w-4xl mx-auto space-y-6 text-justify"
+                                        className="max-w-4xl mx-auto space-y-6 text-justify flex justify-center "
                                     >
-                                        {paragraphs.map((paragraph: string, index: number) => (
-                                            <LazySection
-                                                key={index}
-                                                threshold={0.1}
-                                                delay={index * 100}
-                                                className="relative pl-6 border-l border-[var(--mono-4)]/30 hover:border-[var(--mono-4)] transition-colors duration-300"
-                                                fallback={<div className="h-20 bg-[var(--mono-4)]/5 animate-pulse rounded" />}
-                                            >
-                                                <div className="animate-pulse absolute top-0 left-[-4px] w-2 h-2 rounded-full bg-[var(--mono-4)] opacity-50" />
-                                                <p className="whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black">
-                                                    {paragraph}
-                                                </p>
-                                            </LazySection>
-                                        ))}
+                                        {/* <motion.div
+                                            initial={{ opacity: 0, filter: 'blur(5px)' }}
+                                            animate={{ opacity: 1, filter: 'blur(0px)' }}
+                                            transition={{ duration: 0.5 }}
+                                            className="w-full text-justify"
+                                        >
+                                            <Image
+                                                src={Data.Image}
+                                                alt={Data.Name}
+                                                width={720}
+                                                height={720}
+                                                className="rounded-md object-cover group-hover:grayscale-0 transition-all duration-500"
+                                                onError={(e) => {
+                                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                                                }}
+                                            />
+
+                                        </motion.div> */}
+                                        <motion.div
+                                            initial={{ opacity: 0, filter: 'blur(5px)' }}
+                                            animate={{ opacity: 1, filter: 'blur(0px)' }}
+                                            transition={{ duration: 0.5 }}
+                                            className="space-y-6 text-justify cursor-default"
+                                        >
+                                            {paragraphs.map((paragraph: string, index: number) => (
+                                                <LazySection
+                                                    key={index}
+                                                    threshold={0.1}
+                                                    delay={index * 100}
+                                                    className="relative pl-6 border-l border-[var(--mono-4)]/30 hover:border-[var(--mono-4)] transition-colors duration-300"
+                                                    fallback={<div className="h-20 bg-[var(--mono-4)]/5 animate-pulse rounded" />}
+                                                >
+                                                    <div className="animate-pulse absolute top-0 left-[-4px] w-2 h-2 rounded-full bg-[var(--mono-4)] opacity-50" />
+                                                    <p className="whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black">
+                                                        {paragraph}
+                                                    </p>
+                                                </LazySection>
+                                            ))}
+                                        </motion.div>
                                     </motion.div>
                                 )}
 

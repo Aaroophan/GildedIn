@@ -29,6 +29,7 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
     const [selectedProject, setSelectedProject] = useState<any>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isExpanded, setIsExpanded] = useState(false)
+    const [Title, setTitle] = useState<string>(initialData?.Title || "")
 
     // Dynamic refs for each project
     const projectRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -54,6 +55,7 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
                 setData(result)
+                setTitle(result.Title)
                 setError(null)
             } else {
                 setError(result.Message)
@@ -96,8 +98,8 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
                                 transition={{ duration: 0.5 }}
                                 className="inline-block"
                             >
-                                <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
-                                    Project Archive
+                                <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
+                                    {Title}
                                 </h2>
                                 <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
                                     <motion.div

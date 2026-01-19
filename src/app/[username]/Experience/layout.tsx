@@ -7,7 +7,7 @@ export async function generateMetadata(
     const decodedUsername = decodeURIComponent(username)
 
     return {
-        title: `${decodedUsername}'s Experience | GildedIn`,
+        title: `${decodedUsername}'s Experience | GildedIn | Aaroophan`,
         description: `Professional experience of ${decodedUsername}.`,
     }
 }

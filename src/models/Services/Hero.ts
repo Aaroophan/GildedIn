@@ -44,18 +44,20 @@ export class HeroService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
-                "Image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixid=M3w3MjUzNDh8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBwb3J0Zm9saW8lMjBiYWNrZ3JvdW5kJTIwdGVjaHxlbnwwfHx8fDE3NDg1MTMxNzB8MA&ixlib=rb-4.1.0",
+                Title: "Hello, I'm",
+                "Image": "/images/Aaroophan-Main.png",
                 "Greeting": "I'm",
                 "Name": "Aaroophan Varatharajan",
                 "Tags": [
                     "Animation Enthusiast",
-                    "Full Stack Developer",
-                    "Associate Software Engineer",
-                    "MSc in Computer Science",
+                    "Full Stack Software Engineer",
+                    "Metadata-Driven Systems",
+                    "MSc in Computer Science (In Progress)",
                     "Next.js, React, JavaScript/TypeScript",
-                    "Node, Python (FastAPI), C# (.NET)",
-                    "SQL, PostgreSQL, MongoDB",
-                    "Agile Team Player"
+                    "C# (.NET), Node.js, Python (FastAPI)",
+                    "T-SQL, PostgreSQL, MongoDB",
+                    "Agile Team Player",
+                    "Blog Writer"
                 ],
                 "Links": [
                     {
@@ -72,6 +74,11 @@ export class HeroService {
                         "Name": "GitHub",
                         "Icon": "Github",
                         "Href": "https://github.com/Aaroophan"
+                    },
+                    {
+                        "Name": "Medium",
+                        "Icon": "PenLine",
+                        "Href": "https://medium.com/@aaroophan"
                     },
                     {
                         "Name": "Email",
@@ -103,7 +110,7 @@ export class HeroService {
                     "/images/BG_11-min.mp4"
                 ],
                 "Images": [
-                    // "/images/Profile_1-min.JPG",
+                    // "/images/Aaroophan-Main.png",
                     // "/images/Profile_2-min.JPG",
                     // "/images/Profile_3-min.JPG",
                     // "/images/Profile_4-min.JPG",

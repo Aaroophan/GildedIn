@@ -20,14 +20,14 @@ export default function GridBackground({ Data, Name, Code }: { Data: any, Name: 
 				<div>SECURE_CONNECTION: ESTABLISHED</div>
 				<div>TARGET_ID: {Data.Name.replace(/\s/g, '_').toUpperCase()}</div>
 				<div>SECTION_TITLE: {Name}</div>
-				<div className="">SOURCE_CODE: {Code}</div>
+				{/* <div className="">SOURCE_CODE: {Code}</div> */}
 			</div>
 
 			{/* Right panel */}
 			<div className="max-w-4xl text-[10px] text-[var(--mono-4)]/15 font-mono font-bold tracking-widest cursor-default select-none whitespace-pre-wrap break-words mask-linear-fade-y">
 				<div>COORDINATES: {new Date().getFullYear()}.{new Date().getMonth() + 1}.{new Date().getDate()}</div>
 				<div>ENCRYPTION: AES-256</div>
-				<div>DATA_FOUND: {JSON.stringify(Data, null, 4)}</div>
+				{/* <div>DATA_FOUND: {JSON.stringify(Data, null, 4)}</div> */}
 			</div>
 
 		</div>

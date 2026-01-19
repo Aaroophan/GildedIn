@@ -19,6 +19,7 @@ export const References = ({ initialData }: { initialData?: any }) => {
     const [references, setReferences] = useState<any[]>(initialData?.References || [])
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
+    const [Title, setTitle] = useState<string>(initialData?.Title || "")
 
     const GetData = async () => {
         setIsLoading(true)
@@ -30,6 +31,7 @@ export const References = ({ initialData }: { initialData?: any }) => {
                 if (result.References) {
                     setReferences(result.References)
                 }
+                setTitle(result.Title)
                 setError(null)
             } else {
                 setError(result.Message)
@@ -69,8 +71,8 @@ export const References = ({ initialData }: { initialData?: any }) => {
                                 transition={{ duration: 0.5 }}
                                 className="inline-block"
                             >
-                                <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
-                                    References
+                                <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
+                                    {Title}
                                 </h2>
                                 <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
                                     <motion.div

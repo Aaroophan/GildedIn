@@ -4,20 +4,19 @@ import { useEffect, useRef, useState } from "react"
 import { GlowCapture } from "@codaworks/react-glow"
 import Hero from "@/components/sections/Hero"
 import { About } from "@/components/sections/About"
-import { Technologies } from "@/components/sections/Technologies"
+import { Blog } from "@/components/sections/Blog"
 import { Projects } from "@/components/sections/Projects"
 import { Experiences } from "@/components/sections/Experiences"
 import { Educations } from "@/components/sections/Educations"
 import { Contacts } from "@/components/sections/Contact"
 import { References } from "@/components/sections/References"
-import RainEffect from "../ui/RainEffect"
-import { div } from "framer-motion/client"
 
 interface LandingPageClientProps {
     heroData?: any
     aboutData?: any
-    technologiesData?: any
+
     projectsData?: any
+    BlogData?: any
     experiencesData?: any
     educationsData?: any
     referencesData?: any
@@ -27,8 +26,9 @@ interface LandingPageClientProps {
 export default function LandingPageClient({
     heroData,
     aboutData,
-    technologiesData,
+
     projectsData,
+    BlogData,
     experiencesData,
     educationsData,
     referencesData,
@@ -93,7 +93,6 @@ export default function LandingPageClient({
         <GlowCapture>
             <div ref={containerRef} className="relative">
                 {/* <RainEffect /> */}
-                {/* Hero Section - Fixed initially */}
                 <div
                     ref={heroRef}
                     className="fixed inset-0 z-20 transition-opacity duration-500 ease-out"
@@ -106,10 +105,8 @@ export default function LandingPageClient({
                     {showHero && <Hero initialData={heroData} />}
                 </div>
 
-                {/* Spacer to push content below Hero */}
                 <div style={{ height: `${heroHeight}px` }} />
 
-                {/* About Section - Slides up over Hero */}
                 <div
                     ref={aboutRef}
                     className="relative z-30 transition-transform duration-700 ease-out"
@@ -117,9 +114,8 @@ export default function LandingPageClient({
                     <About initialData={aboutData} />
                 </div>
 
-                {/* Technologies Section - Normal flow */}
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Technologies initialData={technologiesData} />
+                    <Experiences initialData={experiencesData} />
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
@@ -127,7 +123,7 @@ export default function LandingPageClient({
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Experiences initialData={experiencesData} />
+                    <Blog initialData={BlogData} />
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">

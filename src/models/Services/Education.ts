@@ -44,6 +44,7 @@ export class EducationService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
+                Title: "Academic Qualifications",
                 "Educations": [
                     {
                         "Image": "/images/UoM-min.JPG",

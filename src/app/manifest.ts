@@ -11,7 +11,7 @@ export default function manifest(): MetadataRoute.Manifest {
         theme_color: '#0f73ff',
         icons: [
             {
-                src: '/favicon.ico',
+                src: '/images/Aaroophan-Main.ico',
                 sizes: 'any',
                 type: 'image/x-icon',
             },

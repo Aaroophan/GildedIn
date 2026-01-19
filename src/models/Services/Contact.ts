@@ -44,6 +44,7 @@ export class ContactService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
+                Title: "Get In Touch",
                 "Contact": {
                     "Email": "mailto:arophn@gmail.com",
                     "Phone": "https://wa.me/+94768505131",

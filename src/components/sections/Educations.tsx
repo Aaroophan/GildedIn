@@ -19,6 +19,7 @@ export const Educations = ({ initialData }: { initialData?: any }) => {
     const [educations, setEducations] = useState<any[]>(initialData?.Educations || [])
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
+    const [Title, setTitle] = useState<string>(initialData?.Title || "Academic Qualifications")
 
     const GetData = async () => {
         setIsLoading(true)
@@ -30,6 +31,7 @@ export const Educations = ({ initialData }: { initialData?: any }) => {
                 if (result.Educations) {
                     setEducations(result.Educations)
                 }
+                setTitle(result.Title)
                 setError(null)
             } else {
                 setError(result.Message)
@@ -60,14 +62,14 @@ export const Educations = ({ initialData }: { initialData?: any }) => {
 
             <GlowCapture>
                 <Glow color='var(--mono-4)'>
-                    <EducationTimeline educations={educations} />
+                    <EducationTimeline educations={educations} Title={Title} />
                 </Glow>
             </GlowCapture>
         </section>
     )
 }
 
-const EducationTimeline = ({ educations }: { educations: any[] }) => {
+const EducationTimeline = ({ educations, Title }: { educations: any[], Title: string }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -86,8 +88,8 @@ const EducationTimeline = ({ educations }: { educations: any[] }) => {
                     transition={{ duration: 0.5 }}
                     className="inline-block"
                 >
-                    <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
-                        Academic Qualifications
+                    <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
+                        {Title}
                     </h2>
                     <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
                         <motion.div

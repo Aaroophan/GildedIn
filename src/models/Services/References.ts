@@ -44,6 +44,7 @@ export class ReferenceService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
+                Title: "References",
                 "References": [
                 {
                     "Name": "Lasintha Ferdinando",

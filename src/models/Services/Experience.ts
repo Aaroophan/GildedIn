@@ -44,7 +44,24 @@ export class ExperienceService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
+                Title: "Career Timeline",
                 "Experiences": [
+                    {
+                        "Image": "/images/MDZ_logo-min.JPG",
+                        "Title": "Software Engineer",
+                        "Company": "M Data Zone (PVT) LTD",
+                        "JobType": "Full-time",
+                        "Location": "Colombo, Western Province, Sri Lanka",
+                        "LocationType": "On-site (US Hours)",
+                        "Date": "September 2025 - Present",
+                        "Description": [
+                            "Building a metadata-driven multi-channel marketing and admin platform using Next.js, ASP.NET Core, SQL Server, and Jenkins CI/CD, powering brand management, deep-linking, analytics, and user/role governance.",
+                            "Designed and implemented a dynamic CRUD grid framework in the Next.js App Router where a single generic route renders multiple screens from backend metadata, eliminating one-off pages and accelerating feature delivery.",
+                            "Developed a configurable, backend-driven, permission-aware UI with advanced table interactions including column resizing, drag-to-reorder, search, and filtering boosting admin productivity and reducing deployment churn.",
+                            "Built and extended the .NET API layer with stored-procedure-driven endpoints, cross-cutting middleware (logging, no-cache, error tracing), rotating-token authentication, Twilio/TOTP-based 2FA, and an HMAC-signed webhook dispatcher/receiver.",
+                            "Implemented new services within a distributed multi-service event pipeline: Push API, Deeplink API, RabbitMQ publishing with dead-letter handling, and enhanced observability via rotating Serilog logs and DB-backed sinks."
+                        ]
+                    },
                     {
                         "Image": "/images/MDZ_logo-min.JPG",
                         "Title": "Associate Software Engineer",
@@ -52,13 +69,8 @@ export class ExperienceService {
                         "JobType": "Full-time",
                         "Location": "Colombo, Western Province, Sri Lanka",
                         "LocationType": "On-site (US Hours)",
-                        "Date": "September 2024 - Present",
+                        "Date": "September 2024 - September 2025",
                         "Description": [
-                            "Building a metadata-driven multi-channel marketing and admin platform using Next.js, ASP.NET Core, SQL Server, and Jenkins CI/CD, powering brand management, deep-linking, analytics, and user/role governance.",
-                            "Designed and implemented a dynamic CRUD grid framework in the Next.js App Router where a single generic route renders multiple screens from backend metadata, eliminating one-off pages and accelerating feature delivery.",
-                            "Developed a configurable, backend-driven, permission-aware UI with advanced table interactions including column resizing, drag-to-reorder, search, and filtering boosting admin productivity and reducing deployment churn.",
-                            "Built and extended the .NET API layer with stored-procedure-driven endpoints, cross-cutting middleware (logging, no-cache, error tracing), rotating-token authentication, Twilio/TOTP-based 2FA, and an HMAC-signed webhook dispatcher/receiver.",
-                            "Implemented new services within a distributed multi-service event pipeline: Push API, Deeplink API, RabbitMQ publishing with dead-letter handling, and enhanced observability via rotating Serilog logs and DB-backed sinks.",
                             "Authored 100+ T-SQL queries and database objects with constraints and DB Mail notifications, improving data quality signals and reducing rework.",
                             "Troubleshot and resolved database issues using T-SQL, constraints, and defensive parsing reducing data-related downtime by ~20%.",
                             "Built 3 .NET Core CLI apps with Selenium for automated group/single test runs, screenshots, and logs cutting repeat manual effort by ~70%.",

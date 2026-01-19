@@ -44,6 +44,7 @@ export class TechnologiesService {
                 Status: 200,
                 Message: "",
                 User_Session_Token: "User_Session_Token",
+                Title: "Skills & Technologies",
                 "Technologies": [
                     [
                         "Programming Languages",

@@ -110,6 +110,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 	const [currentTagIndex, setCurrentTagIndex] = useState(0)
 	const [isVisible, setIsVisible] = useState<Boolean>(false)
 	const [cornerDims, setCornerDims] = useState({ w: 12, h: 12 })
+    const [Title, setTitle] = useState<string>(initialData?.Title || "")
 	let SPLITHERE
 
 	useEffect(() => {
@@ -191,6 +192,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 				target="_blank"
 				rel="noopener noreferrer"
 				aria-label={Social.Name}
+				title={Social.Name}
 			>
 				{/* Connecting Line to Center (Visual Only) */}
 				<div className="absolute -top-15 left-1/2 w-1 h-15 bg-gradient-to-b from-transparent to-[var(--mono-4)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 m-10" />
@@ -207,7 +209,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 		<section id="Hero" className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden font-mono">
 			<FadingBackground Value="Backgrounds" />
 			{/* <HeroScene /> */}
-			<GridBackground Data={Data} Name={Hero.name} Code={Hero.toString().split("SPLITHERE")[1]} />
+			{/* <GridBackground Data={Data} Name={Hero.name} Code={Hero.toString().split("SPLITHERE")[1]} /> */}
 
 			<header className="container mx-auto px-4 relative z-10 flex flex-col items-center cursor-default">
 				<div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-100">

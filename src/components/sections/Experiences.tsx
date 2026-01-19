@@ -19,6 +19,7 @@ export const Experiences = ({ initialData }: { initialData?: any }) => {
     const [experiences, setExperiences] = useState<any[]>(initialData?.Experiences || [])
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
+    const [Title, setTitle] = useState<string>(initialData?.Title || "Professional Experience")
 
     const GetData = async () => {
         setIsLoading(true)
@@ -30,6 +31,7 @@ export const Experiences = ({ initialData }: { initialData?: any }) => {
                 if (result.Experiences) {
                     setExperiences(result.Experiences)
                 }
+                setTitle(result.Title)
                 setError(null)
             } else {
                 setError(result.Message)
@@ -60,14 +62,14 @@ export const Experiences = ({ initialData }: { initialData?: any }) => {
 
             <GlowCapture>
                 <Glow color='var(--mono-4)'>
-                    <ExperienceTimeline experiences={experiences} />
+                    <ExperienceTimeline experiences={experiences} Title={Title} />
                 </Glow>
             </GlowCapture>
         </section>
     )
 }
 
-const ExperienceTimeline = ({ experiences }: { experiences: any[] }) => {
+const ExperienceTimeline = ({ experiences, Title }: { experiences: any[], Title: string }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -86,7 +88,7 @@ const ExperienceTimeline = ({ experiences }: { experiences: any[] }) => {
                     transition={{ duration: 0.5 }}
                     className="inline-block"
                 >
-                    <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] uppercase tracking-wide">
+                    <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
                         Career Timeline
                     </h2>
                     <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
