@@ -45,14 +45,14 @@ export const metadata: Metadata = {
 		address: false,
 		telephone: false,
 	},
-	metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://www.gildedin.com'),
+	metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://aaroophan.dev'),
 	alternates: {
 		canonical: '/',
 	},
 	openGraph: {
 		title: 'GildedIn | Your Instant Portfolio',
 		description: 'Create your professional portfolio instantly without coding. Dynamic routes, premium themes, and real-time updates.',
-		url: 'https://www.gildedin.com',
+		url: 'https://aaroophan.dev',
 		siteName: 'GildedIn',
 		locale: 'en_US',
 		type: 'website',
