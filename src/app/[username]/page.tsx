@@ -23,8 +23,8 @@ export async function generateMetadata(
     ])
 
     const name = heroData?.Name || username || "Professional"
-    const title = heroData?.Greeting ? `${heroData.Greeting} ${name}` : `${name} - Portfolio`
-    const description = aboutData?.About?.Description?.substring(0, 160) || `Check out ${name}'s professional portfolio on GildedIn.`
+    const title = `${name} | Portfolio | GildedIn | Aaroophan`
+    const description = aboutData?.Tagline || `Check out ${name}'s professional portfolio on GildedIn. | Aaroophan`
     const images = heroData?.Image ? [heroData.Image] : []
 
     return {

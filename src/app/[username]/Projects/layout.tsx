@@ -9,7 +9,7 @@ export async function generateMetadata(
     return {
         title: `${decodedUsername}'s Projects | GildedIn | Aaroophan`,
         description: `Explore the projects created by ${decodedUsername}.`,
-        keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase"],
+        keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase", "Aaroophan"],
         authors: [{ name: "Aaroophan Varatharajan", url: "https://aaroophan.dev" }],
         creator: "Aaroophan Varatharajan",
         publisher: "GildedIn",

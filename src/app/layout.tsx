@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 		template: "%s | GildedIn",
 	},
 	description: "GildedIn is a no-code portfolio platform that instantly gives users their own personalized space on the web through automatically generated dynamic routes.",
-	keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase"],
+	keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase", "Aaroophan"],
 	authors: [{ name: "Aaroophan Varatharajan", url: "https://aaroophan.dev" }],
 	creator: "Aaroophan Varatharajan",
 	publisher: "GildedIn",
