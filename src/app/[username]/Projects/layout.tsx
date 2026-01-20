@@ -7,12 +7,12 @@ export async function generateMetadata(
     const decodedUsername = decodeURIComponent(username)
 
     return {
-        title: `${decodedUsername}'s Projects | GildedIn | Aaroophan`,
+        title: `${decodedUsername}'s Projects`,
         description: `Explore the projects created by ${decodedUsername}.`,
         keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase", "Aaroophan"],
         authors: [{ name: "Aaroophan Varatharajan", url: "https://aaroophan.dev" }],
         creator: "Aaroophan Varatharajan",
-        publisher: "GildedIn",
+        publisher: "Aaroophan Varatharajan",
         formatDetection: {
             email: false,
             address: false,
@@ -23,7 +23,7 @@ export async function generateMetadata(
             canonical: '/',
         },
         openGraph: {
-            title: `${decodedUsername}'s Projects | GildedIn | Aaroophan`,
+            title: `${decodedUsername}'s Projects`,
             description: `Explore the projects created by ${decodedUsername}.`,
             url: 'https://aaroophan.dev',
             siteName: 'GildedIn',
@@ -40,7 +40,7 @@ export async function generateMetadata(
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${decodedUsername}'s Projects | GildedIn | Aaroophan`,
+            title: `${decodedUsername}'s Projects`,
             description: `Explore the projects created by ${decodedUsername}.`,
             creator: '@Aaroophan',
             images: ['/images/Aaroophan-Main.png'],

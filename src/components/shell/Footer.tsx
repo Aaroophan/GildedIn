@@ -11,12 +11,12 @@ export default function Footer() {
             <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="font-mono flex items-center justify-center gap-2">
                     <a href="https://aaroophan.dev" className="font-oswald text-[var(--mono-4)] text-md">GildedIn</a>
-                    <span className="font-mono text-sm text-[var(--foreground)]/60">by</span>
+                    <span className="font-mono text-xs text-[var(--foreground)]/50">by</span>
                     <a href="https://aaroophan.dev" className="font-inkfree font-medium text-[var(--foreground)]"><i>Aaroophan Varatharajan</i></a>
                 </div>
                 <div className="h-px flex-1 bg-[var(--mono-4)]/30" />
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
                     {[
                         { name: "Portfolio", icon: User, href: "https://aaroophan.dev" },
                         { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/aaroophan/?theme=dark" },

@@ -23,27 +23,61 @@ export async function generateMetadata(
     ])
 
     const name = heroData?.Name || username || "Professional"
-    const title = `${name} | Portfolio | GildedIn | Aaroophan`
+    const title = `${name} | Portfolio`
     const description = aboutData?.Tagline || `Check out ${name}'s professional portfolio on GildedIn. | Aaroophan`
     const images = heroData?.Image ? [heroData.Image] : []
 
     return {
         title: title,
         description: description,
+        keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase", "Aaroophan"],
+        authors: [{ name: "Aaroophan Varatharajan", url: "https://aaroophan.dev" }],
+        creator: "Aaroophan Varatharajan",
+        publisher: "Aaroophan Varatharajan",
+        formatDetection: {
+            email: false,
+            address: false,
+            telephone: false,
+        },
+        metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://aaroophan.dev'),
+        alternates: {
+            canonical: `/${username}`,
+        },
         openGraph: {
             title: title,
             description: description,
+            url: 'https://aaroophan.dev',
+            siteName: 'GildedIn',
+            locale: 'en_US',
+            type: 'website',
             images: images,
-            type: 'profile',
         },
         twitter: {
             card: 'summary_large_image',
             title: title,
             description: description,
+            creator: '@Aaroophan',
             images: images,
         },
-        alternates: {
-            canonical: `/${username}`,
+        verification: {
+            google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        },
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                'max-video-preview': -1,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+            },
+        },
+        category: 'technology',
+        icons: {
+            icon: '/images/Aaroophan-Main.ico',
+            shortcut: '/images/Aaroophan-Main.ico',
+            apple: '/images/Aaroophan-Main.png',
         },
     }
 }

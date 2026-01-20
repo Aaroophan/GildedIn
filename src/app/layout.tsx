@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 	keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase", "Aaroophan"],
 	authors: [{ name: "Aaroophan Varatharajan", url: "https://aaroophan.dev" }],
 	creator: "Aaroophan Varatharajan",
-	publisher: "GildedIn",
+	publisher: "Aaroophan Varatharajan",
 	formatDetection: {
 		email: false,
 		address: false,

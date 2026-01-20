@@ -191,7 +191,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                                     fallback={<div className="h-20 bg-[var(--mono-4)]/5 animate-pulse rounded" />}
                                                 >
                                                     <div className="animate-pulse absolute top-0 left-[-4px] w-2 h-2 rounded-full bg-[var(--mono-4)] opacity-50" />
-                                                    <p className="whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black">
+                                                    <p className={`whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black ${paragraph.charAt(0) === '•' ? 'ml-4 mb-2' : ''}`}>
                                                         {paragraph}
                                                     </p>
                                                 </LazySection>

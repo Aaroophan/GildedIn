@@ -53,7 +53,7 @@ export const LazySection = ({
                 </motion.div>
             ) : (
                 fallback || (
-                    <div className="w-full h-32 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
+                    <div className="w-full h-32 bg-[var(--mono-4)]/5 animate-pulse rounded-lg" />
                 )
             )}
         </div>
