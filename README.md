@@ -152,18 +152,24 @@ For development, use the mock credentials to simulate a logged-in state:
 3. Build the UI component in `src/components/sections/`.
 4. Register the route in the navigation.
 
-## 👨‍💻 About the Creator
 
-**Aaroophan Varatharajan** is the architect and lead developer of GildedIn.
+# 👨‍💻 About the Creator
 
-A seasoned **Software Engineer** with significant expertise in **Next.js**, **React**, **TypeScript**, and **ASP.NET Core**, Aaroophan specializes in designing robust, scalable systems and metadata-driven UIs. His work on GildedIn reflects his passion for combining clean architecture with immersive user experiences.
+**Aaroophan Varatharajan**
+**Full Stack Software Engineer | MSc in Computer Science (In Progress) | Metadata-Driven Systems | Next.js, React, JavaScript/TypeScript | C# (.NET) | Node.js | Python (FastAPI) | T-SQL | PostgreSQL | MongoDB | Agile Team Player | Blog Writer**
 
-Aaroophan thrives in building data-driven web applications and distributed multi-service pipelines. He is currently focused on advancing his expertise in **Computer Science** and **AI/ML integration** at the **University of Moratuwa**.
+I am **Aaroophan Varatharajan** and I am the developer of GildedIn.
+
+I am a **Software Engineer** with expertise in **Next.js**, **React**, **TypeScript**, and **ASP.NET Core**, I specialize in designing robust, scalable systems and metadata-driven UIs. I work on GildedIn to reflect my passion for combining clean architecture with immersive user experiences.
+
+I thrive in building data-driven web applications and distributed multi-service pipelines. I am currently focused on advancing my expertise in **Computer Science** and **AI/ML integration** at the **University of Moratuwa**.
 
 ### 🌐 Connect
 - **Portfolio**: [aaroophan.dev](https://aaroophan.dev)
 - **GitHub**: [github.com/Aaroophan](https://github.com/Aaroophan)
 - **Instagram**: [@Aaroophan](https://instagram.com/Aaroophan)
+- **LinkedIn**: [linkedin.com/in/aaroophan](https://linkedin.com/in/aaroophan)
+- **Medium**: [aaroophan.medium.com](https://aaroophan.medium.com)
 - **Email**: arophn@gmail.com
 
 ## 🤝 Contributing
@@ -175,7 +181,3 @@ Contributions are welcome! Please follow these steps:
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
 4. Push to the branch (`git push origin feature/AmazingFeature`).
 5. Open a Pull Request.
-
----
-
-*Verified and generated based on project codebase analysis.*
