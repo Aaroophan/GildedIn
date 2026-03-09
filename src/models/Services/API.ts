@@ -11,7 +11,7 @@ export class APIURLService {
     }
 
     public get APIURL(): string {
-        if (typeof window !== 'undefined' && window.location.hostname === 'stg.envisionarc.com') {
+        if (typeof window !== 'undefined') {
             return process.env.NEXT_PUBLIC_STG_API || ''
         }
         return process.env.NEXT_PUBLIC_DEV_API || ''

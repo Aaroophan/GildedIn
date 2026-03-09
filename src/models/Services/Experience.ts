@@ -55,11 +55,11 @@ export class ExperienceService {
                         "LocationType": "On-site (US Hours)",
                         "Date": "September 2025 - Present",
                         "Description": [
-                            "Building a metadata-driven multi-channel marketing and admin platform using Next.js, ASP.NET Core, SQL Server, and Jenkins CI/CD, powering brand management, deep-linking, analytics, and user/role governance.",
-                            "Designed and implemented a dynamic CRUD grid framework in the Next.js App Router where a single generic route renders multiple screens from backend metadata, eliminating one-off pages and accelerating feature delivery.",
-                            "Developed a configurable, backend-driven, permission-aware UI with advanced table interactions including column resizing, drag-to-reorder, search, and filtering boosting admin productivity and reducing deployment churn.",
-                            "Built and extended the .NET API layer with stored-procedure-driven endpoints, cross-cutting middleware (logging, no-cache, error tracing), rotating-token authentication, Twilio/TOTP-based 2FA, and an HMAC-signed webhook dispatcher/receiver.",
-                            "Implemented new services within a distributed multi-service event pipeline: Push API, Deeplink API, RabbitMQ publishing with dead-letter handling, and enhanced observability via rotating Serilog logs and DB-backed sinks."
+                            "Architecting a metadata-driven white-label Customer Engagement Platform (CEP) built with Next.js, ASP.NET Core, and SQL Server, enabling brand-configurable campaign management, deep-link orchestration, analytics & role-based administration across environments.",
+                            "Designed a metadata-driven CRUD engine with full UI and API lifecycle, where backend-defined schemas dynamically generate 20+ admin screens through a single Next.js route and component, eliminating hard-coded pages and accelerating feature delivery.",
+                            "Developed a metadata-driven, permission-aware shared form engine and advanced UX framework powering WYSIWYG configuration for Workflow Builder, Push, In-App Messaging, and Deep Link configuration, featuring column resizing, drag-to-reorder, search, and filtering.",
+                            "Developed a typed transport layer with ASP.NET Core between the Next.js frontend, SQL Server stored procedures, and external services, implementing stored-procedure-driven APIs, rotating session tokens, Twilio/TOTP-based 2FA, and HMAC-signed webhooks.",
+                            "Implemented services within a distributed event pipeline for engagement channels, including Push and Deep Link APIs with RabbitMQ messaging, dead-letter handling, Serilog logging, and database-backed observability for reliable cross-service processing."
                         ]
                     },
                     {

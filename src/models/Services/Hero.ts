@@ -48,6 +48,7 @@ export class HeroService {
                 "Image": "/images/Aaroophan-Main.png",
                 "Greeting": "I'm",
                 "Name": "Aaroophan Varatharajan",
+                "Tagline": "I build metadata-driven platforms by designing dynamic UI runtimes and backend orchestration layers that turn backend schemas into configurable systems, using Next.js, ASP.NET Core, & SQL.",
                 "Tags": [
                     "Animation Enthusiast",
                     "Full Stack Software Engineer",
@@ -87,7 +88,7 @@ export class HeroService {
                     },
                     {
                         "Name": "Phone",
-                        "Icon": "Phone",
+                        "Icon": "Smartphone",
                         "Href": "https://wa.me/+94768505131"
                     },
                     {

@@ -260,7 +260,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 									</motion.div>
 
 									{/* Name Title */}
-									<div className="relative mt-4">
+									<div className="relative mt-4 flex-col flex items-center justify-center">
 										<h1 className="
 											font-oswald font-bold text-6xl sm:text-7xl lg:text-9xl 
 											tracking-wibdest bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text
@@ -289,6 +289,29 @@ export default function Hero({ initialData }: { initialData?: any }) {
 												</React.Fragment>
 											))}
 										</h1>
+										<p className="mt-5 h-15 lg:h-auto cursor-default font-inkfree font-bold text-sm lg:text-sm w-xl flex flex-wrap justify-center text-[var(--foreground)]/75">
+											{Data.Tagline.split(' ').map((SplitName: string, ind: number) => (
+												<React.Fragment key={`name-part-${ind}`}>
+													{SplitName.split('').map((letter: string, idx: number) => (
+														<motion.span
+															key={`letter-${ind}-${idx}-${letter}`}
+															initial={{ opacity: 0, filter: "blur(10px)" }}
+															animate={{ opacity: 1, filter: "blur(0px)" }}
+															transition={{
+																duration: 0.1,
+																delay: idx * 0.05 + 0.5,
+																type: "spring",
+																stiffness: 100
+															}}
+															className="rounded-md hover:text-[var(--mono-4)] transition-colors"
+														>
+															{letter}
+														</motion.span>
+													))}
+													<i className="me-1"></i>
+												</React.Fragment>
+											))}
+										</p>
 
 										{/* Underline scanning effect */}
 										<motion.div
