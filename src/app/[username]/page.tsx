@@ -1,5 +1,5 @@
 import { HeroService } from "@/models/Services/Hero"
-import { Metadata, ResolvingMetadata } from "next"
+import { Metadata } from "next"
 import { AboutService } from "@/models/Services/About"
 
 import { ProjectsService } from "@/models/Services/Projects"
@@ -9,10 +9,10 @@ import { ContactService } from "@/models/Services/Contact"
 import { ReferenceService } from "@/models/Services/References"
 import LandingPageClient from "@/components/shell/LandingPageClient"
 import { BlogService } from "@/models/Services/Blog"
+import { SkillsService } from "@/models/Services/Skills"
 
 export async function generateMetadata(
-    { params }: { params: Promise<{ username: string }> },
-    parent: ResolvingMetadata
+    { params }: { params: Promise<{ username: string }> }
 ): Promise<Metadata> {
     const { username } = await params
     const endpoint = `/${username || ""}`
@@ -91,6 +91,7 @@ export default async function Home({ params }: { params: Promise<{ username: str
         aboutData,
         experiencesData,
         projectsData,
+        SkillsData,
         BlogData,
         educationsData,
         referencesData,
@@ -100,6 +101,7 @@ export default async function Home({ params }: { params: Promise<{ username: str
         AboutService.getInstance().About(endpoint),
         ExperienceService.getInstance().Experience(endpoint),
         ProjectsService.getInstance().Projects(endpoint),
+        SkillsService.getInstance().Skills(endpoint),
         BlogService.getInstance().Blog(endpoint),
         EducationService.getInstance().Education(endpoint),
         ReferenceService.getInstance().Reference(endpoint),
@@ -112,6 +114,7 @@ export default async function Home({ params }: { params: Promise<{ username: str
             aboutData={aboutData}
             experiencesData={experiencesData}
             projectsData={projectsData}
+            SkillsData={SkillsData}
             BlogData={BlogData}
             educationsData={educationsData}
             referencesData={referencesData}

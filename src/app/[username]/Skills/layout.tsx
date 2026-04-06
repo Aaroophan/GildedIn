@@ -7,8 +7,8 @@ export async function generateMetadata(
     const decodedUsername = decodeURIComponent(username)
 
     return {
-        title: `${decodedUsername}'s Technologies`,
-        description: `Technologies and skills of ${decodedUsername}.`,
+        title: `${decodedUsername}'s Skills`,
+        description: `Skills of ${decodedUsername}.`,
         keywords: ["Portfolio", "No-code", "Resume", "CV", "Developer", "Designer", "Professional", "Showcase", "Aaroophan"],
         authors: [{ name: "Aaroophan Varatharajan", url: "https://aaroophan.dev" }],
         creator: "Aaroophan Varatharajan",
@@ -23,8 +23,8 @@ export async function generateMetadata(
             canonical: '/',
         },
         openGraph: {
-            title: `${decodedUsername}'s Technologies`,
-            description: `Technologies and skills of ${decodedUsername}.`,
+            title: `${decodedUsername}'s Skills`,
+            description: `Skills of ${decodedUsername}.`,
             url: 'https://aaroophan.dev',
             siteName: 'GildedIn',
             locale: 'en_US',
@@ -40,8 +40,8 @@ export async function generateMetadata(
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${decodedUsername}'s Technologies`,
-            description: `Technologies and skills of ${decodedUsername}.`,
+            title: `${decodedUsername}'s Skills`,
+            description: `Skills of ${decodedUsername}.`,
             creator: '@Aaroophan',
             images: ['/images/Aaroophan-Main.png'],
         },
@@ -68,7 +68,7 @@ export async function generateMetadata(
     }
 }
 
-export default async function TechnologiesLayout({
+export default async function SkillsLayout({
     children,
     params,
 }: {

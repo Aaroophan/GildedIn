@@ -176,11 +176,11 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
                                                     {project.Description}
                                                 </p>
 
-                                                {/* Technologies */}
+                                                {/* Skills */}
                                                 <div className="mb-6">
                                                     <div className="flex flex-wrap gap-2">
-                                                        {Array.isArray(project.Technologies)
-                                                            ? project.Technologies.slice(0, 4).map((tech: string) => (
+                                                        {Array.isArray(project.Skills)
+                                                            ? project.Skills.slice(0, 4).map((tech: string) => (
                                                                 <span
                                                                     key={tech}
                                                                     className="text-[10px] px-2 py-1 bg-[var(--foreground)]/5 text-[var(--foreground)]/80 font-mono border border-[var(--foreground)]/10 transition-colors group-hover:border-[var(--mono-4)]/30 group-hover:text-[var(--mono-4)]"
@@ -188,8 +188,8 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
                                                                     {tech}
                                                                 </span>
                                                             ))
-                                                            : typeof project.Technologies === 'string'
-                                                                ? project.Technologies.split(', ').slice(0, 4).map((tech: string) => (
+                                                            : typeof project.Skills === 'string'
+                                                                ? project.Skills.split(', ').slice(0, 4).map((tech: string) => (
                                                                     <span
                                                                         key={tech}
                                                                         className="text-[10px] px-2 py-1 bg-[var(--foreground)]/5 text-[var(--foreground)]/80 font-mono border border-[var(--foreground)]/10 transition-colors group-hover:border-[var(--mono-4)]/30 group-hover:text-[var(--mono-4)]"
@@ -199,7 +199,7 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
                                                                 ))
                                                                 : null
                                                         }
-                                                        {(Array.isArray(project.Technologies) && project.Technologies.length > 4) || (typeof project.Technologies === 'string' && project.Technologies.split(', ').length > 4) ? (
+                                                        {(Array.isArray(project.Skills) && project.Skills.length > 4) || (typeof project.Skills === 'string' && project.Skills.split(', ').length > 4) ? (
                                                             <span className="text-[10px] px-2 py-1 text-[var(--mono-4)] font-mono">...</span>
                                                         ) : null}
                                                     </div>
@@ -288,12 +288,12 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
                                         <p className="text-[var(--foreground)] font-bold">{selectedProject.Date}</p>
                                     </div>
 
-                                    {/* Technologies */}
+                                    {/* Skills */}
                                     <div>
                                         <h3 className="text-lg font-bold mb-3 text-[var(--foreground)] uppercase tracking-tight">Tech Stack</h3>
                                         <div className="flex flex-wrap gap-2">
-                                            {Array.isArray(selectedProject.Technologies)
-                                                ? selectedProject.Technologies.map((tech: string) => (
+                                            {Array.isArray(selectedProject.Skills)
+                                                ? selectedProject.Skills.map((tech: string) => (
                                                     <span
                                                         key={tech}
                                                         className="text-xs px-2 py-1 bg-[var(--foreground)]/5 text-[var(--foreground)]/90 font-mono border border-[var(--foreground)]/10"
@@ -301,8 +301,8 @@ export const Projects = ({ initialData }: { initialData?: any }) => {
                                                         {tech}
                                                     </span>
                                                 ))
-                                                : typeof selectedProject.Technologies === 'string'
-                                                    ? selectedProject.Technologies.split(', ').map((tech: string) => (
+                                                : typeof selectedProject.Skills === 'string'
+                                                    ? selectedProject.Skills.split(', ').map((tech: string) => (
                                                         <span
                                                             key={tech}
                                                             className="text-xs px-2 py-1 bg-[var(--foreground)]/5 text-[var(--foreground)]/90 font-mono border border-[var(--foreground)]/10"

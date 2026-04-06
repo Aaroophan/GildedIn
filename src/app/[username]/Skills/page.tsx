@@ -1,13 +1,13 @@
 "use client"
 
 import { GlowCapture } from "@codaworks/react-glow"
-import { Technologies } from "@/components/sections/Technologies"
+import { Skills } from "@/components/sections/Skills"
 
-export default function TechnologiesPage() {
+export default function SkillsPage() {
     return (
         <GlowCapture>
             <div className="relative z-10 bg-[var(--background)] min-h-screen mt-10">
-                <Technologies />
+                <Skills />
             </div>
         </GlowCapture>
     )

@@ -7,7 +7,6 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import { Menu, X, Sun, Moon, Briefcase, Code, User, FileText, Send, Award, GraduationCap, Info, PenLine } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks"
 import { toggleTheme } from "@/models/store/themeSlice"
-import { Button } from "../ui/Button"
 
 const letterAnimation = {
     rest: { y: 0, opacity: 0.8 },
@@ -41,6 +40,7 @@ export default function Header() {
     const navItems = [
         { name: "Home", href: `/${username}`, icon: null },
         { name: "About", href: `/${username}/About`, icon: User },
+        { name: "Skills", href: `/${username}/Skills`, icon: Code },
         { name: "Experience", href: `/${username}/Experience`, icon: Award },
         { name: "Projects", href: `/${username}/Projects`, icon: Briefcase },
         { name: "Blog", href: `/${username}/Blog`, icon: PenLine },

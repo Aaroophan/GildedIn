@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/Aaroophan/Education',
         '/Aaroophan/Contact',
         '/Aaroophan/Blog',
-        '/Aaroophan/Technologies',
+        '/Aaroophan/Skills',
         '/Aaroophan/Reference'
     ].map((route) => ({
         url: `${baseUrl}${route}`,

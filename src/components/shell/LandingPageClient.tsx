@@ -6,21 +6,23 @@ import Hero from "@/components/sections/Hero"
 import { About } from "@/components/sections/About"
 import { Blog } from "@/components/sections/Blog"
 import { Projects } from "@/components/sections/Projects"
+import { Skills } from "@/components/sections/Skills"
 import { Experiences } from "@/components/sections/Experiences"
 import { Educations } from "@/components/sections/Educations"
 import { Contacts } from "@/components/sections/Contact"
 import { References } from "@/components/sections/References"
 
 interface LandingPageClientProps {
-    heroData?: any
-    aboutData?: any
+    heroData?: unknown
+    aboutData?: unknown
 
-    projectsData?: any
-    BlogData?: any
-    experiencesData?: any
-    educationsData?: any
-    referencesData?: any
-    contactData?: any
+    projectsData?: unknown
+    SkillsData?: unknown
+    BlogData?: unknown
+    experiencesData?: unknown
+    educationsData?: unknown
+    referencesData?: unknown
+    contactData?: unknown
 }
 
 export default function LandingPageClient({
@@ -28,6 +30,7 @@ export default function LandingPageClient({
     aboutData,
 
     projectsData,
+    SkillsData,
     BlogData,
     experiencesData,
     educationsData,
@@ -42,7 +45,6 @@ export default function LandingPageClient({
     // State for controlling Hero visibility
     const [showHero, setShowHero] = useState(true)
     const [heroOpacity, setHeroOpacity] = useState(1)
-    const [aboutPosition, setAboutPosition] = useState(0)
 
     // Scroll listener for fade effect
     useEffect(() => {
@@ -50,7 +52,6 @@ export default function LandingPageClient({
             if (!aboutRef.current || !heroRef.current) return
 
             const aboutRect = aboutRef.current.getBoundingClientRect()
-            const scrollY = window.scrollY
             const windowHeight = window.innerHeight
 
             // Calculate how much of About section has covered the viewport
@@ -60,10 +61,6 @@ export default function LandingPageClient({
             // Update Hero opacity based on coverage
             const newOpacity = Math.max(0, 1 - heroCoverage * 1.5) // 1.5 for faster fade
             setHeroOpacity(newOpacity)
-
-            // Update About section position
-            const newPosition = Math.min(Math.max(0, scrollY - windowHeight * 0.5), windowHeight)
-            setAboutPosition(newPosition)
 
             // Hide Hero when it's mostly covered
             if (heroCoverage > 0.95) {
@@ -120,6 +117,10 @@ export default function LandingPageClient({
 
                 <div className="relative z-10 bg-[var(--background)]">
                     <Projects initialData={projectsData} />
+                </div>
+
+                <div className="relative z-10 bg-[var(--background)]">
+                    <Skills initialData={SkillsData} />
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">

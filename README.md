@@ -1,12 +1,12 @@
 # GildedIn
 
-GildedIn is a cutting-edge, no-code portfolio platform designed to empower professionals, creatives, and developers with an instantly generated, highly customizable, and visually stunning web presence. 
+GildedIn is a cutting-edge, no-code portfolio platform designed to empower professionals, creatives, and developers with an instantly generated, highly customizable, and visually stunning web presence.
 
 Leveraging the power of **Next.js 16**, **React 19**, and **Three.js**, GildedIn transforms static profiles into dynamic, interactive experiences. It eliminates the technical barrier to entry for building personal websites, offering users a dedicated URL structure (e.g., `domain.com/Username`) populated with rich, modular content sections.
 
 ## 🚀 Overview
 
-The core philosophy of GildedIn is **"Instant Presence, Infinite Style."** 
+The core philosophy of GildedIn is **"Instant Presence, Infinite Style."**
 
 Upon registration, the system automatically provisions a comprehensive portfolio suite for the user. This includes nested routing for distinct professional facets—such as Projects, Experience, and Education—all wrapped in a responsive, high-performance interface. The platform supports real-time editing, allowing users to tweak their details and visual settings via an intuitive dashboard, with changes reflected instantly across their public profile.
 
@@ -15,6 +15,7 @@ Distinctive from standard portfolio builders, GildedIn deeply integrates 3D grap
 ## ✨ Key Features
 
 ### 1. Dynamic Routing Architecture
+
 - **Personalized URLs**: Every user receives a unique namespace `/[username]`.
 - **Nested Sections**: dedicated sub-routes for content depth:
   - `/[username]/About`
@@ -23,19 +24,22 @@ Distinctive from standard portfolio builders, GildedIn deeply integrates 3D grap
   - `/[username]/Education`
   - `/[username]/Contact`
   - `/[username]/Blog`
-  - `/[username]/Technologies`
+  - `/[username]/Skills`
   - `/[username]/Reference`
 
 ### 2. Immersive Visual Experience
+
 - **3D Integration**: Built-in support for 3D scenes and objects using `@react-three/fiber` and `@react-three/drei`.
 - **Advanced Animations**: Smooth page transitions and element interactions powered by `framer-motion`.
 - **Interactive UI**: Elements react to user input with effects like parallax tilt (`react-parallax-tilt`) and glow effects (`@codaworks/react-glow`).
 
 ### 3. Modular Content System
+
 - **Component-Based Sections**: Each part of the portfolio is a self-contained module, ensuring consistency and maintainability.
 - **Detailed Project Views**: Interactive project cards that expand into detailed modals or dedicated views.
 
 ### 4. Application Architecture
+
 - **State Management**: Centralized state management using **Redux Toolkit** for predictable data flow.
 - **Authentication**: Secure client-side authentication handling via `useAuth` hook and `AuthService`.
 - **Mock Login Capability**: Includes a robust mock login flow for development and testing purposes (Test Credentials: `arophn@gmail.com` / `TEST1234`).
@@ -45,19 +49,23 @@ Distinctive from standard portfolio builders, GildedIn deeply integrates 3D grap
 GildedIn is built on a modern, robust, and scalable stack:
 
 ### Core Framework
+
 - **[Next.js 16](https://nextjs.org/)**: React Framework for production, utilizing the App Router.
 - **[React 19](https://react.dev/)**: The library for web and native user interfaces.
 - **[TypeScript](https://www.typescriptlang.org/)**: Typed superset of JavaScript for type safety.
 
 ### Styling & Design
+
 - **[Tailwind CSS 4](https://tailwindcss.com/)**: A utility-first CSS framework for rapid UI development.
 - **[Lucide React](https://lucide.dev/)**: Beautiful & consistent icon toolkit.
 
 ### State Management
+
 - **[Redux Toolkit](https://redux-toolkit.js.org/)**: The official, opinionated, batteries-included toolset for efficient Redux development.
 - **[React Redux](https://react-redux.js.org/)**: Official React bindings for Redux.
 
 ### 3D & Animation
+
 - **[Three.js](https://threejs.org/)**: JavaScript 3D library.
 - **[@react-three/fiber](https://docs.pmnd.rs/react-three-fiber)**: React renderer for Three.js.
 - **[@react-three/drei](https://github.com/pmndrs/drei)**: Useful helpers for react-three-fiber.
@@ -66,6 +74,7 @@ GildedIn is built on a modern, robust, and scalable stack:
 - **[@codaworks/react-glow](https://github.com/codaworks/react-glow)**: Glow effects component.
 
 ### Utilities
+
 - **[LogRocket](https://logrocket.com/)**: Session replay and monitoring.
 - **Crypto-JS**: Cryptographic standards library.
 
@@ -102,18 +111,21 @@ src/
 Follow these steps to set up the project locally.
 
 ### Prerequisites
+
 - **Node.js**: Version 20 or higher recommended.
 - **npm**: (comes with Node.js) or `yarn`/`pnpm`.
 
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/Aaroophan/GildedIn.git
    cd GildedIn
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    # or
@@ -121,6 +133,7 @@ Follow these steps to set up the project locally.
    ```
 
 3. **Run the Development Server:**
+
    ```bash
    npm run dev
    # or
@@ -142,16 +155,18 @@ npm start
 ## 🧪 Development Workflow
 
 ### Authentication
+
 For development, use the mock credentials to simulate a logged-in state:
+
 - **Email**: `arophn@gmail.com`
 - **Password**: `TEST1234`
 
 ### Adding New Sections
+
 1. Create a data model in `src/models/Services`.
 2. Create a new directory in `src/app/[username]/`.
 3. Build the UI component in `src/components/sections/`.
 4. Register the route in the navigation.
-
 
 # 👨‍💻 About the Creator
 
@@ -165,6 +180,7 @@ I am a **Software Engineer** with expertise in **Next.js**, **React**, **TypeScr
 I thrive in building data-driven web applications and distributed multi-service pipelines. I am currently focused on advancing my expertise in **Computer Science** and **AI/ML integration** at the **University of Moratuwa**.
 
 ### 🌐 Connect
+
 - **Portfolio**: [aaroophan.dev](https://aaroophan.dev)
 - **GitHub**: [github.com/Aaroophan](https://github.com/Aaroophan)
 - **Instagram**: [@Aaroophan](https://instagram.com/Aaroophan)
