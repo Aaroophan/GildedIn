@@ -11,13 +11,15 @@ import { Experiences } from "@/components/sections/Experiences"
 import { Educations } from "@/components/sections/Educations"
 import { Contacts } from "@/components/sections/Contact"
 import { References } from "@/components/sections/References"
+import type { ProjectsResult } from "@/models/Services/Projects"
+import type { SkillsResult } from "@/models/Services/Skills"
 
 interface LandingPageClientProps {
     heroData?: unknown
     aboutData?: unknown
 
-    projectsData?: unknown
-    SkillsData?: unknown
+    projectsData?: ProjectsResult
+    SkillsData?: SkillsResult
     BlogData?: unknown
     experiencesData?: unknown
     educationsData?: unknown

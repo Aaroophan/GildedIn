@@ -142,7 +142,7 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
                                         </div>
                                         <div className="flex flex-col">
                                             <p className="text-xs text-[var(--mono-4)] font-mono uppercase tracking-wider mb-1">Email</p>
-                                            <p className="text-lg text-[var(--foreground)] font-bold font-comic tracking-wide group-hover:text-[var(--foreground)/80] transition-colors">{displayEmail}</p>
+                                            <p className="text-lg text-[var(--foreground)] font-bold font-comic tracking-wide group-hover:text-[var(--foreground)]/80 transition-colors">{displayEmail}</p>
                                         </div>
                                         <ExternalLink className="absolute top-4 right-4 w-4 h-4 text-[var(--mono-4)]/30 group-hover:text-[var(--mono-4)] transition-colors" />
                                     </a>

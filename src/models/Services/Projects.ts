@@ -1,17 +1,53 @@
-import { APIURLService } from "./API"
 import { AuthService } from "./Auth"
 import { MessageService } from "./Messages"
 
+export type ProjectHighlightIcon = "Layers3" | "ShieldCheck" | "Rocket"
+
+export type ProjectLink = {
+    Name: string
+    Icon: string
+    Href: string
+}
+
+export type ProjectRecord = {
+    Image: string
+    Name: string
+    Links: ProjectLink[]
+    Date: string
+    Description: string
+    Skills: string | string[]
+}
+
+export type ProjectLane = [
+    title: string,
+    description: string,
+    projectNames: string[]
+]
+
+export type ProjectsResult = {
+    Status: number
+    Message: string
+    User_Session_Token?: string
+    Title?: string
+    Description?: string
+    Guidance?: string
+    Highlights?: Array<{
+        Title: string
+        Description: string
+        Icon: ProjectHighlightIcon
+    }>
+    Lanes?: ProjectLane[]
+    Projects?: ProjectRecord[]
+}
+
 export class ProjectsService {
     private static instance: ProjectsService
-    private readonly APIURLService: APIURLService
     private readonly authService: AuthService
     private readonly messageService = MessageService.getInstance()
 
     private constructor() {
         this.authService = AuthService.getInstance()
         this.messageService = MessageService.getInstance()
-        this.APIURLService = APIURLService.getInstance()
     }
 
     public static getInstance(): ProjectsService {
@@ -45,6 +81,42 @@ export class ProjectsService {
                 Message: "",
                 User_Session_Token: "User_Session_Token",
                 Title: "Personal Projects Archive",
+                Description: "A growing archive of product experiments, internal tools, interactive systems, and delivery-focused builds shaped by the same engineering mindset behind the Skills section.",
+                Guidance: "Shift between project lanes, spotlight a build, and inspect its brief, stack, links, and delivery context.",
+                Highlights: [
+                    {
+                        Title: "Product-minded builds",
+                        Description: "Projects are designed as complete experiences, not just isolated code samples, with attention to usability, polish, and delivery.",
+                        Icon: "Layers3"
+                    },
+                    {
+                        Title: "Full-stack range",
+                        Description: "The archive spans frontend systems, APIs, developer tools, automation, games, and enterprise integrations.",
+                        Icon: "ShieldCheck"
+                    },
+                    {
+                        Title: "Iteration at speed",
+                        Description: "Several builds were executed under tight time constraints without sacrificing clarity of scope or implementation quality.",
+                        Icon: "Rocket"
+                    }
+                ],
+                Lanes: [
+                    [
+                        "Developer Platforms",
+                        "Tools, utilities, and configurable interfaces built to improve workflows for developers, creators, and operators.",
+                        ["Harkbase", "OneWorkLoc", "SkrinePlae", "anaphora", "SVG-ify", "PixelPainter", "Grid-ify"]
+                    ],
+                    [
+                        "Interactive Systems",
+                        "Games, simulations, and immersive interfaces where engagement, rules, and feedback loops are part of the engineering challenge.",
+                        ["Tic-Tac-Bot", "Mend-Tale-Game", "CIS-Domeytoe-Game", "EveryMove", "2D Animation Short"]
+                    ],
+                    [
+                        "Applied Delivery",
+                        "Business systems, assessments, and academic builds that solve practical problems under real deadlines and constraints.",
+                        ["AFC's LOD Web Application", "LocDev", "MovieList", "BaratieBakery", "TimeTicker"]
+                    ]
+                ],
                 "Projects": [
                     {
                         "Image": "/images/HarkBase-min.JPG",
