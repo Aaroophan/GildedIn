@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChatBotService } from "@/models/Services/ChatBot";
 import { useParams } from "next/navigation";
-import GridBackground from "../ui/GridBackground";
 
 interface Message {
 	role: "user" | "assistant";
@@ -319,14 +318,14 @@ export default function ChatBot() {
 						<div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-[var(--background)]/60 via-[var(--background)]/60 to-[var(--background)]/20">
 							<div className="flex items-center gap-3">
 								<div className="relative">
-									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--mono-4)] to-[var(--mono-6)] flex items-center justify-center text-xs font-bold text-white shadow-md">
-										A
+									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--mono-4)] to-[var(--mono-6)] flex items-center justify-center text-lg font-bold text-white shadow-md font-oswald">
+										G
 									</div>
 									<div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-emerald-900 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
 								</div>
 								<div className="flex flex-col justify-center">
 									<p className="text-sm font-semibold text-[var(--foreground)] leading-tight flex items-center justify- gap-1 ">
-                                        <b className="text-md font-bold tracking-widest">Gilden</b> 
+                                        <b className="text-md font-bold tracking-widest font-oswald">Gilden</b> 
                                         <i className="text-[10px] font-semibold text-[var(--foreground)]/80 font-italic leading-tight font-inkfree"> 
                                             ({decodedUsername}&apos;s Assistant) 
                                         </i>
@@ -440,7 +439,7 @@ export default function ChatBot() {
 														? "Waiting for response..."
 														: isCoolingDown
 															? "Preparing next message..."
-															: `Ask about {${decodedUsername}}...`
+															: `Ask about ${decodedUsername}...`
 											}
 											value={input}
 											onChange={(e) => setInput(e.target.value)}
