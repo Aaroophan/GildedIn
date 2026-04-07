@@ -34,7 +34,8 @@ export class ChatBotService {
                     Status: 400,
                     Message: "messages array is required",
                     rateLimitRemaining: null,
-                    rateLimitReset: null
+                    rateLimitReset: null,
+                    rateLimitLimit: null
                 }
             }
 
@@ -47,6 +48,7 @@ export class ChatBotService {
             // Extract rate limit headers
             const rateLimitRemaining = response.headers.get("X-RateLimit-Remaining")
             const rateLimitReset = response.headers.get("X-RateLimit-Reset")
+            const rateLimitLimit = response.headers.get("X-RateLimit-Limit")
 
             if (!response.ok) {
                 const error = await response.json().catch(() => ({ error: "Unknown error" }))
@@ -55,7 +57,8 @@ export class ChatBotService {
                     Status: response.status,
                     Message: error.error || "Request failed",
                     rateLimitRemaining: rateLimitRemaining ? parseInt(rateLimitRemaining, 10) : null,
-                    rateLimitReset: rateLimitReset ? parseInt(rateLimitReset, 10) : null
+                    rateLimitReset: rateLimitReset ? parseInt(rateLimitReset, 10) : null,
+                    rateLimitLimit: rateLimitLimit ? parseInt(rateLimitLimit, 10) : null
                 }
             }
 
@@ -77,7 +80,8 @@ export class ChatBotService {
                 Message: "",
                 Response: content,
                 rateLimitRemaining: rateLimitRemaining ? parseInt(rateLimitRemaining, 10) : null,
-                rateLimitReset: rateLimitReset ? parseInt(rateLimitReset, 10) : null
+                rateLimitReset: rateLimitReset ? parseInt(rateLimitReset, 10) : null,
+                rateLimitLimit: rateLimitLimit ? parseInt(rateLimitLimit, 10) : null
             }
 
             this.messageService.setMessage(data.Status, data.Message)
@@ -89,7 +93,8 @@ export class ChatBotService {
                 Status: 500,
                 Message: `500 - Internal Server Error${e instanceof Error && e.message ? '\n' + e.message : ''}`,
                 rateLimitRemaining: null,
-                rateLimitReset: null
+                rateLimitReset: null,
+                rateLimitLimit: null
             }
         }
     }

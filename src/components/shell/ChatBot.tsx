@@ -4,39 +4,47 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChatBotService } from "@/models/Services/ChatBot";
 import { useParams } from "next/navigation";
+import GridBackground from "../ui/GridBackground";
 
 interface Message {
 	role: "user" | "assistant";
 	content: string;
 }
 
-const WELCOME_MESSAGE: Message = {
-	role: "assistant",
-	content:
-		"Hey there! 👋 I'm Aaroophan's portfolio assistant. Ask me anything about his projects, skills, experience, or education - I'm happy to help!",
-};
-
-const SUGGESTED_QUESTIONS = [
-	"What does Aaroophan do?",
-	"Tell me about his projects",
-	"What tech stack does he use?",
-	"How can I contact him?",
-];
+const MAX_CHARS = 150;
 
 export default function ChatBot() {
     const params = useParams<{ username?: string }>()
     const decodedUsername = decodeURIComponent(params?.username || "Aaroophan")
+
+    const WELCOME_MESSAGE: Message = {
+        role: "assistant",
+        content:
+            `Hey there! 👋 I'm Gilden, ${decodedUsername}'s portfolio assistant. Ask me anything about his projects, skills, experience, education, etc. I'm happy to help!`,
+    };
+
+    const SUGGESTED_QUESTIONS = [
+        `What does ${decodedUsername} do?`,
+        `Tell me about his projects`,
+        "What tech stack does he use?",
+        "How can I contact him?",
+    ];
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
 	const [input, setInput] = useState("");
 	const [isStreaming, setIsStreaming] = useState(false);
 	const [isCoolingDown, setIsCoolingDown] = useState(false);
 	const [hasInteracted, setHasInteracted] = useState(false);
-	const [rateLimitMessages, setRateLimitMessages] = useState<number | null>(null);
+	const [rateLimitRemaining, setRateLimitRemaining] = useState<number | null>(null);
+	const [rateLimitLimit, setRateLimitLimit] = useState<number | null>(null);
 	const [rateLimitReset, setRateLimitReset] = useState<number | null>(null);
+	const [countdownText, setCountdownText] = useState<string | null>(null);
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const abortRef = useRef<AbortController | null>(null);
+
+	const isQuotaExhausted = rateLimitRemaining !== null && rateLimitRemaining <= 0;
 
 	// Auto-scroll to bottom
 	useEffect(() => {
@@ -52,10 +60,59 @@ export default function ChatBot() {
 		}
 	}, [isOpen]);
 
+	// Fetch quota from backend when the chat opens
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const controller = new AbortController();
+		const fetchQuota = async () => {
+			try {
+				const response = await fetch("/api/chat/quota", {
+					signal: controller.signal,
+				});
+				if (!response.ok) return;
+				const data = await response.json();
+				setRateLimitRemaining(data.remaining);
+				setRateLimitLimit(data.limit);
+				setRateLimitReset(data.reset);
+			} catch {
+				// Silently fail — chat still works without quota display
+			}
+		};
+
+		fetchQuota();
+		return () => controller.abort();
+	}, [isOpen]);
+
+	// Live countdown timer when quota is exhausted
+	useEffect(() => {
+		if (!isQuotaExhausted || !rateLimitReset) {
+			setCountdownText(null);
+			return;
+		}
+
+		const tick = () => {
+			const diff = rateLimitReset - Date.now();
+			if (diff <= 0) {
+				setCountdownText(null);
+				setRateLimitRemaining(null);
+				setRateLimitReset(null);
+				return;
+			}
+			const mins = Math.floor(diff / 60000);
+			const secs = Math.floor((diff % 60000) / 1000);
+			setCountdownText(mins > 0 ? `${mins}m ${secs}s` : `${secs}s`);
+		};
+
+		tick();
+		const interval = setInterval(tick, 1000);
+		return () => clearInterval(interval);
+	}, [isQuotaExhausted, rateLimitReset]);
+
 	const sendMessage = useCallback(
 		async (text?: string) => {
 			const messageText = text || input.trim();
-			if (!messageText || isStreaming) return;
+			if (!messageText || isStreaming || isCoolingDown || isQuotaExhausted) return;
 
 			setHasInteracted(true);
 			const userMessage: Message = { role: "user", content: messageText };
@@ -69,62 +126,68 @@ export default function ChatBot() {
 			setMessages([...updatedMessages, assistantMessage]);
 
 			try {
-				const chatBotService = ChatBotService.getInstance()
+				const chatBotService = ChatBotService.getInstance();
 				const result = await chatBotService.ChatBot(
 					updatedMessages.filter((m) => m !== WELCOME_MESSAGE),
 					decodedUsername
-				)
+				);
 
-				// Extract rate limit info
-				if (result.rateLimitRemaining !== null) setRateLimitMessages(result.rateLimitRemaining);
+				if (result.rateLimitRemaining !== null) setRateLimitRemaining(result.rateLimitRemaining);
+				if (result.rateLimitLimit !== null) setRateLimitLimit(result.rateLimitLimit);
 				if (result.rateLimitReset !== null) setRateLimitReset(result.rateLimitReset);
+
+				const isRateLimited = result.Status === 429;
 
 				if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
 					setMessages((prev) => {
-						const updated = [...prev]
+						const updated = [...prev];
 						updated[updated.length - 1] = {
 							role: "assistant",
 							content: result.Response || "I couldn't get an answer just now.",
-						}
-						return updated
-					})
+						};
+						return updated;
+					});
 				} else {
 					setMessages((prev) => {
-						const updated = [...prev]
+						const updated = [...prev];
 						updated[updated.length - 1] = {
 							role: "assistant",
-							content: result.Message === "Too many requests. Please try again later or reach out directly via LinkedIn or Instagram!"
-								? result.Message
+							content: isRateLimited
+								? "You\'ve used all your messages for now. Please try again later or reach out directly via LinkedIn or email."
 								: result.Message || "Oops, something went wrong. Please try again.",
-						}
-						return updated
-					})
+						};
+						return updated;
+					});
 				}
 			} catch (err) {
 				setMessages((prev) => {
-					const updated = [...prev]
+					const updated = [...prev];
 					updated[updated.length - 1] = {
 						role: "assistant",
 						content: "Oops, something went wrong. Please try again! 🙏",
-					}
-					return updated
-				})
+					};
+					return updated;
+				});
 			} finally {
-				setIsStreaming(false)
-				abortRef.current = null
-				
-				// Add a 3-second cooldown to prevent spamming
+				setIsStreaming(false);
+				abortRef.current = null;
+				setTimeout(() => inputRef.current?.focus(), 50);
 				setIsCoolingDown(true);
-				setTimeout(() => setIsCoolingDown(false), 3000);
+				setTimeout(() => {
+					setIsCoolingDown(false);
+					inputRef.current?.focus();
+				}, 3000);
 			}
 		},
-		[input, isStreaming, messages]
+		[input, isStreaming, isCoolingDown, isQuotaExhausted, messages, decodedUsername]
 	);
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter" && !e.shiftKey) {
 			e.preventDefault();
-			sendMessage();
+			if (!isCoolingDown && !isStreaming) {
+				sendMessage();
+			}
 		}
 	};
 
@@ -134,6 +197,25 @@ export default function ChatBot() {
 		const minutes = Math.ceil(diff / 60000);
 		return `${minutes} min`;
 	};
+
+	const charCountColor =
+		input.length >= 140 ? "text-red-400/80" :
+		input.length >= 120 ? "text-amber-400/70" :
+		"text-slate-600";
+
+	const quotaBadgeText = (() => {
+		if (rateLimitRemaining === null || rateLimitLimit === null) return null;
+		if (isQuotaExhausted && countdownText) return `Resets in ${countdownText}`;
+		if (isQuotaExhausted) return "Limit reached";
+		return `${rateLimitRemaining}/${rateLimitLimit} questions left`;
+	})();
+
+	const quotaBadgeColor = (() => {
+		if (rateLimitRemaining === null) return "";
+		if (isQuotaExhausted) return "text-red-400/80";
+		if (rateLimitRemaining <= 5) return "text-amber-400/70";
+		return "text-emerald-400/60";
+	})();
 
 	// Simple markdown-like rendering (bold, inline code)
 	const renderContent = (content: string) => {
@@ -221,6 +303,18 @@ export default function ChatBot() {
 							backdropFilter: "blur(20px)",
 						}}
 					>
+                        
+                        <div className="absolute inset-0 pointer-events-none text-[var(--mono-4)]/5 mask-linear-fade">
+                            <svg className="w-full h-full mask-linear-fade-y" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="1" />
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                            </svg>
+                        </div>
+
 						{/* Header */}
 						<div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-[var(--background)]/60 via-[var(--background)]/60 to-[var(--background)]/20">
 							<div className="flex items-center gap-3">
@@ -230,13 +324,21 @@ export default function ChatBot() {
 									</div>
 									<div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-emerald-900 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
 								</div>
-								<div>
-									<p className="text-sm font-semibold text-[var(--foreground)]">
-										Aaroophan&apos;s Assistant
+								<div className="flex flex-col justify-center">
+									<p className="text-sm font-semibold text-[var(--foreground)] leading-tight flex items-center justify- gap-1 ">
+                                        <b className="text-md font-bold tracking-widest">Gilden</b> 
+                                        <i className="text-[10px] font-semibold text-[var(--foreground)]/80 font-italic leading-tight font-inkfree"> 
+                                            ({decodedUsername}&apos;s Assistant) 
+                                        </i>
 									</p>
-									<p className="text-[10px] text-emerald-500">
-										{isStreaming ? "Typing..." : "Online"}
-									</p>
+									<div className="flex items-center gap-2 ">
+										<p className="text-[10px] text-emerald-500">
+											{isStreaming ? "Typing..." : "Online"}
+										</p>
+										<span className="text-[10px] px-1.5 py-[1px] rounded bg-[var(--mono-4)]/5 text-[var(--mono-4)]/60 border border-[var(--mono-4)]/20 whitespace-nowrap scale-90">
+											20 questions every 1 hr · Max 150 chars
+										</span>
+									</div>
 								</div>
 							</div>
 							<button
@@ -271,7 +373,7 @@ export default function ChatBot() {
 									}`}
 								>
 									<div
-										className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed backdrop-blur-sm transition-all ${
+										className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed backdrop-blur-md z-10 transition-all ${
 											msg.role === "user"
 												? "bg-[var(--mono-4)]/75 text-white rounded-br-md shadow-[0_0_12px_rgba(var(--mono-4-rgb),0.3)]"
 												: "bg-[var(--background)]/25 text-[var(--foreground)] rounded-bl-md border border-[var(--mono-4)]/20 shadow-[0_0_8px_rgba(var(--mono-4-rgb),0.1)]"
@@ -314,54 +416,77 @@ export default function ChatBot() {
 
 						{/* Input */}
 						<div className="px-3 py-3 bg-gradient-to-t from-[var(--background)]/60 from-[var(--background)]/60 to-[var(--background)]/20">
-							<div className="flex items-center gap-2 bg-[var(--mono-4)]/5 rounded-xl px-3 py-1.5 border border-[var(--mono-4)]/20 focus-within:border-[var(--mono-4)]/40 focus-within:bg-[var(--mono-4)]/10 focus-within:shadow-[0_0_12px_rgba(var(--mono-4-rgb),0.1)] transition-all backdrop-blur-sm">
-								<input
-									ref={inputRef}
-									type="text"
-									placeholder={
-										rateLimitMessages === 0
-											? "Message limit reached. Please email me!"
-											: isStreaming || isCoolingDown
-												? "Waiting..."
-												: "Ask about Aaroophan..."
-									}
-									value={input}
-									onChange={(e) => setInput(e.target.value)}
-									onKeyDown={handleKeyDown}
-									disabled={isStreaming || isCoolingDown || (rateLimitMessages !== null && rateLimitMessages <= 0)}
-									className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--mono-4)]/75 outline-none disabled:opacity-50"
-								/>
-								<button
-									onClick={() => sendMessage()}
-									disabled={!input.trim() || isStreaming || isCoolingDown || (rateLimitMessages !== null && rateLimitMessages <= 0)}
-									className="p-1.5 rounded-lg text-[var(--mono-4)] hover:bg-[var(--mono-4)]/15 disabled:opacity-30 disabled:hover:bg-transparent transition-all cursor-pointer"
-									aria-label="Send message"
-								>
-									<svg
-										width="18"
-										height="18"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<path
-											d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
-								</button>
-							</div>
-							<div className="flex items-center justify-between text-[10px] text-[var(--mono-4)]/60 mt-1.5">
-								<p>Powered by Groq • Answers from portfolio data</p>
-								{rateLimitMessages !== null && (
-									<p className={rateLimitMessages === 0 ? 'text-red-500/60' : undefined}>
-										{rateLimitMessages} msgs left
-										{rateLimitMessages === 0 && rateLimitReset && ` (resets ${formatResetTime(rateLimitReset)})`}
+							{isQuotaExhausted ? (
+								<div className="space-y-3 rounded-2xl border border-red-500/10 bg-[var(--background)]/70 p-4 text-center">
+									<p className="text-[12px] text-slate-300">
+										You&apos;ve used all {rateLimitLimit ?? 20} messages this hour.
 									</p>
-								)}
-							</div>
+									{countdownText && (
+										<p className="text-[11px] text-amber-400/80">
+											⏱ Resets in {countdownText}
+										</p>
+									)}
+								</div>
+							) : (
+								<>
+									<div className="flex items-center gap-2 bg-[var(--mono-4)]/5 rounded-xl px-3 py-1.5 border border-[var(--mono-4)]/20 focus-within:border-[var(--mono-4)]/40 focus-within:bg-[var(--mono-4)]/10 focus-within:shadow-[0_0_12px_rgba(var(--mono-4-rgb),0.1)] transition-all backdrop-blur-sm">
+										<input
+											ref={inputRef}
+											type="text"
+											placeholder={
+												isQuotaExhausted
+													? "Message limit reached. Please email me!"
+													: isStreaming
+														? "Waiting for response..."
+														: isCoolingDown
+															? "Preparing next message..."
+															: `Ask about {${decodedUsername}}...`
+											}
+											value={input}
+											onChange={(e) => setInput(e.target.value)}
+											onKeyDown={handleKeyDown}
+											disabled={isStreaming || isQuotaExhausted}
+											maxLength={MAX_CHARS}
+											className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--mono-4)]/75 outline-none disabled:opacity-50"
+										/>
+										{input.length > 0 && (
+											<span className={`text-[10px] tabular-nums whitespace-nowrap transition-colors ${charCountColor}`}>
+												{input.length}/{MAX_CHARS}
+											</span>
+										)}
+										<button
+											onClick={() => sendMessage()}
+											disabled={!input.trim() || isStreaming || isCoolingDown || isQuotaExhausted}
+											className="p-1.5 rounded-lg text-[var(--mono-4)] hover:bg-[var(--mono-4)]/15 disabled:opacity-30 disabled:hover:bg-transparent transition-all cursor-pointer"
+											aria-label="Send message"
+										>
+												<svg
+													width="18"
+													height="18"
+												viewBox="0 0 24 24"
+												fill="none"
+											>
+													<path
+														d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
+														stroke="currentColor"
+														strokeWidth="2"
+														strokeLinecap="round"
+														strokeLinejoin="round"
+													/>
+												</svg>
+											</button>
+									</div>
+									<div className="flex items-center justify-between text-[10px] text-[var(--mono-4)]/60 mt-1.5">
+										<p>Powered by <a href="https://aaroophan.dev" className="font-oswald text-[var(--mono-4)]/90 text-md">GildedIn</a> • Answers from portfolio data</p>
+										{rateLimitRemaining !== null && (
+											<p className={rateLimitRemaining === 0 ? "text-red-500/60" : rateLimitRemaining > 5 ? "text-emerald-500/70" : "text-amber-500/70"}>
+												{rateLimitRemaining} msgs left
+												{rateLimitRemaining === 0 && rateLimitReset && ` (resets ${formatResetTime(rateLimitReset)})`}
+											</p>
+										)}
+									</div>
+								</>
+							)}
 						</div>
 					</motion.div>
 				)}
