@@ -8,6 +8,7 @@ import Footer from "@/components/shell/Footer"
 import AnimatedFavicon from "@/components/shell/AnimatedFavicon"
 
 import GoogleAnalytics from "@/components/providers/GoogleAnalytics"
+import ChatBot from "@/components/shell/ChatBot"
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -184,6 +185,7 @@ export default function RootLayout({
 				<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ""} />
 				<ReduxProvider>
 					<ThemeProvider>
+						<ChatBot />
 						<Header />
 						{children}
 						<Footer />

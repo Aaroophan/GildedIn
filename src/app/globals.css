@@ -144,6 +144,85 @@ body {
   }
 }
 
+/* ── Chatbot Animations ─────────────────────── */
+
+@keyframes chatbot-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes chatbot-orbit-spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes chatbot-float-bob {
+
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  50% {
+    transform: translateY(-50%) translateX(-4px);
+  }
+}
+
+@keyframes chatbot-blink-anim {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.chatbot-orbit {
+  animation: chatbot-orbit-spin 8s linear infinite;
+}
+
+.chatbot-orbit-reverse {
+  animation: chatbot-orbit-spin-reverse 12s linear infinite;
+}
+
+.chatbot-float {
+  animation: chatbot-float-bob 3s ease-in-out infinite;
+}
+
+.chatbot-blink {
+  animation: chatbot-blink-anim 1s step-end infinite;
+}
+
+.chatbot-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chatbot-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatbot-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--background);
+  border-radius: 2px;
+}
+
+.chatbot-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--mono-4);
+}
+
 /* Debugging */
 /* *,
 *::before,

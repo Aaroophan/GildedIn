@@ -30,7 +30,6 @@ interface LandingPageClientProps {
 export default function LandingPageClient({
     heroData,
     aboutData,
-
     projectsData,
     SkillsData,
     BlogData,
