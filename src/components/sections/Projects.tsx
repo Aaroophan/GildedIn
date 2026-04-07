@@ -325,7 +325,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                                     >
                                                         <TechCorners Padding={0} Width={8} Height={8} />
 
-                                                        <div className="relative h-48 overflow-hidden">
+                                                        <div className="relative h-60 overflow-hidden">
                                                             <Image
                                                                 src={project.Image}
                                                                 alt={project.Name}

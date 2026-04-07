@@ -130,7 +130,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                     animate={isInView !== null ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                                     transition={{ duration: 0.5 }}
                                 >
-                                    <h2 className="text-4xl sm:text-5xl font-bold mb-4 font-oswald tracking-wide bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)]/50 bg-clip-text text-transparent inline-block cursor-default">
+                                    <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default inline-block cursor-default">
                                         {Data.Title.split('').map((letter: string, idx: number) => (
                                             <motion.span
                                                 key={idx}
