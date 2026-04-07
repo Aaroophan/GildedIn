@@ -30,7 +30,10 @@ export default function ChatBot() {
 	const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
 	const [input, setInput] = useState("");
 	const [isStreaming, setIsStreaming] = useState(false);
+	const [isCoolingDown, setIsCoolingDown] = useState(false);
 	const [hasInteracted, setHasInteracted] = useState(false);
+	const [rateLimitMessages, setRateLimitMessages] = useState<number | null>(null);
+	const [rateLimitReset, setRateLimitReset] = useState<number | null>(null);
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const abortRef = useRef<AbortController | null>(null);
@@ -72,6 +75,10 @@ export default function ChatBot() {
 					decodedUsername
 				)
 
+				// Extract rate limit info
+				if (result.rateLimitRemaining !== null) setRateLimitMessages(result.rateLimitRemaining);
+				if (result.rateLimitReset !== null) setRateLimitReset(result.rateLimitReset);
+
 				if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(result.Status)) {
 					setMessages((prev) => {
 						const updated = [...prev]
@@ -86,7 +93,9 @@ export default function ChatBot() {
 						const updated = [...prev]
 						updated[updated.length - 1] = {
 							role: "assistant",
-							content: result.Message || "Oops, something went wrong. Please try again.",
+							content: result.Message === "Too many requests. Please try again later or reach out directly via LinkedIn or Instagram!"
+								? result.Message
+								: result.Message || "Oops, something went wrong. Please try again.",
 						}
 						return updated
 					})
@@ -103,6 +112,10 @@ export default function ChatBot() {
 			} finally {
 				setIsStreaming(false)
 				abortRef.current = null
+				
+				// Add a 3-second cooldown to prevent spamming
+				setIsCoolingDown(true);
+				setTimeout(() => setIsCoolingDown(false), 3000);
 			}
 		},
 		[input, isStreaming, messages]
@@ -113,6 +126,13 @@ export default function ChatBot() {
 			e.preventDefault();
 			sendMessage();
 		}
+	};
+
+	const formatResetTime = (timestamp: number) => {
+		const diff = timestamp - Date.now();
+		if (diff <= 0) return "soon";
+		const minutes = Math.ceil(diff / 60000);
+		return `${minutes} min`;
 	};
 
 	// Simple markdown-like rendering (bold, inline code)
@@ -202,7 +222,7 @@ export default function ChatBot() {
 						}}
 					>
 						{/* Header */}
-						<div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-[var(--background)]/60 to-[var(--background)]/20">
+						<div className="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-[var(--background)]/60 via-[var(--background)]/60 to-[var(--background)]/20">
 							<div className="flex items-center gap-3">
 								<div className="relative">
 									<div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--mono-4)] to-[var(--mono-6)] flex items-center justify-center text-xs font-bold text-white shadow-md">
@@ -293,23 +313,27 @@ export default function ChatBot() {
 						</div>
 
 						{/* Input */}
-						<div className="px-3 py-3 bg-gradient-to-t from-[var(--background)]/60 to-[var(--background)]/20">
+						<div className="px-3 py-3 bg-gradient-to-t from-[var(--background)]/60 from-[var(--background)]/60 to-[var(--background)]/20">
 							<div className="flex items-center gap-2 bg-[var(--mono-4)]/5 rounded-xl px-3 py-1.5 border border-[var(--mono-4)]/20 focus-within:border-[var(--mono-4)]/40 focus-within:bg-[var(--mono-4)]/10 focus-within:shadow-[0_0_12px_rgba(var(--mono-4-rgb),0.1)] transition-all backdrop-blur-sm">
 								<input
 									ref={inputRef}
 									type="text"
 									placeholder={
-										isStreaming ? "Waiting for response..." : "Ask about Aaroophan..."
+										rateLimitMessages === 0
+											? "Message limit reached. Please email me!"
+											: isStreaming || isCoolingDown
+												? "Waiting..."
+												: "Ask about Aaroophan..."
 									}
 									value={input}
 									onChange={(e) => setInput(e.target.value)}
 									onKeyDown={handleKeyDown}
-									disabled={isStreaming}
+									disabled={isStreaming || isCoolingDown || (rateLimitMessages !== null && rateLimitMessages <= 0)}
 									className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--mono-4)]/75 outline-none disabled:opacity-50"
 								/>
 								<button
 									onClick={() => sendMessage()}
-									disabled={!input.trim() || isStreaming}
+									disabled={!input.trim() || isStreaming || isCoolingDown || (rateLimitMessages !== null && rateLimitMessages <= 0)}
 									className="p-1.5 rounded-lg text-[var(--mono-4)] hover:bg-[var(--mono-4)]/15 disabled:opacity-30 disabled:hover:bg-transparent transition-all cursor-pointer"
 									aria-label="Send message"
 								>
@@ -329,9 +353,15 @@ export default function ChatBot() {
 									</svg>
 								</button>
 							</div>
-							<p className="text-[10px] text-[var(--mono-4)]/60 text-center mt-1.5">
-								Powered by Groq • Answers from portfolio data
-							</p>
+							<div className="flex items-center justify-between text-[10px] text-[var(--mono-4)]/60 mt-1.5">
+								<p>Powered by Groq • Answers from portfolio data</p>
+								{rateLimitMessages !== null && (
+									<p className={rateLimitMessages === 0 ? 'text-red-500/60' : undefined}>
+										{rateLimitMessages} msgs left
+										{rateLimitMessages === 0 && rateLimitReset && ` (resets ${formatResetTime(rateLimitReset)})`}
+									</p>
+								)}
+							</div>
 						</div>
 					</motion.div>
 				)}
