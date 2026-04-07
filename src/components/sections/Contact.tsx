@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Mail, Phone, MapPin, Send, User, MessageSquare, Loader2, ExternalLink } from "lucide-react"
+import { Mail, Phone, MapPin, Send, User, MessageSquare, Loader2, ExternalLink, Copy, Check } from "lucide-react"
 import { ContactService } from "@/models/Services/Contact"
 import ErrorMessage from "../ui/ErrorMessage"
 import Loading from "../ui/Loading"
@@ -30,6 +30,8 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
         message: ""
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [emailCopied, setEmailCopied] = useState(false)
+    const [phoneCopied, setPhoneCopied] = useState(false)
 
     const GetData = async () => {
         setIsLoading(true)
@@ -77,11 +79,27 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
         }, 1000)
     }
 
+    const copyToClipboard = async (text: string, type: 'email' | 'phone') => {
+        try {
+            await navigator.clipboard.writeText(text)
+            if (type === 'email') {
+                setEmailCopied(true)
+                setTimeout(() => setEmailCopied(false), 2000)
+            } else {
+                setPhoneCopied(true)
+                setTimeout(() => setPhoneCopied(false), 2000)
+            }
+        } catch (err) {
+            console.error('Failed to copy text: ', err)
+        }
+    }
+
     if (isLoading) return <Loading />
     if (error) return <ErrorMessage message={error} />
     if (!contact) return null
 
     const displayEmail = contact.Email ? contact.Email.replace("mailto:", "") : ""
+    const displayPhone = contact.Phone ? (contact.Phone.split("wa.me/")[1] || contact.Phone) : ""
     // Prepare data for GridBackground based on form fields to make it look "live"
     const backgroundData = { ...formData, ...contact, Section: "CONTACT", Name: decodedUsername }
 
@@ -140,11 +158,20 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
                                         <div className="p-3 rounded-md bg-[var(--background)] border border-[var(--mono-4)]/20 text-[var(--mono-4)] group-hover:scale-110 transition-transform shadow-[0_0_10px_rgba(var(--mono-4-rgb),0.1)]">
                                             <Mail className="w-6 h-6" />
                                         </div>
-                                        <div className="flex flex-col">
+                                        <div className="flex flex-col flex-1">
                                             <p className="text-xs text-[var(--mono-4)] font-mono uppercase tracking-wider mb-1">Email</p>
                                             <p className="text-lg text-[var(--foreground)] font-bold font-comic tracking-wide group-hover:text-[var(--foreground)]/80 transition-colors">{displayEmail}</p>
                                         </div>
-                                        <ExternalLink className="absolute top-4 right-4 w-4 h-4 text-[var(--mono-4)]/30 group-hover:text-[var(--mono-4)] transition-colors" />
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                copyToClipboard(displayEmail, 'email')
+                                            }}
+                                            className="p-2 rounded-md bg-[var(--background)] border border-[var(--mono-4)]/20 text-[var(--mono-4)] hover:text-[var(--foreground)] hover:border-[var(--mono-4)]/40 transition-all duration-200 hover:scale-110"
+                                            title="Copy email"
+                                        >
+                                            {emailCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                        </button>
                                     </a>
 
                                     <a
@@ -157,11 +184,20 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
                                         <div className="p-3 rounded-md bg-[var(--background)] border border-[var(--mono-4)]/20 text-[var(--mono-4)] group-hover:scale-110 transition-transform shadow-[0_0_10px_rgba(var(--mono-4-rgb),0.1)]">
                                             <Phone className="w-6 h-6" />
                                         </div>
-                                        <div className="flex flex-col">
+                                        <div className="flex flex-col flex-1">
                                             <p className="text-xs text-[var(--mono-4)] font-mono uppercase tracking-wider mb-1">WhatsApp</p>
-                                            <p className="text-lg text-[var(--foreground)] font-bold font-comic tracking-wide group-hover:text-[var(--foreground)]/80 transition-colors">Start a Chat at {contact.Phone.split("wa.me/")[1] || contact.Phone}</p>
+                                            <p className="text-lg text-[var(--foreground)] font-bold font-comic tracking-wide group-hover:text-[var(--foreground)]/80 transition-colors">Start a Chat at {displayPhone}</p>
                                         </div>
-                                        <ExternalLink className="absolute top-4 right-4 w-4 h-4 text-[var(--mono-4)]/30 group-hover:text-[var(--mono-4)] transition-colors" />
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                copyToClipboard(displayPhone, 'phone')
+                                            }}
+                                            className="p-2 rounded-md bg-[var(--background)] border border-[var(--mono-4)]/20 text-[var(--mono-4)] hover:text-[var(--foreground)] hover:border-[var(--mono-4)]/40 transition-all duration-200 hover:scale-110"
+                                            title="Copy phone number"
+                                        >
+                                            {phoneCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                        </button>
                                     </a>
 
                                     <div className="relative flex items-center gap-4 p-6 rounded-xl bg-[var(--mono-4)]/5 border border-[var(--mono-4)]/10 hover:border-[var(--mono-4)]/40 hover:bg-[var(--mono-4)]/10 transition-all duration-300 group cursor-default overflow-hidden backdrop-blur-xs">

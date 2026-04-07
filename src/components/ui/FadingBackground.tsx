@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/hooks/hooks"
+import { useAppSelector } from "@/hooks/useTypingEffect"
 import { HeroService } from "@/models/Services/Hero"
 import { useEffect, useState, useRef } from "react"
 

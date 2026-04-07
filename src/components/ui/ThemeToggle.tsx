@@ -1,6 +1,6 @@
 'use client'
 
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/useTypingEffect'
 import { setTheme, toggleTheme } from '@/models/store/themeSlice'
 import { Button } from '@/components/ui/Button'
 import { Sun, Moon, Monitor } from 'lucide-react'

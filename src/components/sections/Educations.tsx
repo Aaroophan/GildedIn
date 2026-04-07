@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { GraduationCap, Calendar, Award, ChevronDown, ChevronUp, ChevronRight } from "lucide-react"
+import { GraduationCap, Calendar, Award, ChevronDown, ChevronUp, ChevronRight, ExternalLink, X } from "lucide-react"
 import { EducationService } from "@/models/Services/Education"
 import ErrorMessage from "../ui/ErrorMessage"
 import Loading from "../ui/Loading"
@@ -11,6 +11,7 @@ import { useParams } from "next/navigation"
 import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 import { GlowCapture, Glow } from "@codaworks/react-glow"
+import Modal from "../ui/Modal"
 
 export const Educations = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
@@ -20,6 +21,9 @@ export const Educations = ({ initialData }: { initialData?: any }) => {
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
     const [Title, setTitle] = useState<string>(initialData?.Title || "Academic Qualifications")
+    const [selectedEducation, setSelectedEducation] = useState<any | null>(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const educationRefs = useRef<(HTMLDivElement | null)[]>([])
 
     const GetData = async () => {
         setIsLoading(true)
@@ -56,20 +60,115 @@ export const Educations = ({ initialData }: { initialData?: any }) => {
     // Prepare data for GridBackground (inject Name)
     const backgroundData = { Educations: educations.length, Name: decodedUsername }
 
+    const handleOpenEducation = (education: any) => {
+        setSelectedEducation(education)
+        setIsModalOpen(true)
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        setSelectedEducation(null)
+    }
+
+    const handleNodeClick = (index: number) => {
+        const ref = educationRefs.current[index]
+        if (ref) {
+            ref.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+    }
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+        if (!isModalOpen) return
+        if (event.key === 'Escape') {
+            handleCloseModal()
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown)
+        return () => document.removeEventListener('keydown', handleKeyDown)
+    }, [isModalOpen])
+
     return (
         <section id="Education" className="relative min-h-screen py-20 px-4 overflow-hidden font-comic text-[var(--foreground)]">
             <GridBackground Data={backgroundData} Name={Educations.name} Code={Educations.toString()} />
 
             <GlowCapture>
                 <Glow color='var(--mono-4)'>
-                    <EducationTimeline educations={educations} Title={Title} />
+                    <EducationTimeline
+                        educations={educations}
+                        Title={Title}
+                        onOpen={handleOpenEducation}
+                        onNodeClick={handleNodeClick}
+                        setRef={(index, el) => (educationRefs.current[index] = el)}
+                    />
                 </Glow>
             </GlowCapture>
+
+            {isModalOpen && (
+                <Modal Title={selectedEducation?.Title || "Education Details"} setIsModalOpen={setIsModalOpen}>
+                    {selectedEducation && (
+                        <div className="relative max-w-4xl mx-auto bg-[var(--background)] rounded-xl border border-[var(--mono-4)]/30 p-8 overflow-hidden">
+                            <TechCorners Padding={4} Width={8} Height={8} />
+                            <button
+                                onClick={handleCloseModal}
+                                className="absolute top-4 right-4 p-2 rounded-full bg-[var(--mono-4)]/10 hover:bg-[var(--mono-4)]/20 transition-colors"
+                            >
+                                <X className="w-5 h-5 text-[var(--foreground)]" />
+                            </button>
+
+                            <div className="flex flex-col gap-6">
+                                <div className="flex items-center gap-4">
+                                    {selectedEducation.Image && (
+                                        <div className="relative w-16 h-16 rounded border border-[var(--mono-4)]/30 overflow-hidden">
+                                            <Image
+                                                src={selectedEducation.Image}
+                                                alt={selectedEducation.Name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    )}
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-[var(--foreground)]">{selectedEducation.Title}</h3>
+                                        <p className="text-lg text-[var(--mono-4)]">{selectedEducation.Name}</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div className="flex items-center">
+                                        <GraduationCap className="w-4 h-4 mr-2 text-[var(--mono-4)]" />
+                                        {selectedEducation.Name}
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Calendar className="w-4 h-4 mr-2 text-[var(--mono-4)]" />
+                                        {selectedEducation.Date}
+                                    </div>
+                                </div>
+
+                                {selectedEducation.Description && selectedEducation.Description.length > 0 && (
+                                    <div>
+                                        <h4 className="text-lg font-bold mb-4 text-[var(--foreground)]">Highlights</h4>
+                                        <ul className="space-y-3">
+                                            {selectedEducation.Description.map((desc: string, i: number) => (
+                                                <li key={i} className="flex items-start">
+                                                    <span className="text-[var(--mono-4)] mr-3 mt-1 text-sm font-mono">{`${i < 9 ? '0' : ''}${i + 1}`}</span>
+                                                    <span className="text-[var(--foreground)]/80">{desc}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </Modal>
+            )}
         </section>
     )
 }
 
-const EducationTimeline = ({ educations, Title }: { educations: any[], Title: string }) => {
+const EducationTimeline = ({ educations, Title, onOpen, onNodeClick, setRef }: { educations: any[], Title: string, onOpen: (edu: any) => void, onNodeClick: (index: number) => void, setRef: (index: number, el: HTMLDivElement | null) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -77,9 +176,19 @@ const EducationTimeline = ({ educations, Title }: { educations: any[], Title: st
     })
 
     const scaleY = useTransform(scrollYProgress, [0, 2], [0, 2.5])
+    const progress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]) 
 
     return (
         <div ref={containerRef} className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* <div className="fixed top-20 left-4 right-4 z-50 md:left-8 md:right-8">
+                <div className="bg-[var(--background)]/80 backdrop-blur-sm border border-[var(--mono-4)]/20 rounded-full p-1">
+                    <motion.div
+                        style={{ width: progress }}
+                        className="h-1 bg-gradient-to-r from-[var(--mono-4)] to-[var(--mono-4)]/50 rounded-full"
+                    />
+                </div>
+            </div> */}
+
             {/* Header */}
             <div className="mb-24 text-center relative">
                 <motion.div
@@ -125,6 +234,9 @@ const EducationTimeline = ({ educations, Title }: { educations: any[], Title: st
                             key={index}
                             education={education}
                             index={index}
+                            onOpen={onOpen}
+                            onNodeClick={onNodeClick}
+                            setRef={(el) => setRef(index, el)}
                         />
                     ))}
                 </div>
@@ -133,7 +245,7 @@ const EducationTimeline = ({ educations, Title }: { educations: any[], Title: st
     )
 }
 
-const EducationCard = ({ education, index }: { education: any, index: number }) => {
+const EducationCard = ({ education, index, onOpen, onNodeClick, setRef }: { education: any, index: number, onOpen: (edu: any) => void, onNodeClick: (index: number) => void, setRef: (el: HTMLDivElement | null) => void }) => {
     const isLeft = index % 2 === 1
     // Check if education is "Present" or ongoing
     const isCurrent = education.Date ? education.Date.includes("Present") : false
@@ -143,7 +255,9 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
         <div className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${!isLeft ? 'md:flex-row-reverse' : ''}`}>
 
             {/* Timeline Node - styled as a tech connector */}
-            <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-md bg-[var(--background)] border border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8 flex items-center justify-center shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)]">
+            <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-md bg-[var(--background)] border border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8 flex items-center justify-center shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)] cursor-pointer hover:scale-110 transition-transform"
+                onClick={() => onNodeClick(index)}
+            >
                 <div className="w-4 h-4 rounded-sm bg-[var(--mono-4)] animate-pulse shadow-[0_0_8px_var(--mono-4)]" />
                 {/* Connector Lines */}
                 <div className={`hidden md:block absolute top-1/2 w-10 h-px bg-[var(--mono-4)]/50 ${isLeft ? 'right-full' : 'left-full'}`} />
@@ -154,14 +268,27 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
 
             {/* Card */}
             <motion.div
+                ref={setRef}
                 initial={{ opacity: 0, x: isLeft ? -50 : 50, y: 20 }}
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`cursor-default flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-16' : 'md:pr-16'}`}
+                className={`cursor-pointer flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-16' : 'md:pr-16'}`}
+                onClick={() => onOpen(education)}
+                onKeyDown={(e: ReactKeyboardEvent<HTMLDivElement>) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        onOpen(education)
+                    }
+                }}
+                tabIndex={0}
             >
-                <div className={`group relative p-6 sm:p-8 rounded-xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/15 to-[var(--mono-4)]/0 backdrop-blur-xs border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.1)]`}>
+                <div className={`group relative p-6 sm:p-8 rounded-xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/15 to-[var(--mono-4)]/0 backdrop-blur-xs border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.1)] hover:scale-[1.02] transform`}>
                     <TechCorners Padding={2} Width={6} Height={6} />
+
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ExternalLink className="w-4 h-4 text-[var(--mono-4)]" />
+                    </div>
 
                     {isCurrent && (
                         <div className="absolute -top-3 right-6 px-3 py-1 text-[10px] font-bold tracking-widest text-[var(--background)] bg-[var(--mono-4)] border border-[var(--mono-4)] animate-pulse shadow-[0_0_10px_var(--mono-4)] uppercase rounded-lg">
@@ -210,13 +337,35 @@ const EducationCard = ({ education, index }: { education: any, index: number }) 
                         {education.Description && education.Description.length > 0 && (
                             <div className="relative border-t border-[var(--mono-4)]/10">
                                 <ul className="space-y-3">
-                                    {education.Description.map((desc: string, i: number) => (
+                                    {(isExpanded ? education.Description : education.Description.slice(0, 3)).map((desc: string, i: number) => (
                                         <li key={i} className="flex items-start text-sm md:text-md text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors group/item">
                                             <span className="text-[var(--mono-4)] mr-3 mt-1 text-[10px] group-hover/item:text-[var(--foreground)] font-mono">{`${i < 9 ? '0' : ''}${i + 1}`}</span>
                                             <span className="leading-relaxed">{desc}</span>
                                         </li>
                                     ))}
                                 </ul>
+
+                                {education.Description.length > 3 && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setIsExpanded(!isExpanded)
+                                        }}
+                                        className="mt-4 flex items-center gap-2 text-xs font-bold font-mono text-[var(--mono-4)] hover:text-[var(--foreground)] transition-colors uppercase tracking-widest border border-[var(--mono-4)]/20 px-4 py-2 hover:bg-[var(--mono-4)]/10"
+                                    >
+                                        {isExpanded ? (
+                                            <>
+                                                <ChevronUp className="w-5 h-5" />
+                                                Show less
+                                            </>
+                                        ) : (
+                                            <>
+                                                <ChevronDown className="w-5 h-5" />
+                                                Show more
+                                            </>
+                                        )}
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>

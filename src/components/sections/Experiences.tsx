@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Briefcase, Calendar, MapPin, Award, ChevronDown, ChevronUp } from "lucide-react"
+import { Briefcase, Calendar, MapPin, Award, ChevronDown, ChevronUp, ExternalLink, X } from "lucide-react"
 import { ExperienceService } from "@/models/Services/Experience"
 import ErrorMessage from "../ui/ErrorMessage"
 import Loading from "../ui/Loading"
@@ -11,6 +11,7 @@ import { useParams } from "next/navigation"
 import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 import { GlowCapture, Glow } from "@codaworks/react-glow"
+import Modal from "../ui/Modal"
 
 export const Experiences = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
@@ -20,6 +21,9 @@ export const Experiences = ({ initialData }: { initialData?: any }) => {
     const [isLoading, setIsLoading] = useState(!initialData)
     const [error, setError] = useState<string | null>(null)
     const [Title, setTitle] = useState<string>(initialData?.Title || "Professional Experience")
+    const [selectedExperience, setSelectedExperience] = useState<any | null>(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const experienceRefs = useRef<(HTMLDivElement | null)[]>([])
 
     const GetData = async () => {
         setIsLoading(true)
@@ -56,20 +60,121 @@ export const Experiences = ({ initialData }: { initialData?: any }) => {
     // Prepare data for GridBackground (inject Name)
     const backgroundData = { ...experiences, Name: decodedUsername }
 
+    const handleOpenExperience = (experience: any) => {
+        setSelectedExperience(experience)
+        setIsModalOpen(true)
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        setSelectedExperience(null)
+    }
+
+    const handleNodeClick = (index: number) => {
+        const ref = experienceRefs.current[index]
+        if (ref) {
+            ref.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+    }
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+        if (!isModalOpen) return
+        if (event.key === 'Escape') {
+            handleCloseModal()
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown)
+        return () => document.removeEventListener('keydown', handleKeyDown)
+    }, [isModalOpen])
+
     return (
         <section id="Experience" className="relative min-h-screen py-20 px-4 overflow-hidden font-comic text-[var(--foreground)]">
             <GridBackground Data={backgroundData} Name={Experiences.name} Code={Experiences.toString()} />
 
             <GlowCapture>
                 <Glow color='var(--mono-4)'>
-                    <ExperienceTimeline experiences={experiences} Title={Title} />
+                    <ExperienceTimeline
+                        experiences={experiences}
+                        Title={Title}
+                        onOpen={handleOpenExperience}
+                        onNodeClick={handleNodeClick}
+                        setRef={(index, el) => (experienceRefs.current[index] = el)}
+                    />
                 </Glow>
             </GlowCapture>
+
+            {isModalOpen && (
+                <Modal Title={selectedExperience?.Title || "Experience"} setIsModalOpen={setIsModalOpen}>
+                    {selectedExperience && (
+                    <div className="relative max-w-4xl mx-auto bg-[var(--background)] rounded-xl border border-[var(--mono-4)]/30 p-8 overflow-hidden">
+                        <TechCorners Padding={4} Width={8} Height={8} />
+                        <button
+                            onClick={handleCloseModal}
+                            className="absolute top-4 right-4 p-2 rounded-full bg-[var(--mono-4)]/10 hover:bg-[var(--mono-4)]/20 transition-colors"
+                        >
+                            <X className="w-5 h-5 text-[var(--foreground)]" />
+                        </button>
+
+                        <div className="flex flex-col gap-6">
+                            <div className="flex items-center gap-4">
+                                {selectedExperience.Image && (
+                                    <div className="relative w-16 h-16 rounded border border-[var(--mono-4)]/30 overflow-hidden">
+                                        <Image
+                                            src={selectedExperience.Image}
+                                            alt={selectedExperience.Company}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                )}
+                                <div>
+                                    <h3 className="text-2xl font-bold text-[var(--foreground)]">{selectedExperience.Title}</h3>
+                                    <p className="text-lg text-[var(--mono-4)]">{selectedExperience.Company}</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div className="flex items-center">
+                                    <MapPin className="w-4 h-4 mr-2 text-[var(--mono-4)]" />
+                                    {selectedExperience.Location} {selectedExperience.LocationType && `(${selectedExperience.LocationType})`}
+                                </div>
+                                <div className="flex items-center">
+                                    <Calendar className="w-4 h-4 mr-2 text-[var(--mono-4)]" />
+                                    {selectedExperience.Date}
+                                </div>
+                                {selectedExperience.JobType && (
+                                    <div className="flex items-center">
+                                        <Briefcase className="w-4 h-4 mr-2 text-[var(--mono-4)]" />
+                                        {selectedExperience.JobType}
+                                    </div>
+                                )}
+                            </div>
+
+                            {selectedExperience.Description && (
+                                <div>
+                                    <h4 className="text-lg font-bold mb-4 text-[var(--foreground)]">Responsibilities & Achievements</h4>
+                                    <ul className="space-y-3">
+                                        {selectedExperience.Description.map((desc: string, i: number) => (
+                                            <li key={i} className="flex items-start">
+                                                <span className="text-[var(--mono-4)] mr-3 mt-1 text-sm font-mono">{`${i < 9 ? '0' : ''}${i + 1}`}</span>
+                                                <span className="text-[var(--foreground)]/80">{desc}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    )}
+                </Modal>
+            )}
         </section>
     )
 }
 
-const ExperienceTimeline = ({ experiences, Title }: { experiences: any[], Title: string }) => {
+const ExperienceTimeline = ({ experiences, Title, onOpen, onNodeClick, setRef }: { experiences: any[], Title: string, onOpen: (exp: any) => void, onNodeClick: (index: number) => void, setRef: (index: number, el: HTMLDivElement | null) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -77,9 +182,19 @@ const ExperienceTimeline = ({ experiences, Title }: { experiences: any[], Title:
     })
 
     const scaleY = useTransform(scrollYProgress, [0, 2], [0, 2.5])
+    const progress = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
 
     return (
         <div ref={containerRef} className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Progress Bar */}
+            {/* <div className="fixed top-20 left-4 right-4 z-50 md:left-8 md:right-8">
+                <div className="bg-[var(--background)]/80 backdrop-blur-sm border border-[var(--mono-4)]/20 rounded-full p-1">
+                    <motion.div
+                        style={{ width: progress }}
+                        className="h-1 bg-gradient-to-r from-[var(--mono-4)] to-[var(--mono-4)]/50 rounded-full"
+                    />
+                </div>
+            </div> */}
             {/* Header */}
             <div className="mb-24 text-center relative">
                 <motion.div
@@ -125,6 +240,9 @@ const ExperienceTimeline = ({ experiences, Title }: { experiences: any[], Title:
                             key={index}
                             experience={experience}
                             index={index}
+                            onOpen={onOpen}
+                            onNodeClick={onNodeClick}
+                            setRef={(el) => setRef(index, el)}
                         />
                     ))}
                 </div>
@@ -133,7 +251,7 @@ const ExperienceTimeline = ({ experiences, Title }: { experiences: any[], Title:
     )
 }
 
-const ExperienceCard = ({ experience, index }: { experience: any, index: number }) => {
+const ExperienceCard = ({ experience, index, onOpen, onNodeClick, setRef }: { experience: any, index: number, onOpen: (exp: any) => void, onNodeClick: (index: number) => void, setRef: (el: HTMLDivElement | null) => void }) => {
     const isLeft = index % 2 === 1
     // Safe check in case Date is missing or undefined
     const isCurrent = experience.Date ? experience.Date.includes("Present") : false
@@ -143,7 +261,10 @@ const ExperienceCard = ({ experience, index }: { experience: any, index: number 
         <div className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${!isLeft ? 'md:flex-row-reverse' : ''}`}>
 
             {/* Timeline Node - styled as a tech connector */}
-            <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-md bg-[var(--background)] border border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8 flex items-center justify-center shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)]">
+            <div 
+                className="absolute left-4 md:left-1/2 w-8 h-8 rounded-md bg-[var(--background)] border border-[var(--mono-4)] z-20 -translate-x-1/2 mt-1.5 md:mt-8 flex items-center justify-center shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)] cursor-pointer hover:scale-110 transition-transform"
+                onClick={() => onNodeClick(index)}
+            >
                 <div className="w-4 h-4 rounded-sm bg-[var(--mono-4)] animate-pulse shadow-[0_0_8px_var(--mono-4)]" />
                 {/* Connector Lines */}
                 <div className={`hidden md:block absolute top-1/2 w-10 h-px bg-[var(--mono-4)]/50 ${isLeft ? 'right-full' : 'left-full'}`} />
@@ -154,14 +275,28 @@ const ExperienceCard = ({ experience, index }: { experience: any, index: number 
 
             {/* Card */}
             <motion.div
+                ref={setRef}
                 initial={{ opacity: 0, x: isLeft ? -50 : 50, y: 20 }}
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`cursor-default flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-16' : 'md:pr-16'}`}
+                className={`cursor-pointer flex-1 md:w-1/2 pl-12 md:pl-0 ${isLeft ? 'md:pl-16' : 'md:pr-16'}`}
+                onClick={() => onOpen(experience)}
+                onKeyDown={(e: ReactKeyboardEvent<HTMLDivElement>) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        onOpen(experience)
+                    }
+                }}
+                tabIndex={0}
             >
-                <div className={`group relative p-6 sm:p-8 rounded-xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/15 to-[var(--mono-4)]/0 backdrop-blur-xs border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.1)]`}>
+                <div className={`group relative p-6 sm:p-8 rounded-xl ${isLeft ? 'bg-gradient-to-r' : 'bg-gradient-to-l'} from-[var(--mono-4)]/15 to-[var(--mono-4)]/0 backdrop-blur-xs border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.1)] hover:scale-[1.02] transform`}>
                     <TechCorners Padding={4} Width={8} Height={8} />
+
+                    {/* Click indicator */}
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ExternalLink className="w-4 h-4 text-[var(--mono-4)]" />
+                    </div>
 
                     {isCurrent && (
                         <div className="absolute -top-3 right-6 px-3 py-1 text-[10px] font-bold tracking-widest text-[var(--background)] bg-[var(--mono-4)] border border-[var(--mono-4)] animate-pulse shadow-[0_0_10px_var(--mono-4)] uppercase rounded-lg">

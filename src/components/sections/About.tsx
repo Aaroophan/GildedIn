@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { LazySection } from '../providers/LazySection'
 import { AboutService } from '@/models/Services/About'
@@ -13,6 +13,37 @@ import { useParams } from "next/navigation"
 import GridBackground from '../ui/GridBackground'
 import TechCorners from '../ui/TechCorners'
 import Image from 'next/image'
+import { useTypingEffect } from '@/hooks/useTypingEffect'
+import { Timeline } from '../ui/Timeline'
+import { Tooltip } from '../ui/Tooltip'
+import ParticleNetwork from '../ui/ParticleNetwork'
+
+const TypingDescription = ({ text }: { text: string }) => {
+    const { displayText, isComplete } = useTypingEffect(text, 1)
+    const paragraphs = displayText.split('\n\n')
+
+    return (
+        <div className="space-y-6">
+            {paragraphs.map((paragraph: string, index: number) => (
+                <motion.div
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="relative pl-6 border-l border-[var(--mono-4)]/30 hover:border-[var(--mono-4)] transition-colors duration-300"
+                >
+                    <div className="animate-pulse absolute top-0 left-[-4px] w-2 h-2 rounded-full bg-[var(--mono-4)] opacity-50" />
+                    <p className={`whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black ${paragraph.charAt(0) === '•' ? 'ml-4 mb-2' : ''}`}>
+                        {paragraph}
+                        {!isComplete && index === paragraphs.length - 1 && (
+                            <span className="inline-block w-2 h-5 bg-[var(--mono-4)] ml-1 animate-pulse" />
+                        )}
+                    </p>
+                </motion.div>
+            ))}
+        </div>
+    )
+}
 
 export const About = ({ initialData }: { initialData?: any }) => {
     const params = useParams<{ username?: string }>()
@@ -125,25 +156,41 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
                             {/* Navigation Tabs (Access Keys) */}
                             <div className="flex flex-wrap justify-center gap-4 mb-12">
-                                {['about', 'values', 'interests', 'trivia'].map((tab) => (
-                                    <button
+                                {['about', 'values', 'interests', 'trivia'].map((tab, tabIndex) => (
+                                    <motion.button
                                         key={tab}
                                         onClick={() => setActiveTab(tab as any)}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: tabIndex * 0.1 }}
                                         className={`
                                         relative px-6 py-2 rounded-lg font-inkfree text-md font-bold tracking-wider transition-all duration-300
                                         border group overflow-hidden
                                         ${activeTab === tab
                                                 ? 'bg-[var(--mono-4)]/20 border-[var(--mono-4)] text-[var(--foreground)] shadow-[0_0_15px_rgba(var(--mono-4-rgb),0.2)]'
-                                                : 'bg-transparent border-[var(--foreground)]/20 text-[var(--foreground)]/80 hover:text-[var(--mono-4)] hover:border-[var(--mono-4)]/50 animate-pulse'
+                                                : 'bg-transparent border-[var(--foreground)]/20 text-[var(--foreground)]/80 hover:text-[var(--mono-4)] hover:border-[var(--mono-4)]/50 hover:shadow-[0_0_10px_rgba(var(--mono-4-rgb),0.1)]'
                                             }
                                     `}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
                                     >
                                         <div className={`absolute left-0 top-0 h-full w-1 bg-[var(--mono-4)] transition-opacity duration-300 ${activeTab === tab ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`} />
-                                        {tab === 'about' && "About Me"}
-                                        {tab === 'values' && "Core Values"}
-                                        {tab === 'interests' && "Interests"}
-                                        {tab === 'trivia' && "Trivia"}
-                                    </button>
+
+                                        {/* Animated background */}
+                                        <motion.div
+                                            className="absolute inset-0 bg-gradient-to-r from-[var(--mono-4)]/10 to-transparent opacity-0 group-hover:opacity-100"
+                                            initial={{ x: '-100%' }}
+                                            whileHover={{ x: '100%' }}
+                                            transition={{ duration: 0.6 }}
+                                        />
+
+                                        <span className="relative z-10">
+                                            {tab === 'about' && "About Me"}
+                                            {tab === 'values' && "Core Values"}
+                                            {tab === 'interests' && "Interests"}
+                                            {tab === 'trivia' && "Trivia"}
+                                        </span>
+                                    </motion.button>
                                 ))}
                             </div>
 
@@ -156,46 +203,99 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                         initial={{ opacity: 0, filter: 'blur(5px)' }}
                                         animate={{ opacity: 1, filter: 'blur(0px)' }}
                                         transition={{ duration: 0.5 }}
-                                        className="max-w-4xl mx-auto space-y-6 text-justify flex justify-center "
+                                        className="max-w-6xl mx-auto"
                                     >
-                                        {/* <motion.div
-                                            initial={{ opacity: 0, filter: 'blur(5px)' }}
-                                            animate={{ opacity: 1, filter: 'blur(0px)' }}
-                                            transition={{ duration: 0.5 }}
-                                            className="w-full text-justify"
-                                        >
-                                            <Image
-                                                src={Data.Image}
-                                                alt={Data.Name}
-                                                width={720}
-                                                height={720}
-                                                className="rounded-md object-cover group-hover:grayscale-0 transition-all duration-500"
-                                                onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                                                }}
-                                            />
+                                        {/* Profile Section */}
+                                        <div className="flex flex-col lg:flex-row items-center gap-8 mb-12">
+                                            {/* Profile Image */}
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ duration: 0.6 }}
+                                                className="relative group"
+                                            >
+                                                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-[var(--mono-4)]/30 shadow-2xl">
+                                                    <Image
+                                                        src={Data.About?.Image || "/images/default-profile.png"}
+                                                        alt={decodedUsername}
+                                                        width={192}
+                                                        height={192}
+                                                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                                                        onError={(e) => {
+                                                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                                                        }}
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--mono-4)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                                </div>
+                                                {/* Floating particles around image */}
+                                                {/* <div className="absolute -inset-4 pointer-events-none">
+                                                    {[...Array(6)].map((_, i) => (
+                                                        <motion.div
+                                                            key={i}
+                                                            className="absolute w-2 h-2 bg-[var(--mono-4)] rounded-full opacity-60"
+                                                            animate={{
+                                                                x: [0, Math.random() * 100 - 50],
+                                                                y: [0, Math.random() * 100 - 50],
+                                                                opacity: [0.6, 0.2, 0.6]
+                                                            }}
+                                                            transition={{
+                                                                duration: 3 + Math.random() * 2,
+                                                                repeat: Infinity,
+                                                                delay: i * 0.5
+                                                            }}
+                                                            style={{
+                                                                top: `${20 + Math.random() * 60}%`,
+                                                                left: `${20 + Math.random() * 60}%`
+                                                            }}
+                                                        />
+                                                    ))}
+                                                </div> */}
+                                            </motion.div>
 
-                                        </motion.div> */}
+                                            {/* Profile Info */}
+                                            <div className="flex-1 text-center lg:text-left">
+                                                <motion.h3
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                                    className="text-3xl font-bold font-oswald text-[var(--foreground)] mb-2"
+                                                >
+                                                    {decodedUsername}
+                                                </motion.h3>
+                                                <motion.p
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.5, delay: 0.3 }}
+                                                    className="text-lg text-[var(--foreground)]/70 font-comic mb-4"
+                                                >
+                                                    {Data.Tagline}
+                                                </motion.p>
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.5, delay: 0.4 }}
+                                                    className="flex flex-wrap justify-center lg:justify-start gap-2"
+                                                >
+                                                    {['Next.js', 'React', 'TypeScript', 'ASP.NET Core', 'Python'].map((skill, index) => (
+                                                        <span
+                                                            key={skill}
+                                                            className="px-3 py-1 bg-[var(--mono-4)]/10 border border-[var(--mono-4)]/30 rounded-full text-sm font-mono text-[var(--mono-4)] hover:bg-[var(--mono-4)]/20 transition-colors"
+                                                        >
+                                                            {skill}
+                                                        </span>
+                                                    ))}
+                                                </motion.div>
+                                            </div>
+                                        </div>
+
+                                        {/* Description with Typing Effect */}
                                         <motion.div
                                             initial={{ opacity: 0, filter: 'blur(5px)' }}
                                             animate={{ opacity: 1, filter: 'blur(0px)' }}
-                                            transition={{ duration: 0.5 }}
-                                            className="space-y-6 text-justify cursor-default"
+                                            transition={{ duration: 0.5, delay: 0.5 }}
+                                            className="space-y-6 text-justify"
                                         >
-                                            {paragraphs.map((paragraph: string, index: number) => (
-                                                <LazySection
-                                                    key={index}
-                                                    threshold={0.1}
-                                                    delay={index * 100}
-                                                    className="relative pl-6 border-l border-[var(--mono-4)]/30 hover:border-[var(--mono-4)] transition-colors duration-300"
-                                                    fallback={<div className="h-20 bg-[var(--mono-4)]/5 animate-pulse rounded" />}
-                                                >
-                                                    <div className="animate-pulse absolute top-0 left-[-4px] w-2 h-2 rounded-full bg-[var(--mono-4)] opacity-50" />
-                                                    <p className={`whitespace-pre-line text-lg leading-relaxed font-comic text-[var(--foreground)]/90 selection:bg-[var(--mono-4)] selection:text-black ${paragraph.charAt(0) === '•' ? 'ml-4 mb-2' : ''}`}>
-                                                        {paragraph}
-                                                    </p>
-                                                </LazySection>
-                                            ))}
+                                            <TypingDescription text={Data.About?.Description || ''} />
                                         </motion.div>
                                     </motion.div>
                                 )}
@@ -211,21 +311,65 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                                     <motion.div
                                                         initial={{ opacity: 0, x: -20 }}
                                                         whileInView={{ opacity: 1, x: 0 }}
-                                                        className="relative group p-6 h-full flex flex-col bg-[var(--background)]/50 border border-[var(--foreground)]/10 hover:border-[var(--mono-4)]/50 transition-all duration-300 rounded-lg hover:shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.1)]"
+                                                        whileHover={{
+                                                            scale: 1.05,
+                                                            boxShadow: "0 20px 40px rgba(var(--mono-4-rgb), 0.2)"
+                                                        }}
+                                                        transition={{ duration: 0.3 }}
+                                                        className="relative group p-6 h-full flex flex-col bg-[var(--background)]/50 border border-[var(--foreground)]/10 hover:border-[var(--mono-4)]/50 transition-all duration-300 rounded-lg cursor-pointer overflow-hidden"
                                                     >
                                                         <TechCorners Padding={2} Width={4} Height={2} />
-                                                        <div className="flex items-start gap-4 mb-4">
-                                                            <div className={`p-3 rounded bg-[var(--mono-4)]/10 text-[var(--mono-4)] group-hover:scale-110 transition-transform duration-300`}>
+
+                                                        {/* Background gradient animation */}
+                                                        <motion.div
+                                                            className={`absolute inset-0 bg-gradient-to-br ${value.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                                                            initial={{ scale: 0 }}
+                                                            whileHover={{ scale: 1 }}
+                                                            transition={{ duration: 0.5 }}
+                                                        />
+
+                                                        <div className="flex items-start gap-4 mb-4 relative z-10">
+                                                            <motion.div
+                                                                className={`p-3 rounded bg-[var(--mono-4)]/10 text-[var(--mono-4)] group-hover:scale-110 transition-transform duration-300`}
+                                                                whileHover={{ rotate: 360 }}
+                                                                transition={{ duration: 0.6 }}
+                                                            >
                                                                 <Icon className="w-6 h-6" />
-                                                            </div>
-                                                            <h3 className="text-2xl font-bold font-comic text-[var(--foreground)] mt-2">
+                                                            </motion.div>
+                                                            <h3 className="text-2xl font-bold font-comic text-[var(--foreground)] mt-2 group-hover:text-[var(--mono-4)] transition-colors">
                                                                 {value.title}
                                                             </h3>
                                                         </div>
-                                                        <div className="h-px w-full bg-gradient-to-r from-[var(--mono-4)]/50 to-transparent mb-4" />
-                                                        <p className="text-md font-comic text-[var(--foreground)]/70 leading-relaxed">
+
+                                                        <div className="h-px w-full bg-gradient-to-r from-[var(--mono-4)]/50 to-transparent mb-4 relative z-10" />
+
+                                                        <p className="text-md font-comic text-[var(--foreground)]/70 leading-relaxed relative z-10 group-hover:text-[var(--foreground)]/90 transition-colors">
                                                             {value.description}
                                                         </p>
+
+                                                        {/* Floating particles */}
+                                                        <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                                            {[...Array(3)].map((_, i) => (
+                                                                <motion.div
+                                                                    key={i}
+                                                                    className="absolute w-1 h-1 bg-[var(--mono-4)] rounded-full"
+                                                                    animate={{
+                                                                        x: [0, Math.random() * 50 - 25],
+                                                                        y: [0, Math.random() * 50 - 25],
+                                                                        opacity: [0, 1, 0]
+                                                                    }}
+                                                                    transition={{
+                                                                        duration: 2,
+                                                                        repeat: Infinity,
+                                                                        delay: i * 0.3
+                                                                    }}
+                                                                    style={{
+                                                                        top: `${30 + Math.random() * 40}%`,
+                                                                        left: `${30 + Math.random() * 40}%`
+                                                                    }}
+                                                                />
+                                                            ))}
+                                                        </div>
                                                     </motion.div>
                                                 </LazySection>
                                             )
@@ -241,30 +385,59 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                             const Icon = LucideIcons[interest.icon] || LucideIcons.HelpCircle
                                             return (
                                                 <LazySection key={index} delay={index * 50} threshold={0.1}>
-                                                    <TechCorners Padding={0} Width={4} Height={2} />
-                                                    <motion.div
-                                                        initial={{ opacity: 0, y: 20 }}
-                                                        whileInView={{ opacity: 1, y: 0 }}
-                                                        className="flex items-center gap-4 p-4 border border-[var(--foreground)]/10 bg-[var(--background)]/30 rounded hover:border-[var(--mono-4)]/30 transition-colors"
-                                                    >
-                                                        <div className={`p-2 rounded bg-[var(--mono-4)]/10 text-[var(--mono-4)]`}>
-                                                            <Icon className="w-8 h-8" />
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div className="flex justify-between items-center mb-1">
-                                                                <span className="font-bold font-comic text-md text-[var(--foreground)]">{interest.name}</span>
-                                                                <span className="font-mono text-md text-[var(--foreground)]/50">{interest.level}%</span>
+                                                    <Tooltip content={`${interest.name}: ${interest.level}% proficiency`}>
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: 20 }}
+                                                            whileInView={{ opacity: 1, y: 0 }}
+                                                            whileHover={{ scale: 1.02, y: -2 }}
+                                                            transition={{ duration: 0.3 }}
+                                                            className="flex items-center gap-4 p-4 border border-[var(--foreground)]/10 bg-[var(--background)]/30 rounded hover:border-[var(--mono-4)]/30 transition-all duration-300 cursor-pointer group"
+                                                        >
+                                                            <TechCorners Padding={0} Width={4} Height={2} />
+                                                            <motion.div
+                                                                className={`p-2 rounded bg-[var(--mono-4)]/10 text-[var(--mono-4)] group-hover:scale-110 transition-transform duration-300`}
+                                                                whileHover={{ rotate: [0, -10, 10, 0] }}
+                                                                transition={{ duration: 0.5 }}
+                                                            >
+                                                                <Icon className="w-8 h-8" />
+                                                            </motion.div>
+                                                            <div className="flex-1">
+                                                                <div className="flex justify-between items-center mb-1">
+                                                                    <span className="font-bold font-comic text-md text-[var(--foreground)] group-hover:text-[var(--mono-4)] transition-colors">
+                                                                        {interest.name}
+                                                                    </span>
+                                                                    <motion.span
+                                                                        className="font-mono text-md text-[var(--foreground)]/50"
+                                                                        initial={{ opacity: 0 }}
+                                                                        animate={{ opacity: 1 }}
+                                                                        transition={{ delay: 0.5 + index * 0.1 }}
+                                                                    >
+                                                                        {interest.level}%
+                                                                    </motion.span>
+                                                                </div>
+                                                                <div className="w-full h-3 bg-[var(--foreground)]/10 rounded-full overflow-hidden relative">
+                                                                    <motion.div
+                                                                        className={`h-full bg-gradient-to-r ${interest.color} rounded-full shadow-[0_0_10px_var(--mono-4)] relative`}
+                                                                        initial={{ width: 0 }}
+                                                                        whileInView={{ width: `${interest.level}%` }}
+                                                                        transition={{ duration: 1.5, delay: 0.2 + index * 0.1 }}
+                                                                    >
+                                                                        {/* Animated shine effect */}
+                                                                        <motion.div
+                                                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                                                                            animate={{ x: ['-100%', '100%'] }}
+                                                                            transition={{
+                                                                                duration: 2,
+                                                                                repeat: Infinity,
+                                                                                repeatDelay: 3,
+                                                                                ease: "easeInOut"
+                                                                            }}
+                                                                        />
+                                                                    </motion.div>
+                                                                </div>
                                                             </div>
-                                                            <div className="w-full h-2 bg-[var(--foreground)]/10 rounded-full overflow-hidden">
-                                                                <motion.div
-                                                                    initial={{ width: 0 }}
-                                                                    whileInView={{ width: `${interest.level}%` }}
-                                                                    transition={{ duration: 1, delay: 0.2 }}
-                                                                    className={`h-full bg-[var(--mono-4)]/80 rounded-full shadow-[0_0_10px_var(--mono-4)]`}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </motion.div>
+                                                        </motion.div>
+                                                    </Tooltip>
                                                 </LazySection>
                                             )
                                         })}
@@ -275,56 +448,59 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                 {activeTab === 'trivia' && (
                                     <div className="max-w-6xl mx-auto space-y-12">
 
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        {/* Fun Facts Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                             {funFacts?.map((fact: any, index: number) => {
                                                 // @ts-ignore
                                                 const Icon = LucideIcons[fact.icon] || LucideIcons.HelpCircle
                                                 return (
                                                     <LazySection key={index} delay={index * 100}>
                                                         <motion.div
-                                                            whileHover={{ scale: 1.02 }}
-                                                            className="h-full p-6 border border-[var(--foreground)]/10 bg-[var(--background)]/20 rounded-lg relative overflow-hidden group"
+                                                            whileHover={{ scale: 1.05, rotate: [0, -1, 1, 0] }}
+                                                            transition={{ duration: 0.3 }}
+                                                            className="h-full p-6 border border-[var(--foreground)]/10 bg-[var(--background)]/20 rounded-lg relative overflow-hidden group cursor-pointer"
                                                         >
                                                             <TechCorners Padding={0} Width={4} Height={2} />
-                                                            <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                                                                <Icon className="w-16 h-16" />
+
+                                                            {/* Background pattern */}
+                                                            <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                                <div className="absolute top-0 right-0 w-32 h-32">
+                                                                    <Icon className="w-full h-full" />
+                                                                </div>
                                                             </div>
-                                                            <div className="relative z-10 flex flex-col gap-2">
-                                                                <Icon className="w-6 h-6 text-[var(--mono-4)] mb-2" />
-                                                                <p className="font-comic text-md text-[var(--foreground)]/80">{fact.fact}</p>
+
+                                                            <div className="relative z-10 flex flex-col gap-3">
+                                                                <motion.div
+                                                                    whileHover={{ scale: 1.1, rotate: 360 }}
+                                                                    transition={{ duration: 0.6 }}
+                                                                >
+                                                                    <Icon className="w-8 h-8 text-[var(--mono-4)] mb-2" />
+                                                                </motion.div>
+                                                                <p className="font-comic text-md text-[var(--foreground)]/80 leading-relaxed group-hover:text-[var(--foreground)] transition-colors">
+                                                                    {fact.fact}
+                                                                </p>
                                                             </div>
+
+                                                            {/* Hover glow effect */}
+                                                            <motion.div
+                                                                className={`absolute inset-0 bg-gradient-to-br ${fact.color} opacity-0 group-hover:opacity-10 rounded-lg`}
+                                                                initial={{ scale: 0 }}
+                                                                whileHover={{ scale: 1 }}
+                                                                transition={{ duration: 0.3 }}
+                                                            />
                                                         </motion.div>
                                                     </LazySection>
                                                 )
                                             })}
                                         </div>
 
-                                        {/* Daily Routine Visualization */}
+                                        {/* Daily Routine Timeline */}
                                         <LazySection threshold={0.2}>
                                             <div className="p-8 border border-[var(--mono-4)]/20 bg-[var(--background)]/30 rounded-xl relative">
-                                                <div className="absolute -top-3 left-4 bg-[var(--background)] px-2 text-[var(--mono-4)] text-xs font-bold font-mono tracking-widest border border-[var(--mono-4)]/20 rounded">
+                                                <div className="absolute -top-3 left-4 bg-[var(--background)] px-3 py-1 text-[var(--mono-4)] text-sm font-bold font-mono tracking-widest border border-[var(--mono-4)]/20 rounded">
                                                     Typical Day
                                                 </div>
-                                                <div className="space-y-4 font-mono text-sm">
-                                                    {dayRythm?.map((item, idx) => (
-                                                        <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 group">
-                                                            <div className="min-w-24 text-[var(--mono-4)]/80 text-xs font-bold">{item.time}</div>
-                                                            <div className="flex-1 h-8 bg-[var(--foreground)]/5 rounded overflow-hidden relative border border-[var(--foreground)]/5 group-hover:border-[var(--mono-4)]/30 transition-colors">
-                                                                <div className="absolute inset-y-0 left-4 flex items-center z-10 text-[var(--foreground)]/90 text-md font-comic tracking-wide px-2">
-                                                                    {item.activity}
-                                                                </div>
-                                                                <motion.div
-                                                                    initial={{ width: 0 }}
-                                                                    whileInView={{ width: "100%" }}
-                                                                    transition={{ duration: 1.5, delay: idx * 0.1 }}
-                                                                    className={`h-full ${item.color.replace('bg-', 'bg-opacity-20 bg-')} w-full absolute top-0 left-0`}
-                                                                >
-                                                                    <div className={`h-full w-1 bg-[var(--mono-4)] absolute right-0 top-0 shadow-[0_0_10px_var(--mono-4)] opacity-50`} />
-                                                                </motion.div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <Timeline items={dayRythm || []} />
                                             </div>
                                         </LazySection>
                                     </div>

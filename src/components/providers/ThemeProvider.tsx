@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useAppSelector, useAppDispatch } from '@/hooks/hooks'
+import { useAppSelector, useAppDispatch } from '@/hooks/useTypingEffect'
 import { updateResolvedTheme } from '@/models/store/themeSlice'
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

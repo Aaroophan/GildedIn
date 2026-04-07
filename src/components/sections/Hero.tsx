@@ -78,7 +78,7 @@ function TimelyGreeting({ Data }: { Data: string }) {
 	const { icon: IconComponent, text, className } = greetingData
 
 	return (
-		<div className="relative inline-flex items-center gap-3 bg-[var(--background)]/60 backdrop-blur-md py-2 px-4 rounded-lg border border-[var(--mono-4)]/25 shadow-lg group hover:border-[var(--mono-4)]/50 transition-all duration-300">
+		<div className="relative inline-flex items-center gap-2 sm:gap-3 bg-[var(--background)]/60 backdrop-blur-md py-2 px-3 sm:px-4 rounded-lg border border-[var(--mono-4)]/25 shadow-lg group hover:border-[var(--mono-4)]/50 transition-all duration-300">
 			{/* Tech Corners */}
 			<TechCorners Padding={2} Width={4} Height={4} />
 
@@ -89,14 +89,14 @@ function TimelyGreeting({ Data }: { Data: string }) {
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.05, delay: idx * 0.05 }}
-						className="font-inkfree font-bold hover:text-[var(--mono-4)] transition-colors"
+						className="font-inkfree font-bold text-xs sm:text-sm hover:text-[var(--mono-4)] transition-colors"
 					>
 						{letter}
 					</motion.span>
 				))}
 			</i>
 
-			<IconComponent className="w-5 h-5 rounded-md text-[var(--foreground)]/70 hover:text-[var(--mono-4)] transition-colors" />
+			<IconComponent className="w-4 h-4 sm:w-5 sm:h-5 rounded-md text-[var(--foreground)]/70 hover:text-[var(--mono-4)] transition-colors" />
 		</div>
 	)
 }
@@ -183,10 +183,12 @@ export default function Hero({ initialData }: { initialData?: any }) {
 					transition: { duration: 0.2 }
 				}}
 				className="
-                    relative group flex items-center justify-center mt-4 lg:mt-0 lg:p-6 p-2 
+                    relative group flex items-center justify-center mt-2 sm:mt-4 lg:mt-0 
+                    p-2 sm:p-3 lg:p-6 
                     rounded-full bg-[var(--mono-1)]/10 backdrop-blur-sm 
                     border border-[var(--foreground)]/10 hover:border-[var(--mono-4)]/50
                     text-[var(--foreground)]/75 hover:text-[var(--mono-4)] transition-all duration-300
+                    active:scale-75 touch:scale-100
                 "
 				href={Social.Href}
 				target="_blank"
@@ -206,66 +208,66 @@ export default function Hero({ initialData }: { initialData?: any }) {
 	})
 
 	return (
-		<section id="Hero" className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden font-mono">
+		<section id="Hero" className="relative min-h-screen flex items-center justify-center py-10 sm:py-16 lg:py-20 overflow-hidden font-mono">
 			<FadingBackground Value="Backgrounds" />
 			{/* <HeroScene /> */}
 			{/* <GridBackground Data={Data} Name={Hero.name} Code={Hero.toString().split("SPLITHERE")[1]} /> */}
 
-			<header className="container mx-auto px-4 relative z-10 flex flex-col items-center cursor-default">
-				<div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-100">
-					<div className="hidden lg:block w-64 h-64 sm:w-80 sm:h-80" />
-					<div className="flex flex-col items-center justify-center">
+			<header className="container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center cursor-default">
+				<div className="flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-20">
+					<div className="hidden lg:block w-40 h-40 sm:w-64 sm:h-64 lg:w-80 lg:h-80" />
+					<div className="flex flex-col items-center justify-center w-full sm:w-auto px-1 sm:px-0 sm:ml-100">
 						{/* Main Dossier Card */}
 						<Tilt
 							tiltMaxAngleX={20}
 							tiltMaxAngleY={20}
 							glareEnable={false}
-							perspective={1000}
+							perspective={800}
 							transitionSpeed={300}
-							scale={1.05}
-							className="inline-block"
+							scale={1.02}
+							className="inline-block w-full sm:w-auto"
 						>
 							<motion.div
 								initial={{ opacity: 0, scale: 0.9, y: 30 }}
 								animate={{ opacity: 1, scale: 1, y: 0 }}
 								transition={{ duration: 0.8, ease: "easeOut" }}
 								className="
-									relative p-8 sm:p-5 lg:py-10 rounded-2xl
+									relative p-4 sm:p-6 md:p-8 lg:p-10 rounded-2xl
 									bg-[var(--background)]/20 backdrop-blur-md
 									border border-[var(--foreground)]/10
 									shadow-2xl
-									w-full lg:w-auto
+									w-full max-w-sm sm:max-w-md lg:max-w-4xl
 								"
 							>
 
 								<TechCorners Padding={2} Width={cornerDims.w} Height={cornerDims.h} />
 
 								{/* Case ID Label */}
-								<div className="absolute top-4 right-6 text-[10px] tracking-widest text-[var(--mono-4)] font-bold opacity-70">
+								<div className="absolute top-2 sm:top-4 right-3 sm:right-6 text-[8px] sm:text-[10px] tracking-widest text-[var(--mono-4)] font-bold opacity-70">
 									CASE_FILE_#: {Array.from(Data.Name.split(' ')[0]).map((char: any) => char.charCodeAt(0).toString(16).toUpperCase()).join("")}
 								</div>
 
-								<div className="flex flex-col items-center text-center gap-4">
+								<div className="flex flex-col items-center text-center gap-2 sm:gap-3 md:gap-4">
 
 									{/* Greeting Note */}
 									<motion.div
 										initial={{ opacity: 0, y: -10 }}
 										animate={{ opacity: 1, y: 0 }}
 										transition={{ delay: 0.3 }}
-										className="relative rotate-[4deg]"
+										className="relative rotate-[4deg] px-2 sm:px-0"
 									>
-										<div className="absolute -top-6 -left-4 text-[var(--mono-4)] text-2xl opacity-50">"</div>
+										<div className="absolute -top-4 sm:-top-6 -left-2 sm:-left-4 text-[var(--mono-4)] text-lg sm:text-2xl opacity-50">"</div>
 										<TimelyGreeting Data={Data.Greeting} />
-										<div className="absolute -bottom-8 -right-4 text-[var(--mono-4)] text-2xl opacity-50">"</div>
+										<div className="absolute -bottom-6 sm:-bottom-8 -right-2 sm:-right-4 text-[var(--mono-4)] text-lg sm:text-2xl opacity-50">"</div>
 									</motion.div>
 
 									{/* Name Title */}
-									<div className="relative mt-4 flex-col flex items-center justify-center">
+									<div className="relative mt-2 sm:mt-4 flex-col flex items-center justify-center w-full">
 										<h1 className="
-											font-oswald font-bold text-6xl sm:text-7xl lg:text-9xl 
-											tracking-wibdest bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text
+											font-oswald font-bold text-6xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl
+											bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text
 											cursor-default select-none
-											drop-shadow-lg lg:px-4
+											drop-shadow-lg px-2 sm:px-4 lg:px-4 leading-tight
 										">
 											{Data.Name.split(' ').map((SplitName: string, ind: number) => (
 												<React.Fragment key={`name-part-${ind}`}>
@@ -289,7 +291,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 												</React.Fragment>
 											))}
 										</h1>
-										<p className="mt-5 h-15 lg:h-auto cursor-default font-inkfree font-bold text-sm lg:text-sm w-xl flex flex-wrap justify-center text-[var(--foreground)]/75">
+										<p className="mt-3 sm:mt-5 h-auto cursor-default font-inkfree font-bold text-xs sm:text-sm md:text-base w-full px-2 flex flex-wrap justify-center text-[var(--foreground)]/75">
 											{Data.Tagline.split(' ').map((SplitName: string, ind: number) => (
 												<React.Fragment key={`name-part-${ind}`}>
 													{SplitName.split('').map((letter: string, idx: number) => (
@@ -318,17 +320,17 @@ export default function Hero({ initialData }: { initialData?: any }) {
 											initial={{ width: "0%" }}
 											animate={{ width: "100%" }}
 											transition={{ delay: 3, duration: 3, ease: "easeInOut" }}
-											className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent opacity-50 mt-5 animate-pulse"
+											className="h-1 sm:h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent opacity-50 mt-3 sm:mt-5 animate-pulse"
 										/>
 									</div>
-									<h2 className="h-15 lg:h-auto font-mono font-bold text-center cursor-default lg:text-xl bg-gradient-to-br bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent">
+									<h2 className="h-auto font-mono font-bold text-center cursor-default text-xs sm:text-sm md:text-base lg:text-lg bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent mt-3 sm:mt-4 px-2">
 										{Data.Tags[currentTagIndex].split("").map((letter: string, index: number) => (
 											<motion.span
 												key={index}
 												initial={{ opacity: 0, y: 10 }}
 												animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
 												transition={{ duration: 0.05, delay: index * 0.01 }}
-												className="lg:text-xl bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent hover:text-[var(--mono-4)] dark:hover:text-[var(--mono-4)] transition-colors tracking-widest "
+												className="text-xs sm:text-sm md:text-base lg:text-lg bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent hover:text-[var(--mono-4)] dark:hover:text-[var(--mono-4)] transition-colors tracking-widest"
 											>
 												{letter}
 											</motion.span>
@@ -339,8 +341,8 @@ export default function Hero({ initialData }: { initialData?: any }) {
 						</Tilt>
 
 						{/* Evidence Links (Socials) */}
-						<div className="mt-2 w-full max-w-5xl relative">
-							<div className="flex flex-wrap justify-center lg:justify-center gap-3 lg:gap-10 lg:mt-10 font-bold">
+						<div className="mt-4 sm:mt-6 lg:mt-10 w-full max-w-5xl relative px-2">
+							<div className="flex flex-wrap justify-center gap-2 sm:gap-3 lg:gap-8 font-bold">
 								{Socials}
 							</div>
 						</div>

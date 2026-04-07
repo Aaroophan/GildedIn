@@ -5,7 +5,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
 import { Menu, X, Sun, Moon, Briefcase, Code, User, FileText, Send, Award, GraduationCap, Info, PenLine } from "lucide-react"
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks/useTypingEffect"
 import { toggleTheme } from "@/models/store/themeSlice"
 
 const letterAnimation = {
@@ -40,9 +40,9 @@ export default function Header() {
     const navItems = [
         { name: "Home", href: `/${username}`, icon: null },
         { name: "About", href: `/${username}/About`, icon: User },
-        { name: "Skills", href: `/${username}/Skills`, icon: Code },
         { name: "Experience", href: `/${username}/Experience`, icon: Award },
         { name: "Projects", href: `/${username}/Projects`, icon: Briefcase },
+        { name: "Skills", href: `/${username}/Skills`, icon: Code },
         { name: "Blog", href: `/${username}/Blog`, icon: PenLine },
         { name: "Education", href: `/${username}/Education`, icon: GraduationCap },
         { name: "References", href: `/${username}/References`, icon: FileText },
