@@ -299,7 +299,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
                                 {/* Values Tab */}
                                 {activeTab === 'values' && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto auto-rows-fr">
                                         {values?.map((value: any, index: number) => {
                                             // @ts-ignore
                                             const Icon = LucideIcons[value.icon] || LucideIcons.HelpCircle
@@ -376,19 +376,19 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
                                 {/* Interests Tab */}
                                 {interests && (activeTab === 'interests') && (
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto auto-rows-fr">
                                         {interests?.map((interest: any, index: number) => {
                                             // @ts-ignore
                                             const Icon = LucideIcons[interest.icon] || LucideIcons.HelpCircle
                                             return (
                                                 <LazySection key={index} delay={index * 50} threshold={0.1}>
-                                                    <Tooltip content={`${interest.name}: ${interest.level}% proficiency`}>
+                                                    <Tooltip content={`${interest.name}: ${interest.level}%`}>
                                                         <motion.div
                                                             initial={{ opacity: 0, y: 20 }}
                                                             whileInView={{ opacity: 1, y: 0 }}
                                                             whileHover={{ scale: 1.02, y: -2 }}
                                                             transition={{ duration: 0.3 }}
-                                                            className="flex items-center gap-4 p-4 border border-[var(--foreground)]/10 bg-[var(--background)]/30 rounded hover:border-[var(--mono-4)]/30 transition-all duration-300 cursor-pointer group"
+                                                            className="flex items-center gap-4 p-4 h-full border border-[var(--foreground)]/10 bg-[var(--background)]/30 rounded hover:border-[var(--mono-4)]/30 transition-all duration-300 cursor-pointer group"
                                                         >
                                                             <TechCorners Padding={0} Width={4} Height={2} />
                                                             <motion.div
@@ -398,7 +398,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                                             >
                                                                 <Icon className="w-8 h-8" />
                                                             </motion.div>
-                                                            <div className="flex-1">
+                                                            <div className="flex-1 w-60 sm:w-100">
                                                                 <div className="flex justify-between items-center mb-1">
                                                                     <span className="font-bold font-comic text-md text-[var(--foreground)] group-hover:text-[var(--mono-4)] transition-colors">
                                                                         {interest.name}

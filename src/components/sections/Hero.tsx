@@ -278,7 +278,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 															animate={{ opacity: 1, filter: "blur(0px)" }}
 															transition={{
 																duration: 0.1,
-																delay: idx * 0.05 + 0.5,
+																delay: idx * 0.1 + ind * 0.1,
 																type: "spring",
 																stiffness: 100
 															}}
@@ -301,7 +301,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 															animate={{ opacity: 1, filter: "blur(0px)" }}
 															transition={{
 																duration: 0.1,
-																delay: idx * 0.05 + 0.5,
+																delay: idx * 0.05 + ind * 0.1,
 																type: "spring",
 																stiffness: 100
 															}}
