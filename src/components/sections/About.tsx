@@ -121,9 +121,6 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
                             {/* Header Section */}
                             <div className="mb-12 text-center relative">
-                                <div className="absolute top-0 right-0 text-[10px] sm:text-xs text-[var(--mono-4)] tracking-widest opacity-60 font-bold border border-[var(--mono-4)]/30 px-2 py-1 rounded cursor-default">
-                                    REF: CONFIDENTIAL
-                                </div>
 
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}

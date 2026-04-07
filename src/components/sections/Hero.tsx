@@ -291,7 +291,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 												</React.Fragment>
 											))}
 										</h1>
-										<p className="mt-3 sm:mt-5 h-auto cursor-default font-inkfree font-bold text-xs sm:text-sm md:text-base w-full px-2 flex flex-wrap justify-center text-[var(--foreground)]/75">
+										<p className="mt-3 sm:mt-5 h-auto cursor-default font-inkfree font-bold text-xs sm:text-sm md:text-base w-full px-4 flex flex-wrap break-words justify-center text-[var(--foreground)]/75">
 											{Data.Tagline.split(' ').map((SplitName: string, ind: number) => (
 												<React.Fragment key={`name-part-${ind}`}>
 													{SplitName.split('').map((letter: string, idx: number) => (
