@@ -227,7 +227,7 @@ export const Skills = ({ initialData }: { initialData?: SkillsResult }) => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-80px" }}
                                 transition={{ duration: 0.55, delay: 0.1 }}
-                                className="relative overflow-hidden "
+                                className="relative "
                             >
                                 <div className="space-y-4">
                                     {data.Skills.map((lane, laneIndex) => {
@@ -242,7 +242,7 @@ export const Skills = ({ initialData }: { initialData?: SkillsResult }) => {
                                                     : "border-[var(--mono-4)]/14 bg-[var(--background)]/58"
                                                     }`}
                                             >
-                                                <TechCorners Padding={0} Width={6} Height={6} />
+                                                <TechCorners Padding={1} Width={6} Height={6} />
                                                 <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                                                     <div>
                                                         <p className="font-oswald text-2xl tracking-[0.12em] text-[var(--foreground)]">
@@ -276,9 +276,9 @@ export const Skills = ({ initialData }: { initialData?: SkillsResult }) => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-80px" }}
                                     transition={{ duration: 0.55, delay: 0.16 }}
-                                    className="relative overflow-hidden rounded-[1.75rem] border border-[var(--mono-4)]/16 bg-[var(--background)]/74 p-5 backdrop-blur-xl"
+                                    className="relative rounded-[1.75rem] border border-[var(--mono-4)]/16 bg-[var(--background)]/74 p-5 backdrop-blur-xl"
                                 >
-                                    <TechCorners Padding={0} Width={5} Height={5} />
+                                    <TechCorners Padding={2} Width={5} Height={5} />
                                     <p className="font-mono text-[10px] tracking-[0.34em] text-[var(--mono-4)]">Focused Skill</p>
                                     <p className="mt-3 font-mono text-[10px] tracking-[0.28em] text-[var(--foreground)]/52">{activeLane[0]}</p>
                                     <div className="mt-4 flex items-start gap-4">
@@ -318,7 +318,7 @@ export const Skills = ({ initialData }: { initialData?: SkillsResult }) => {
                                             transition={{ duration: 0.45, delay: 0.2 + index * 0.07 }}
                                             className="rounded-[1.75rem] border border-[var(--mono-4)]/16 bg-[var(--background)]/68 p-5 backdrop-blur-xl"
                                         >
-                                            <TechCorners Padding={0} Width={3} Height={3} />
+                                            <TechCorners Padding={2} Width={3} Height={3} />
                                             <div className="flex items-start gap-4">
                                                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-[var(--mono-4)]/20 bg-[var(--mono-4)]/10 text-[var(--mono-4)]">
                                                     <Icon size={22} />

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChatBotService } from "@/models/Services/ChatBot";
 import { useParams } from "next/navigation";
+import TechCorners from "../ui/TechCorners";
 
 interface Message {
 	role: "user" | "assistant";
@@ -259,6 +260,7 @@ export default function ChatBot() {
 						className="fixed bottom-6 right-6 z-[9998] group cursor-pointer"
 						aria-label="Open chat assistant"
 					>
+						<TechCorners Padding={3} Width={3} Height={3} />
 						{/* Orbiting ring */}
 						<div className="absolute inset-[-6px] rounded-full border border-[var(--mono-4)]/30 chatbot-orbit" />
 						<div className="absolute inset-[-12px] rounded-full border border-[var(--mono-4)]/10 chatbot-orbit-reverse" />
@@ -296,13 +298,13 @@ export default function ChatBot() {
 						animate={{ opacity: 1, y: 0, scale: 1 }}
 						exit={{ opacity: 0, y: 20, scale: 0.95 }}
 						transition={{ type: "spring", stiffness: 300, damping: 25 }}
-						className="fixed bottom-6 right-6 z-[9998] w-[calc(100vw-3rem)] sm:w-[400px] h-[min(580px,calc(100vh-6rem))] flex flex-col rounded-2xl overflow-hidden border border-[var(--mono-4)]/20 shadow-2xl shadow-[var(--mono-4)]/10 backdrop-blur-xs"
+						className="fixed bottom-6 right-6 z-[9998] w-[calc(100vw-3rem)] sm:w-[400px] h-[min(580px,calc(100vh-6rem))] flex flex-col rounded-2xl border border-[var(--mono-4)]/20 shadow-2xl shadow-[var(--mono-4)]/10 backdrop-blur-xs"
 						style={{
 							background: "linear-gradient(135deg, rgba(var(--mono-7-rgb), 0.4) 0%, rgba(var(--mono-8-rgb), 0.3) 100%)",
 							backdropFilter: "blur(20px)",
 						}}
 					>
-                        
+						<TechCorners Padding={3} Width={6} Height={6} />
                         <div className="absolute inset-0 pointer-events-none text-[var(--mono-4)]/5 mask-linear-fade">
                             <svg className="w-full h-full mask-linear-fade-y" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                                 <defs>

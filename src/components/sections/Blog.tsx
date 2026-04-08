@@ -149,9 +149,9 @@ export const Blog = ({ initialData }: { initialData?: any }) => {
                                             viewport={{ once: true, amount: 0.1 }}
                                             transition={{ duration: 0.5, delay: index * 0.1 }}
                                             whileHover={{ y: -5, scale: 1.02 }}
-                                            className="h-full flex flex-col overflow-hidden transition-all duration-300 rounded-xl border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/50 cursor-pointer bg-[var(--mono-4)]/5 backdrop-blur-xs shadow-lg hover:shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.1)] group relative"
+                                            className="h-full flex flex-col transition-all duration-300 rounded-xl border border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/50 cursor-pointer bg-[var(--mono-4)]/5 backdrop-blur-xs shadow-lg hover:shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.1)] group relative"
                                         >
-                                            <TechCorners Padding={0} Width={8} Height={8} />
+                                            <TechCorners Padding={2} Width={8} Height={8} />
 
                                             <div className="h-60 overflow-hidden relative border-b border-[var(--foreground)]/10">
                                                 <Image

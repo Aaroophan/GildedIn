@@ -12,7 +12,14 @@ export default function Footer() {
                 <div className="font-mono flex items-center justify-center gap-2">
                     <a href="https://aaroophan.dev" className="font-oswald text-[var(--mono-4)] text-md">GildedIn</a>
                     <span className="font-mono text-xs text-[var(--foreground)]/50">by</span>
-                    <a href="https://aaroophan.dev" className="font-inkfree font-medium text-[var(--foreground)]"><i>Aaroophan Varatharajan</i></a>
+                    <a href="https://aaroophan.dev" className="flex gap-2 items-center justify-center font-inkfree font-medium text-[var(--foreground)]">  
+                        <img
+                            src="https://lh3.googleusercontent.com/a/ACg8ocKNRvtI3cvci9DHfzBfC3d0PgPneG86fZv7w5se1U5mfBgcNqXj4g=s83-c-mo"
+                            alt="Aaroophan"
+                            className="h-5 w-5 rounded-full"
+                        />
+                        <i>Aaroophan Varatharajan</i>
+                    </a>
                 </div>
                 <div className="h-px flex-1 bg-[var(--mono-4)]/30" />
 

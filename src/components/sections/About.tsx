@@ -117,7 +117,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                             transition={{ duration: 0.8 }}
                             className="relative p-6 sm:p-10 rounded-xl bg-[var(--background)]/25 backdrop-blur-sm border border-[var(--foreground)]/10 shadow-2xl"
                         >
-                            <TechCorners Padding={2} Width={6} Height={6} />
+                            <TechCorners Padding={2} Width={10} Height={10} />
 
                             {/* Header Section */}
                             <div className="mb-12 text-center relative">

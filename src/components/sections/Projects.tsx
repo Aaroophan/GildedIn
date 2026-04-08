@@ -184,7 +184,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true, margin: "-80px" }}
                                 transition={{ duration: 0.5, delay: 0.08 }}
-                                className="relative self-start overflow-hidden rounded-[1.75rem] border border-[var(--mono-4)]/16 bg-[var(--background)]/78 p-5 backdrop-blur-xl xl:sticky xl:top-24"
+                                className="relative self-start rounded-[1.75rem] border border-[var(--mono-4)]/16 bg-[var(--background)]/78 p-5 backdrop-blur-xl xl:sticky xl:top-24"
                             >
                                 <TechCorners Padding={1} Width={6} Height={6} />
 
@@ -318,12 +318,12 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                                         onFocus={() => handleProjectFocus(project)}
                                                         onKeyDown={(event) => handleProjectKeyDown(event, project)}
                                                         whileHover={{ y: -5, scale: 1.02 }}
-                                                        className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-transparent shadow-lg backdrop-blur-xs transition-all duration-300 ${isActiveProject
+                                                        className={`group relative flex h-full cursor-pointer flex-col rounded-xl border bg-transparent shadow-lg backdrop-blur-xs transition-all duration-300 ${isActiveProject
                                                             ? "border-[var(--mono-4)]/50 shadow-[0_0_20px_rgba(15,115,255,0.12)]"
                                                             : "border-[var(--foreground)]/5 hover:border-[var(--mono-4)]/50 hover:shadow-[0_0_20px_rgba(15,115,255,0.1)]"
                                                             }`}
                                                     >
-                                                        <TechCorners Padding={0} Width={8} Height={8} />
+                                                        <TechCorners Padding={2} Width={8} Height={8} />
 
                                                         {endpoint === '/Aaroophan' && <div className="relative h-60 overflow-hidden">
                                                             <Image

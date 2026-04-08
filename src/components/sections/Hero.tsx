@@ -93,7 +93,7 @@ function TimelyGreeting({ Data }: { Data: string }) {
 	return (
 		<div className="relative inline-flex items-center gap-2 sm:gap-3 bg-[var(--background)]/60 backdrop-blur-md py-2 px-3 sm:px-4 rounded-lg border border-[var(--mono-4)]/25 shadow-lg group hover:border-[var(--mono-4)]/50 transition-all duration-300">
 			{/* Tech Corners */}
-			<TechCorners Padding={2} Width={4} Height={4} />
+			<TechCorners Padding={2} Width={4} Height={2} />
 
 			<i className={className}>
 				{text.split("").map((letter, idx) => (
@@ -122,25 +122,8 @@ export default function Hero({ initialData }: { initialData?: any }) {
 	const [error, setError] = useState<string | null>(null)
 	const [currentTagIndex, setCurrentTagIndex] = useState(0)
 	const [isVisible, setIsVisible] = useState<Boolean>(false)
-	const [cornerDims, setCornerDims] = useState({ w: 12, h: 12 })
     const [Title, setTitle] = useState<string>(initialData?.Title || "")
 	let SPLITHERE
-
-	const nameParts = splitWords(Data?.Name || "Professional")
-	const taglineParts = splitWords(Data?.Tagline || "")
-	const tags = Array.isArray(Data?.Tags) && Data.Tags.length ? Data.Tags : ["Professional"]
-	const currentTag = tags[currentTagIndex % tags.length]
-	const caseFileName = nameParts[0] || "ANON"
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCornerDims({
-				w: Math.floor(Math.random() * (50 - 5 + 1) + 5),
-				h: Math.floor(Math.random() * (50 - 5 + 1) + 5)
-			})
-		}, 500)
-		return () => clearInterval(interval)
-	}, [])
 
 	useEffect(() => {
 		if (!Data?.Tags) return
@@ -260,7 +243,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 								"
 							>
 
-								<TechCorners Padding={2} Width={cornerDims.w} Height={cornerDims.h} />
+								<TechCorners Padding={2} Width={25} Height={25} />
 
 								{/* Case ID Label */}
 								<div className="absolute top-2 sm:top-4 right-3 sm:right-6 text-[8px] sm:text-[10px] tracking-widest text-[var(--mono-4)] font-bold opacity-70">
