@@ -16,7 +16,20 @@ import GridBackground from "../ui/GridBackground"
 import TechCorners from "../ui/TechCorners"
 import HeroScene from "../ui/HeroScene"
 
+function safeString(value: unknown): string {
+	return typeof value === "string" ? value : ""
+}
+
+function splitWords(value: unknown): string[] {
+	return safeString(value).trim().split(" ").filter(Boolean)
+}
+
+function splitChars(value: unknown): string[] {
+	return safeString(value).split("")
+}
+
 function TimelyGreeting({ Data }: { Data: string }) {
+	const greetingText = typeof Data === "string" && Data.length ? Data : "Hello"
 	const [greetingData, setGreetingData] = useState({
 		icon: LucideIcons.Coffee,
 		text: "Hello",
@@ -112,6 +125,12 @@ export default function Hero({ initialData }: { initialData?: any }) {
 	const [cornerDims, setCornerDims] = useState({ w: 12, h: 12 })
     const [Title, setTitle] = useState<string>(initialData?.Title || "")
 	let SPLITHERE
+
+	const nameParts = splitWords(Data?.Name || "Professional")
+	const taglineParts = splitWords(Data?.Tagline || "")
+	const tags = Array.isArray(Data?.Tags) && Data.Tags.length ? Data.Tags : ["Professional"]
+	const currentTag = tags[currentTagIndex % tags.length]
+	const caseFileName = nameParts[0] || "ANON"
 
 	useEffect(() => {
 		const interval = setInterval(() => {

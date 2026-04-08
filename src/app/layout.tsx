@@ -5,7 +5,6 @@ import { ReduxProvider } from "@/components/providers/ReduxProvider"
 import { ThemeProvider } from "@/components/providers/ThemeProvider"
 import Header from "@/components/shell/Header"
 import Footer from "@/components/shell/Footer"
-import AnimatedFavicon from "@/components/shell/AnimatedFavicon"
 
 import GoogleAnalytics from "@/components/providers/GoogleAnalytics"
 import ChatBot from "@/components/shell/ChatBot"
@@ -189,7 +188,7 @@ export default function RootLayout({
 						<Header />
 						{children}
 						<Footer />
-						<AnimatedFavicon />
+						{/* <AnimatedFavicon /> */}
 					</ThemeProvider>
 				</ReduxProvider>
 			</body>

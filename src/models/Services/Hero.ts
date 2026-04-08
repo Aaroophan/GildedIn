@@ -32,98 +32,17 @@ export class HeroService {
                 Name: Name
             }
 
-            // const response = await fetch(`${this.APIURLService.APIURL}/Hero/v1/Hero`, {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(requestData),
-            // })
+            const response = await fetch(`${this.APIURLService.APIURL}/api/hero`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestData),
+                cache: "no-store"
+            })
 
-            // const data = await response.json()
+            const data = await response.json()
 
-            const data = {
-                Status: 200,
-                Message: "",
-                User_Session_Token: "User_Session_Token",
-                Title: "Hello, I'm",
-                "Image": "/images/Aaroophan-Main.png",
-                "Greeting": "I'm",
-                "Name": "Aaroophan Varatharajan",
-                "Tagline": "I build metadata-driven platforms by designing dynamic UI runtimes and backend orchestration layers that turn backend schemas into configurable systems, using Next.js, ASP.NET Core, & SQL.",
-                "Tags": [
-                    "Animation Enthusiast",
-                    "Full Stack Software Engineer",
-                    "Metadata-Driven Systems",
-                    "MSc in Computer Science (In Progress)",
-                    "Next.js, React, JavaScript/TypeScript",
-                    "C# (.NET), Node.js, Python (FastAPI)",
-                    "T-SQL, PostgreSQL, MongoDB",
-                    "Agile Team Player",
-                    "Blog Writer"
-                ],
-                "Links": [
-                    {
-                        "Name": "Instagram",
-                        "Icon": "Instagram",
-                        "Href": "https://www.instagram.com/aaroophan/?theme=dark"
-                    },
-                    {
-                        "Name": "LinkedIn",
-                        "Icon": "Linkedin",
-                        "Href": "https://www.linkedin.com/in/aaroophan/"
-                    },
-                    {
-                        "Name": "GitHub",
-                        "Icon": "Github",
-                        "Href": "https://github.com/Aaroophan"
-                    },
-                    {
-                        "Name": "Medium",
-                        "Icon": "PenLine",
-                        "Href": "https://medium.com/@aaroophan"
-                    },
-                    {
-                        "Name": "Email",
-                        "Icon": "Mail",
-                        "Href": "mailto:arophn@gmail.com"
-                    },
-                    {
-                        "Name": "Phone",
-                        "Icon": "Smartphone",
-                        "Href": "https://wa.me/+94768505131"
-                    },
-                    {
-                        "Name": "Resume",
-                        "Icon": "FileText",
-                        "Href": "https://docs.google.com/document/d/1DfQIxQo6b5PwLa1kKXoS7bUM2pUMsKIY5_GTlorXpzk/edit?usp=sharing"
-                    }
-                ],
-                "Backgrounds": [
-                    "/images/BG_1-min.JPG",
-                    "/images/BG_2-min.JPG",
-                    "/images/BG_3-min.JPG",
-                    "/images/BG_4-min.JPG",
-                    "/images/BG_5-min.JPG",
-                    "/images/BG_6-min.JPG",
-                    "/images/BG_7-min.JPG",
-                    "/images/BG_8-min.JPG",
-                    "/images/BG_9-min.JPG",
-                    "/images/BG_10-min.JPG",
-                    "/images/BG_11-min.mp4"
-                ],
-                "Images": [
-                    // "/images/Aaroophan-Main.png",
-                    // "/images/Profile_2-min.JPG",
-                    // "/images/Profile_3-min.JPG",
-                    // "/images/Profile_4-min.JPG",
-                    // "/images/Profile_5-min.JPG",
-                    // "/images/Profile_6-min.JPG",
-                    // "/images/Profile_3-min.JPG",
-                    // "/images/Profile_4-min.JPG",
-                    // "/images/Profile_5-min.JPG",
-                    // "/images/Profile_6-min.JPG",
-                    // "/images/BG_11-min.mp4",
-                    "/images/Profile_8-min.mp4",
-                ]
+            if (!response.ok) {
+                throw new Error(data?.Message || data?.error || `Hero API request failed with status ${response.status}`)
             }
 
             this.authService.setUser({
