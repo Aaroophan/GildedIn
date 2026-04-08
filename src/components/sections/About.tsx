@@ -211,7 +211,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                                 transition={{ duration: 0.6 }}
                                                 className="relative group"
                                             >
-                                                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-[var(--mono-4)]/30 shadow-2xl">
+                                                {endpoint === '/Aaroophan'  && <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-[var(--mono-4)]/30 shadow-2xl">
                                                     <Image
                                                         src={Data.About?.Image || "/images/default-profile.png"}
                                                         alt={decodedUsername}
@@ -223,7 +223,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                                         }}
                                                     />
                                                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--mono-4)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                                </div>
+                                                </div>}
                                                 {/* Floating particles around image */}
                                                 {/* <div className="absolute -inset-4 pointer-events-none">
                                                     {[...Array(6)].map((_, i) => (

@@ -281,7 +281,7 @@ export default function ChatBot() {
 							transition={{ delay: 1, duration: 0.4 }}
 							className="absolute right-[calc(100%+12px)] top-1/2 -translate-y-1/2 whitespace-nowrap bg-[var(--background)]/50 text-[var(--mono-7)] text-xs font-medium px-3 py-1.5 rounded-full border border-[var(--mono-4)]/20 shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.1)] pointer-events-none chatbot-float"
 						>
-							Ask me anything ✨
+							Ask me about {decodedUsername} ✨
 						</motion.div>
 					</motion.button>
 				)}

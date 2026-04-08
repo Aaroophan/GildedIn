@@ -119,7 +119,7 @@ export const Experiences = ({ initialData }: { initialData?: any }) => {
 
                         <div className="flex flex-col gap-6">
                             <div className="flex items-center gap-4">
-                                {selectedExperience.Image && (
+                                {decodedUsername === '/Aaroophan' && selectedExperience.Image && (
                                     <div className="relative w-16 h-16 rounded border border-[var(--mono-4)]/30 overflow-hidden">
                                         <Image
                                             src={selectedExperience.Image}
@@ -257,6 +257,9 @@ const ExperienceCard = ({ experience, index, onOpen, onNodeClick, setRef }: { ex
     const isCurrent = experience.Date ? experience.Date.includes("Present") : false
     const [isExpanded, setIsExpanded] = useState(false)
 
+    const params = useParams<{ username?: string }>()
+    const endpoint = `/${params?.username || ""}`
+
     return (
         <div className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${!isLeft ? 'md:flex-row-reverse' : ''}`}>
 
@@ -306,7 +309,7 @@ const ExperienceCard = ({ experience, index, onOpen, onNodeClick, setRef }: { ex
 
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col sm:flex-row gap-5 items-start">
-                            {experience.Image && (
+                            {endpoint === '/Aaroophan' && experience.Image && (
                                 <div className="relative w-20 h-20 shrink-0 rounded border border-[var(--mono-4)]/30 overflow-hidden group-hover:border-[var(--mono-4)] transition-colors p-1 bg-[var(--background)]/50">
                                     <div className="w-full h-full relative overflow-hidden">
                                         <Image

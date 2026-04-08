@@ -223,7 +223,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                             </div>
                                         </div>
 
-                                        <div className="relative mt-5 overflow-hidden rounded-[1.25rem] border border-[var(--mono-4)]/16">
+                                        {endpoint === '/Aaroophan' && <div className="relative mt-5 overflow-hidden rounded-[1.25rem] border border-[var(--mono-4)]/16">
                                             <div className="relative aspect-[4/3]">
                                                 <Image
                                                     src={activeProject.Image}
@@ -243,7 +243,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                                     </span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>}
 
                                         <p className="mt-5 text-sm leading-7 text-[var(--foreground)]/72">
                                             {normalizeCopy(activeProject.Description)}
@@ -325,7 +325,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                                     >
                                                         <TechCorners Padding={0} Width={8} Height={8} />
 
-                                                        <div className="relative h-60 overflow-hidden">
+                                                        {endpoint === '/Aaroophan' && <div className="relative h-60 overflow-hidden">
                                                             <Image
                                                                 src={project.Image}
                                                                 alt={project.Name}
@@ -335,7 +335,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                                                             />
                                                             <div className="absolute inset-0 bg-[var(--mono-4)]/10 opacity-0 transition-opacity duration-300 mix-blend-overlay group-hover:opacity-100" />
                                                             <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] opacity-10" />
-                                                        </div>
+                                                        </div>}
 
                                                         <div className="relative z-10 flex flex-1 flex-col p-6">
                                                             <div className="mb-3 flex items-start justify-between gap-3">
@@ -419,13 +419,13 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                             <div className="space-y-6">
                                 <div className="relative overflow-hidden rounded-[1.75rem] border border-[var(--mono-4)]/16 bg-[var(--background)]/74">
                                     <div className="relative aspect-[16/9]">
-                                        <Image
+                                        {endpoint === '/Aaroophan' && <Image
                                             src={selectedProject.Image}
                                             alt={selectedProject.Name}
                                             fill
                                             sizes="(max-width: 1024px) 100vw, 800px"
                                             className="object-cover"
-                                        />
+                                        />}
                                         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,14,35,0.06),rgba(0,14,35,0.75))]" />
                                         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(255,255,255,0.06)_50%)] bg-[length:100%_4px] opacity-20" />
                                         <div className="absolute bottom-0 left-0 right-0 p-5">

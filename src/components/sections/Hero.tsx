@@ -228,14 +228,14 @@ export default function Hero({ initialData }: { initialData?: any }) {
 
 	return (
 		<section id="Hero" className="relative min-h-screen flex items-center justify-center py-10 sm:py-16 lg:py-20 overflow-hidden font-mono">
-			<FadingBackground Value="Backgrounds" />
+			{endpoint === '/Aaroophan' ? <FadingBackground Value="Backgrounds" /> : <GridBackground Data={Data} Name={Hero.name} Code={Hero.toString()} />}
 			{/* <HeroScene /> */}
 			{/* <GridBackground Data={Data} Name={Hero.name} Code={Hero.toString().split("SPLITHERE")[1]} /> */}
 
 			<header className="container mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center cursor-default">
 				<div className="flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-20">
-					<div className="hidden lg:block w-40 h-40 sm:w-64 sm:h-64 lg:w-80 lg:h-80" />
-					<div className="flex flex-col items-center justify-center w-full sm:w-auto px-1 sm:px-0 sm:ml-100">
+					{endpoint === '/Aaroophan' && <div className="hidden lg:block w-40 h-40 sm:w-64 sm:h-64 lg:w-80 lg:h-80" />}
+					<div className={`flex flex-col items-center justify-center w-full sm:w-auto px-1 sm:px-0 ${endpoint === '/Aaroophan' ? 'sm:ml-100' : ''}`}>
 						{/* Main Dossier Card */}
 						<Tilt
 							tiltMaxAngleX={20}
@@ -244,7 +244,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 							perspective={800}
 							transitionSpeed={300}
 							scale={1.02}
-							className="inline-block w-full sm:w-auto"
+							className="inline-block w-full sm:w-auto mt-5"
 						>
 							<motion.div
 								initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -256,6 +256,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 									border border-[var(--foreground)]/10
 									shadow-2xl
 									w-full max-w-sm sm:max-w-md lg:max-w-4xl
+									py-25 sm:py-6
 								"
 							>
 
@@ -266,7 +267,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 									CASE_FILE_#: {Array.from(Data.Name.split(' ')[0]).map((char: any) => char.charCodeAt(0).toString(16).toUpperCase()).join("")}
 								</div>
 
-								<div className="flex flex-col items-center text-center gap-2 sm:gap-3 md:gap-4">
+								<div className="flex flex-col items-center text-center gap-10 sm:gap-3 md:gap-4">
 
 									{/* Greeting Note */}
 									<motion.div

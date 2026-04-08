@@ -16,6 +16,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
     const { username } = await params
     const endpoint = `/${username || ""}`
+    const Ico = username === 'Aaroophan' ? '/images/Aaroophan-Main.ico' : '/images/User.ico'
 
     const [heroData, aboutData] = await Promise.all([
         HeroService.getInstance().Hero(endpoint),
@@ -75,8 +76,8 @@ export async function generateMetadata(
         },
         category: 'technology',
         icons: {
-            icon: '/images/Aaroophan-Main.ico',
-            shortcut: '/images/Aaroophan-Main.ico',
+            icon: Ico,
+            shortcut: Ico,
             apple: '/images/Aaroophan-Main.png',
         },
     }
