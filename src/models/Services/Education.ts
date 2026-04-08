@@ -31,55 +31,18 @@ export class EducationService {
             const requestData = {
                 Name: Name
             }
+            
+            const response = await fetch(`${this.APIURLService.APIURL}/api/education`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestData),
+                cache: "no-store"
+            })
 
-            // const response = await fetch(`${this.APIURLService.APIURL}/Education/v1/Education`, {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(requestData),
-            // })
+            const data = await response.json()
 
-            // const data = await response.json()
-
-            const data = {
-                Status: 200,
-                Message: "",
-                User_Session_Token: "User_Session_Token",
-                Title: "Academic Qualifications",
-                "Educations": [
-                    {
-                        "Image": "/images/UoM-min.JPG",
-                        "Name": "University of Moratuwa",
-                        "Title": "MSc in Computer Science",
-                        "Date": "Jan 2026 - March 2028 (Present)",
-                        "Description": [
-                        ]
-                    },
-                    {
-                        "Image": "/images/UoB-min.JPG",
-                        "Name": "University of Bedfordshire",
-                        "Title": "BSc (Hons) Computer Science & Software Engineering",
-                        "Date": "Sep 2023 - May 2024",
-                        "Description": [
-                            "Second Class, Upper Division"
-                        ]
-                    },
-                    {
-                        "Image": "/images/SCU-min.JPG",
-                        "Name": "SLIIT City UNI",
-                        "Title": "Higher Diploma in Information Technology",
-                        "Date": "May 2021 - Jun 2023",
-                        "Description": [
-                            "Dean's List Award (GPA - 3.8 / 4.0) "
-                        ]
-                    },
-                    {
-                        "Image": "/images/SMC-min.JPG",
-                        "Name": "St. Michael's College",
-                        "Title": "High School",
-                        "Date": "Jan 2006 - Aug 2019",
-                        "Description": []
-                    }
-                ]
+            if (!response.ok) {
+                throw new Error(data?.Message || data?.error || `Education API request failed with status ${response.status}`)
             }
 
             this.authService.setUser({

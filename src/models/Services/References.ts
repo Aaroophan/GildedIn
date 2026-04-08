@@ -31,38 +31,18 @@ export class ReferenceService {
             const requestData = {
                 Name: Name
             }
+            
+            const response = await fetch(`${this.APIURLService.APIURL}/api/references`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestData),
+                cache: "no-store"
+            })
 
-            // const response = await fetch(`${this.APIURLService.APIURL}/Reference/v1/Reference`, {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(requestData),
-            // })
+            const data = await response.json()
 
-            // const data = await response.json()
-
-            const data = {
-                Status: 200,
-                Message: "",
-                User_Session_Token: "User_Session_Token",
-                Title: "References",
-                "References": [
-                {
-                    "Name": "Lasintha Ferdinando",
-                    "Education": "FCMA (UK), FIB (SL), MBA (UOC), CCM (FASEC), CGMA, GSLID MSc - IT & Strategic innovation (UK)",
-                    "Job": "Managing Director",
-                    "Company": "JKSE Consultants",
-                    "Phone": "+94 77 759 0523",
-                    "Email": "lasintha@jkseconsultants.com"
-                },
-                {
-                    "Name": "Aruni Samaraweera",
-                    "Education": null,
-                    "Job": "Project Manager",
-                    "Company": "Alliance Finance Company PLC",
-                    "Phone": "+94 77 477 3665",
-                    "Email": "aruni@alliancefinance.lk"
-                }
-                ]
+            if (!response.ok) {
+                throw new Error(data?.Message || data?.error || `References API request failed with status ${response.status}`)
             }
 
             this.authService.setUser({

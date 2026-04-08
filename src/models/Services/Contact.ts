@@ -31,26 +31,17 @@ export class ContactService {
             const requestData = {
                 Name: Name
             }
+            const response = await fetch(`${this.APIURLService.APIURL}/api/contact`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestData),
+                cache: "no-store"
+            })
 
-            // const response = await fetch(`${this.APIURLService.APIURL}/Contact/v1/Contact`, {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(requestData),
-            // })
+            const data = await response.json()
 
-            // const data = await response.json()
-
-            const data = {
-                Status: 200,
-                Message: "",
-                User_Session_Token: "User_Session_Token",
-                Title: "Get In Touch",
-                "Contact": {
-                    "Email": "mailto:arophn@gmail.com",
-                    "Phone": "https://wa.me/+94768505131",
-                    "Location": "Colombo, Sri Lanka.",
-                    "Message": "I'm currently open to new opportunities and collaborations. Whether you have a question or just want to say hi, drop a message and I'll get back to you!"
-                }
+            if (!response.ok) {
+                throw new Error(data?.Message || data?.error || `Contact API request failed with status ${response.status}`)
             }
 
             this.authService.setUser({

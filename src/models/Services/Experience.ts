@@ -32,76 +32,17 @@ export class ExperienceService {
                 Name: Name
             }
 
-            // const response = await fetch(`${this.APIURLService.APIURL}/Experience/v1/Experience`, {
-            //     method: "POST",
-            //     headers: headers,
-            //     body: JSON.stringify(requestData),
-            // })
+            const response = await fetch(`${this.APIURLService.APIURL}/api/experience`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestData),
+                cache: "no-store"
+            })
 
-            // const data = await response.json()
+            const data = await response.json()
 
-            const data = {
-                Status: 200,
-                Message: "",
-                User_Session_Token: "User_Session_Token",
-                Title: "Career Timeline",
-                "Experiences": [
-                    {
-                        "Image": "/images/MDZ_logo-min.JPG",
-                        "Title": "Software Engineer",
-                        "Company": "M Data Zone (PVT) LTD",
-                        "JobType": "Full-time",
-                        "Location": "Colombo, Western Province, Sri Lanka",
-                        "LocationType": "On-site (US Hours)",
-                        "Date": "September 2025 - Present",
-                        "Description": [
-                            "Architecting a metadata-driven white-label Customer Engagement Platform (CEP) built with Next.js, ASP.NET Core, and SQL Server, enabling brand-configurable campaign management, deep-link orchestration, analytics & role-based administration across environments.",
-                            "Designed a metadata-driven CRUD engine with full UI and API lifecycle, where backend-defined schemas dynamically generate 20+ admin screens through a single Next.js route and component, eliminating hard-coded pages and accelerating feature delivery.",
-                            "Developed a metadata-driven, permission-aware shared form engine and advanced UX framework powering WYSIWYG configuration for Workflow Builder, Push, In-App Messaging, and Deep Link configuration, featuring column resizing, drag-to-reorder, search, and filtering.",
-                            "Developed a typed transport layer with ASP.NET Core between the Next.js frontend, SQL Server stored procedures, and external services, implementing stored-procedure-driven APIs, rotating session tokens, Twilio/TOTP-based 2FA, and HMAC-signed webhooks.",
-                            "Implemented services within a distributed event pipeline for engagement channels, including Push and Deep Link APIs with RabbitMQ messaging, dead-letter handling, Serilog logging, and database-backed observability for reliable cross-service processing."
-                        ]
-                    },
-                    {
-                        "Image": "/images/MDZ_logo-min.JPG",
-                        "Title": "Associate Software Engineer",
-                        "Company": "M Data Zone (PVT) LTD",
-                        "JobType": "Full-time",
-                        "Location": "Colombo, Western Province, Sri Lanka",
-                        "LocationType": "On-site (US Hours)",
-                        "Date": "September 2024 - September 2025",
-                        "Description": [
-                            "Authored 100+ T-SQL queries and database objects with constraints and DB Mail notifications, improving data quality signals and reducing rework.",
-                            "Troubleshot and resolved database issues using T-SQL, constraints, and defensive parsing reducing data-related downtime by ~20%.",
-                            "Built 3 .NET Core CLI apps with Selenium for automated group/single test runs, screenshots, and logs cutting repeat manual effort by ~70%.",
-                            "Automated 1000+ end-to-end UI scenarios with resilient selectors, enabling overnight suites and improving triage with evidence-rich artifacts.",
-                            "Performed manual QA across 6+ projects (feature & regression), improving defect detection and reducing escaped bugs by ~30%.",
-                            "Led onboarding for 2 employees through code walkthroughs, documentation, and demo suites reducing ramp-up time by ~40% within 4 weeks.",
-                            "Documented software and database designs for 3+ system areas, improving cross-team collaboration and onboarding efficiency.",
-                            "Collaborated across time zones with teams in Canada, US, and Sri Lanka on release planning, QA handoffs, and DB changes.",
-                            "Managed 20+ Zendesk tickets weekly (triage, client communication, routing), improving response and resolution metrics by ~35%."
-                        ]
-                    },
-                    {
-                        "Image": "/images/afcplc_logo-min.JPG",
-                        "Title": "Intern Software Engineer",
-                        "Company": "Alliance Finance Company PLC",
-                        "JobType": "Internship",
-                        "Location": "Colombo, Western Province, Sri Lanka",
-                        "LocationType": "On-site",
-                        "Date": "Nov 2023 - Sep 2024",
-                        "Description": [
-                            "Developed and hosted a MERN stack application for report generation used by 5 departments, integrating Lime’s MongoDB and Finacle’s PostgreSQL.",
-                            "Ensured data integrity by writing PostgreSQL and MongoDB scripts to validate backend data from Finacle against in-bank systems.",
-                            "Performed manual testing on 40+ core-banking workflows including Customers, Savings, and Fixed Deposits, ensuring functional stability.",
-                            "Created 500+ test cases and detailed QA documentation covering both predefined and new Lime workflows.",
-                            "Identified, documented, and reported 30+ workflow bugs via JIRA performed regression testing after system updates.",
-                            "Developed a sanction list module with database lookups and validation scripts collaborated with Legal & Compliance on risk score security setups.",
-                            "Conducted UAT training sessions for 200+ users across AFC branches and provided continuous support post-deployment.",
-                            "Trained 2 interns using customized guides and practical exercises reducing onboarding time by ~80%."
-                        ]
-                    }
-                ]
+            if (!response.ok) {
+                throw new Error(data?.Message || data?.error || `Experience API request failed with status ${response.status}`)
             }
 
             this.authService.setUser({

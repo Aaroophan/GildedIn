@@ -31,10 +31,22 @@ export class BlogService {
             const requestData = {
                 Name: Name
             }
-
-            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${Name.replace("/", "").toLocaleLowerCase()}`)
+            const response = await fetch(`${this.APIURLService.APIURL}/api/blog`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(requestData),
+                cache: "no-store"
+            })
 
             const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(data?.Message || data?.error || `Blog API request failed with status ${response.status}`)
+            }
+
+            const BlogResponse = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${data.RSS}`)
+
+            const BlogResponseData = await BlogResponse.json()
 
             this.authService.setUser({
                 User_Session_Token: data.User_Session_Token
@@ -42,7 +54,7 @@ export class BlogService {
 
             if ([200, 201, 202, 203, 204, 205, 206, 207, 208, 226].includes(data.Status) || data.status === "ok") {
                 this.messageService.setMessage(data.Status, data.Message)
-                return data
+                return BlogResponseData
             } else {
                 this.messageService.setMessage(data.Status, data.Message)
                 return {
