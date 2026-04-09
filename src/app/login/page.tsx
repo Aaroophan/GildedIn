@@ -88,7 +88,7 @@ export default function LoginPage() {
 
                                 <div className="space-y-4 font-comic text-md leading-relaxed text-[var(--foreground)]/90 text-justify">
                                     <p>
-                                        <strong className="text-[var(--mono-4)]">GildedIn</strong> is a no-code portfolio platform that instantly gives users their own personalized space on the web through automatically generated dynamic routes. Upon signing up, GildedIn creates a unique URL like <span className="font-mono bg-[var(--mono-4)]/10 px-1 rounded">...com/Username</span> with nested sections such as Projects or About, functioning as mini websites that showcase a user’s profile, work, and visual preferences.
+                                        <strong className="text-[var(--mono-4)] font-oswald scale-105">GildedIn</strong> is a no-code portfolio platform that instantly gives users their own personalized space on the web through automatically generated dynamic routes. Upon signing up, GildedIn creates a unique URL like <span className="font-mono bg-[var(--mono-4)]/10 px-1 rounded">...com/Username</span> with nested sections such as Projects or About, functioning as mini websites that showcase a user’s profile, work, and visual preferences.
                                     </p>
                                     <p>
                                         Users can log in at any time to update their content, add projects, upload media, or tweak design settings through an intuitive dashboard, with all changes appearing in real time no coding or deployment required.

@@ -260,7 +260,7 @@ export default function ChatBot() {
 						className="fixed bottom-6 right-6 z-[9998] group cursor-pointer"
 						aria-label="Open chat assistant"
 					>
-						<TechCorners Padding={3} Width={3} Height={3} />
+						<TechCorners Padding={3} Width={3} Height={3} Radius="full" />
 						{/* Orbiting ring */}
 						<div className="absolute inset-[-6px] rounded-full border border-[var(--mono-4)]/30 chatbot-orbit" />
 						<div className="absolute inset-[-12px] rounded-full border border-[var(--mono-4)]/10 chatbot-orbit-reverse" />

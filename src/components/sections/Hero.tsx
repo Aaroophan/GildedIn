@@ -93,7 +93,7 @@ function TimelyGreeting({ Data }: { Data: string }) {
 	return (
 		<div className="relative inline-flex items-center gap-2 sm:gap-3 bg-[var(--background)]/60 backdrop-blur-md py-2 px-3 sm:px-4 rounded-lg border border-[var(--mono-4)]/25 shadow-lg group hover:border-[var(--mono-4)]/50 transition-all duration-300">
 			{/* Tech Corners */}
-			<TechCorners Padding={2} Width={4} Height={2} />
+			<TechCorners Padding={2} Width={4} Height={2} Radius="full" />
 
 			<i className={className}>
 				{text.split("").map((letter, idx) => (
