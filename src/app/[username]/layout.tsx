@@ -1,3 +1,5 @@
+import ChatBot from "@/components/shell/ChatBot"
+import CursorTechCorners from "@/components/ui/CursorTechCorners"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
@@ -154,6 +156,8 @@ export default async function UserLayout({
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <style>{mobileFontStyle}</style>
+            <CursorTechCorners />
+            <ChatBot />
             {children}
         </>
     )

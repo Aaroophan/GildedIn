@@ -105,6 +105,13 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+@media (pointer: fine) {
+  .cursor-tech-corners,
+  .cursor-tech-corners * {
+    cursor: none !important;
+  }
+}
+
 .mask-linear-fade {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
