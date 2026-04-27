@@ -84,6 +84,69 @@ function setValueAtPath(
     return current
 }
 
+function appendValueAtPath(
+    current: JsonValue,
+    path: Array<string | number>,
+    nextValue: JsonValue
+): JsonValue {
+    if (path.length === 0) {
+        return Array.isArray(current) ? [...current, nextValue] : current
+    }
+
+    const [head, ...rest] = path
+
+    if (Array.isArray(current) && typeof head === "number") {
+        return current.map((item, index) => {
+            if (index !== head) {
+                return item
+            }
+
+            return appendValueAtPath(item, rest, nextValue)
+        })
+    }
+
+    if (isRecord(current) && typeof head === "string") {
+        return {
+            ...current,
+            [head]: appendValueAtPath(current[head], rest, nextValue)
+        }
+    }
+
+    return current
+}
+
+function createEmptyValueFromTemplate(template: JsonValue): JsonValue {
+    if (template === null) {
+        return ""
+    }
+
+    if (typeof template === "string") {
+        return ""
+    }
+
+    if (typeof template === "number") {
+        return 0
+    }
+
+    if (typeof template === "boolean") {
+        return false
+    }
+
+    if (Array.isArray(template)) {
+        return template.map((item) => {
+            if (Array.isArray(item)) {
+                return []
+            }
+
+            return createEmptyValueFromTemplate(item)
+        })
+    }
+
+    return Object.fromEntries(
+        Object.entries(template).map(([key, value]) => [key, createEmptyValueFromTemplate(value)])
+    )
+}
+
 function PrimitiveField({
     path,
     label,
@@ -170,25 +233,36 @@ function FieldNode({
     path,
     label,
     value,
-    onChange
+    onChange,
+    onAddArrayItem
 }: {
     path: Array<string | number>
     label: string
     value: JsonValue
     onChange: (path: Array<string | number>, value: JsonValue) => void
+    onAddArrayItem: (path: Array<string | number>, template: JsonValue[]) => void
 }) {
     if (Array.isArray(value)) {
         return (
             <div className="rounded-2xl border border-[var(--mono-4)]/50 px-4 py-6">
                 <div className="mb-3 flex items-baseline justify-between gap-4">
-                    <div className="text-sm font-mono font-bold text-neutral-200">{formatLabel(label)}</div>
-                    <div className="text-xs text-neutral-500">{value.length} items</div>
+                    <div>
+                        <div className="text-sm font-mono font-bold text-neutral-200">{formatLabel(label)}</div>
+                        <div className="mt-1 text-xs text-neutral-500">{value.length} items</div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => onAddArrayItem(path, value)}
+                        className="rounded-full border border-[var(--mono-4)]/50 px-3 py-1 text-xs font-medium text-neutral-100 transition-colors hover:bg-[var(--mono-4)]/10"
+                    >
+                        Add Item
+                    </button>
                 </div>
 
                 {value.length === 0 ? (
-                    <div className="text-xs text-neutral-500">(empty array)</div>
+                    <div className="text-xs text-neutral-500">(empty array - add the first item to start this list)</div>
                 ) : (
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
                         {value.map((item, index) => (
                             <FieldNode
                                 key={pathToString([...path, index])}
@@ -196,6 +270,7 @@ function FieldNode({
                                 label={`${label} #${index + 1}`}
                                 value={item}
                                 onChange={onChange}
+                                onAddArrayItem={onAddArrayItem}
                             />
                         ))}
                     </div>
@@ -224,6 +299,7 @@ function FieldNode({
                                 label={key}
                                 value={child}
                                 onChange={onChange}
+                                onAddArrayItem={onAddArrayItem}
                             />
                         ))}
                     </div>
@@ -267,6 +343,26 @@ function SectionEditor({
             }
 
             return setValueAtPath(current, path, value) as SectionData
+        })
+        setStatusMessage("")
+        setErrorMessage("")
+    }
+
+    function handleAddArrayItem(path: Array<string | number>, template: JsonValue[]) {
+        if (!draftData) {
+            return
+        }
+
+        const newItem = template.length > 0
+            ? createEmptyValueFromTemplate(template[0])
+            : ""
+
+        setDraftData((current) => {
+            if (!current) {
+                return current
+            }
+
+            return appendValueAtPath(current, path, newItem) as SectionData
         })
         setStatusMessage("")
         setErrorMessage("")
@@ -355,6 +451,7 @@ function SectionEditor({
                             label={key}
                             value={value}
                             onChange={handleChange}
+                            onAddArrayItem={handleAddArrayItem}
                         />
                     ))}
                 </div>
@@ -377,20 +474,20 @@ export default function DashboardEditor({
 }: DashboardEditorProps) {
     return (
         <main className="min-h-screen px-6 py-10 text-neutral-100 md:px-10">
-            <div className="mx-auto mb-10 max-w-7xl">
-                <div className="rounded-3xl border border-[var(--mono-4)]/30 bg-[linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))] p-6 shadow-[0_0_40px_rgba(255,255,255,0.03)]">
+            <div className="mx-auto my-10 max-w-7xl">
+                <div className="rounded-3xl p-6">
                     <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                         <div>
                             <h1 className="text-4xl font-oswald font-bold tracking-[0.2em] text-[var(--foreground)]">
-                                DASHBOARD
+                                Welcome back, {userName ?? "User"}!
                             </h1>
                             <p className="mt-3 text-sm text-neutral-300">
-                                Signed in as <span className="font-medium text-neutral-100">{userEmail ?? userName}</span>
+                                Signed in as <span className="font-medium text-[var(--foreground)]">{userEmail ?? userName}</span>
                             </p>
                             <p className="mt-1 text-sm text-neutral-300">
-                                Portfolio URL: <span className="font-mono text-neutral-100">/{portfolioURL}</span>
+                                Portfolio URL: <span className="font-mono text-[var(--foreground)]">/{portfolioURL}</span>
                             </p>
-                            <p className="mt-3 max-w-2xl text-xs leading-6 text-neutral-500">
+                            <p className="mt-3 max-w-2xl text-xs leading-6 text-mono-4/75">
                                 Each section saves independently. Cancel restores the last saved version for that section only.
                             </p>
                         </div>
