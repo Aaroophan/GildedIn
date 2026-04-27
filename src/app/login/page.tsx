@@ -10,6 +10,8 @@ import TechCorners from "@/components/ui/TechCorners"
 import { Glow, GlowCapture } from "@codaworks/react-glow"
 import { Button } from "@/components/ui/Button"
 import { AuthService } from "@/models/Services/Auth"
+import { signIn } from "next-auth/react"
+import Tilt from "react-parallax-tilt"
 
 export default function LoginPage() {
     const router = useRouter()
@@ -139,63 +141,53 @@ export default function LoginPage() {
                             </motion.section>
                         </div>
 
-                        {/* Mock Login Form */}
                         <motion.div
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
                             className="max-w-2xl mx-auto mt-8 bg-[var(--background)]/80 backdrop-blur-xl p-8 rounded-2xl border border-[var(--mono-4)]/20 hover:border-[var(--mono-4)]/40 transition-colors shadow-2xl shadow-[var(--mono-4)]/5 flex items-center justify-center"
                         >
-                            <form className="space-y-5 text-left max-w-xl" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-                                <h3 className="text-[var(--foreground)] font-oswald font-bold text-2xl mb-6 text-center tracking-wide">
-                                    Welcome
-                                </h3>
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-[var(--foreground)]/70">Email Address</label>
-                                    <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="user@gilded.in"
-                                        className="w-full bg-[var(--mono-1)]/0 border border-[var(--mono-4)]/20 rounded-lg p-3 text-[var(--foreground)] placeholder:text-[var(--foreground)]/30 focus:outline-none focus:border-[var(--mono-4)]/50 focus:ring-1 focus:ring-[var(--mono-4)]/50 transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2 relative">
-                                    <label className="block text-sm font-medium text-[var(--foreground)]/70">Password</label>
-                                    <div className="relative">
-                                        <input
-                                            type={showPassword ? "text" : "password"}
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="••••••••"
-                                            className="w-full bg-[var(--mono-1)]/0 border border-[var(--mono-4)]/20 rounded-lg p-3 pr-10 text-[var(--foreground)] placeholder:text-[var(--foreground)]/30 focus:outline-none focus:border-[var(--mono-4)]/50 focus:ring-1 focus:ring-[var(--mono-4)]/50 transition-all"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-3.5 text-[var(--foreground)]/40 hover:text-[var(--mono-4)] transition-colors"
-                                        >
-                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {error && (
-                                    <p className="text-red-500 text-sm animate-pulse">{error}</p>
-                                )}
-
-                                <div className="flex items-center justify-center">
-                                    <Button
-                                        classname="w-full py-3 px-4 mt-2 text-lg font-bold tracking-wide shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.2)] hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.4)]"
-                                        rounded="rounded-xl"
-                                        flex={`flex items-center justify-center`}
-                                        onClick={handleLogin}
+                            <GlowCapture>
+                                <Tilt
+                                    tiltMaxAngleX={20}
+                                    tiltMaxAngleY={20}
+                                    glareEnable={false}
+                                    perspective={1000}
+                                    transitionSpeed={300}
+                                    scale={1.05}
+                                    className="inline-block p-2"
+                                >
+                                    <button
+                                        onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                                         disabled={loading}
+                                        className={`
+                                            group relative ${`rounded-xl`}
+                                            ${`w-full py-3 px-4 mt-2 text-lg font-bold tracking-wide flex items-center justify-center gap-5 rounded-xl shadow-[0_0_20px_rgba(var(--mono-4-rgb),0.2)]/25 hover:shadow-[0_0_30px_rgba(var(--mono-4-rgb),0.4)]/25 transition`}
+                                            hover:shadow-sm transition-all duration-300 ease-in-out disabled:opacity-50 
+                                            bg-gradient-to-br from-[var(--mono-0)]/25 via-[var(--mono-4)]/25 to-[var(--mono-8)]/25
+                                            focus:outline-none focus:ring-1 focus:ring-[var(--mono-4)] focus:ring-offset-1 cursor-pointer
+                                            hover:scale-101
+                                        `}
                                     >
-                                        {loading ? "Authenticating..." : "Sign In"}
-                                    </Button>
-                                </div>
-                            </form>
+                                        <Glow color='purple'>
+                                            <span className={`relative z-1 ${`flex items-center justify-center`}`}>
+                                                <svg width="64px" height="64px" viewBox="-65.5 -65.5 393.00 393.00" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" fill="#000000" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.524"></g><g id="SVGRepo_iconCarrier"><path d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" fill="#4285F4"></path><path d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" fill="#34A853"></path><path d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" fill="#FBBC05"></path><path d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" fill="#EB4335"></path></g></svg>
+                                                <span>Continue with Google</span>
+                                            </span>
+                                        </Glow>
+                                        <span
+                                            className={`
+                                                absolute inset-0 ${`rounded-xl`}
+                                                bg-gradient-to-br from-[var(--mono-8)]/25 via-[var(--mono-4)]/25 to-[var(--mono-0)]/25
+                                                opacity-0 group-hover:opacity-100
+                                                transition-opacity duration-300
+                                                pointer-events-none
+                                                z-0
+                                            `}
+                                        />
+                                    </button>
+                                </Tilt>
+                            </GlowCapture>
                         </motion.div>
 
                     </div>

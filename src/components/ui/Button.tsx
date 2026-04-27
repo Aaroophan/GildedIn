@@ -1,7 +1,20 @@
 "use client"
 
 import { Glow, GlowCapture } from "@codaworks/react-glow"
+import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from "react"
 import Tilt from "react-parallax-tilt"
+
+interface ButtonProps {
+    children: ReactNode
+    type?: ButtonHTMLAttributes<HTMLButtonElement>["type"]
+    classname?: string
+    disabled?: boolean
+    onclick?: MouseEventHandler<HTMLButtonElement>
+    onClick?: MouseEventHandler<HTMLButtonElement>
+    rounded?: string
+    flex?: string
+    tooltip?: string
+}
 
 export const Button = ({
     children,
@@ -9,10 +22,11 @@ export const Button = ({
     classname,
     disabled,
     onclick,
+    onClick,
     rounded,
     flex,
     tooltip
-}: any) => {
+}: ButtonProps) => {
     return (
         <GlowCapture>
             <Tilt
@@ -25,8 +39,8 @@ export const Button = ({
                 className="inline-block p-2"
             >
                 <button
-                    type={type}
-                    onClick={onclick}
+                    type={type ?? "button"}
+                    onClick={onClick ?? onclick}
                     disabled={disabled}
                     className={`
                         group relative ${rounded}
