@@ -1,6 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState, type ReactNode } from "react"
+import { DndProvider, useDrag, useDrop } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import { GripVertical } from "lucide-react"
 import { signOut } from "next-auth/react"
 
 type JsonPrimitive = string | number | boolean | null
@@ -20,6 +23,11 @@ type DashboardEditorProps = {
     userName?: string | null
     userEmail?: string | null
     sections: SectionConfig[]
+}
+
+type ArrayDragItem = {
+    arrayPathKey: string
+    index: number
 }
 
 function deepClone<T>(value: T): T {
@@ -149,6 +157,54 @@ function removeValueAtPath(
     return current
 }
 
+function moveValueAtPath(
+    current: JsonValue,
+    path: Array<string | number>,
+    fromIndex: number,
+    toIndex: number
+): JsonValue {
+    if (path.length === 0) {
+        if (!Array.isArray(current) || fromIndex === toIndex) {
+            return current
+        }
+
+        if (
+            fromIndex < 0 ||
+            toIndex < 0 ||
+            fromIndex >= current.length ||
+            toIndex >= current.length
+        ) {
+            return current
+        }
+
+        const next = [...current]
+        const [movedItem] = next.splice(fromIndex, 1)
+        next.splice(toIndex, 0, movedItem)
+        return next
+    }
+
+    const [head, ...rest] = path
+
+    if (Array.isArray(current) && typeof head === "number") {
+        return current.map((item, index) => {
+            if (index !== head) {
+                return item
+            }
+
+            return moveValueAtPath(item, rest, fromIndex, toIndex)
+        })
+    }
+
+    if (isRecord(current) && typeof head === "string") {
+        return {
+            ...current,
+            [head]: moveValueAtPath(current[head], rest, fromIndex, toIndex)
+        }
+    }
+
+    return current
+}
+
 function createEmptyValueFromTemplate(template: JsonValue): JsonValue {
     if (template === null) {
         return ""
@@ -263,13 +319,120 @@ function PrimitiveField({
     )
 }
 
+function SortableArrayItem({
+    arrayPath,
+    index,
+    label,
+    onMove,
+    onRemove,
+    children
+}: {
+    arrayPath: Array<string | number>
+    index: number
+    label: string
+    onMove: (arrayPath: Array<string | number>, fromIndex: number, toIndex: number) => void
+    onRemove: (path: Array<string | number>) => void
+    children: ReactNode
+}) {
+    const arrayPathKey = pathToString(arrayPath)
+    const containerRef = useRef<HTMLDivElement | null>(null)
+
+    const [{ isDragging }, drag, preview] = useDrag<ArrayDragItem, void, { isDragging: boolean }>(
+        () => ({
+            type: "dashboard-array-item",
+            item: {
+                arrayPathKey,
+                index
+            },
+            collect: (monitor) => ({
+                isDragging: monitor.isDragging()
+            })
+        }),
+        [arrayPathKey, index]
+    )
+
+    const [, drop] = useDrop<ArrayDragItem, void, unknown>(
+        () => ({
+            accept: "dashboard-array-item",
+            hover: (item, monitor) => {
+                if (!containerRef.current || item.arrayPathKey !== arrayPathKey || item.index === index) {
+                    return
+                }
+
+                const rect = containerRef.current.getBoundingClientRect()
+                const middleY = (rect.bottom - rect.top) / 2
+                const clientOffset = monitor.getClientOffset()
+
+                if (!clientOffset) {
+                    return
+                }
+
+                const hoverY = clientOffset.y - rect.top
+
+                if (item.index < index && hoverY < middleY) {
+                    return
+                }
+
+                if (item.index > index && hoverY > middleY) {
+                    return
+                }
+
+                onMove(arrayPath, item.index, index)
+                item.index = index
+            }
+        }),
+        [arrayPathKey, arrayPath, index, onMove]
+    )
+
+    function setContainerNode(node: HTMLDivElement | null) {
+        containerRef.current = node
+        drop(node)
+        preview(node)
+    }
+
+    function setHandleNode(node: HTMLButtonElement | null) {
+        drag(node)
+    }
+
+    return (
+        <div
+            ref={setContainerNode}
+            className={`rounded-2xl border border-[var(--mono-4)]/50 px-4 py-4 ${isDragging ? "opacity-50" : "opacity-100"}`}
+        >
+            <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-xs font-mono font-medium text-neutral-400">
+                    <button
+                        ref={setHandleNode}
+                        type="button"
+                        className="rounded-full border border-[var(--mono-4)]/30 p-1 text-neutral-400 transition-colors hover:bg-[var(--mono-4)]/10 hover:text-neutral-100 active:cursor-grabbing"
+                        aria-label={`Reorder ${label}`}
+                        title="Drag to reorder"
+                    >
+                        <GripVertical size={14} />
+                    </button>
+                    <span>{label}</span>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => onRemove([...arrayPath, index])}
+                    className="rounded-full px-4 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/80 hover:text-red-200"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+            </div>
+            {children}
+        </div>
+    )
+}
+
 function FieldNode({
     path,
     label,
     value,
     onChange,
     onAddArrayItem,
-    onRemoveArrayItem
+    onRemoveArrayItem,
+    onMoveArrayItem
 }: {
     path: Array<string | number>
     label: string
@@ -277,6 +440,7 @@ function FieldNode({
     onChange: (path: Array<string | number>, value: JsonValue) => void
     onAddArrayItem: (path: Array<string | number>, template: JsonValue[]) => void
     onRemoveArrayItem: (path: Array<string | number>) => void
+    onMoveArrayItem: (path: Array<string | number>, fromIndex: number, toIndex: number) => void
 }) {
     if (Array.isArray(value)) {
         return (
@@ -300,20 +464,14 @@ function FieldNode({
                 ) : (
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
                         {value.map((item, index) => (
-                            <div
+                            <SortableArrayItem
                                 key={pathToString([...path, index])}
-                                className="rounded-2xl border border-[var(--mono-4)]/50 px-4 py-4"
+                                arrayPath={path}
+                                index={index}
+                                label={`${formatLabel(label)} #${index + 1}`}
+                                onMove={onMoveArrayItem}
+                                onRemove={onRemoveArrayItem}
                             >
-                                <div className="mb-3 flex items-center justify-between gap-3">
-                                    <div className="text-xs font-mono font-medium text-neutral-400"></div>
-                                    <button
-                                        type="button"
-                                        onClick={() => onRemoveArrayItem([...path, index])}
-                                        className="rounded-full px-4 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/80 hover:text-red-200"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                    </button>
-                                </div>
                                 <FieldNode
                                     path={[...path, index]}
                                     label={`${label ? label.charAt(0).toUpperCase() + label.slice(1).toLowerCase() : ""} #${index + 1}`}
@@ -321,8 +479,9 @@ function FieldNode({
                                     onChange={onChange}
                                     onAddArrayItem={onAddArrayItem}
                                     onRemoveArrayItem={onRemoveArrayItem}
+                                    onMoveArrayItem={onMoveArrayItem}
                                 />
-                            </div>
+                            </SortableArrayItem>
                         ))}
                     </div>
                 )}
@@ -352,6 +511,7 @@ function FieldNode({
                                 onChange={onChange}
                                 onAddArrayItem={onAddArrayItem}
                                 onRemoveArrayItem={onRemoveArrayItem}
+                                onMoveArrayItem={onMoveArrayItem}
                             />
                         ))}
                     </div>
@@ -431,6 +591,22 @@ function SectionEditor({
             }
 
             return removeValueAtPath(current, path) as SectionData
+        })
+        setStatusMessage("")
+        setErrorMessage("")
+    }
+
+    function handleMoveArrayItem(path: Array<string | number>, fromIndex: number, toIndex: number) {
+        if (!draftData || fromIndex === toIndex) {
+            return
+        }
+
+        setDraftData((current) => {
+            if (!current) {
+                return current
+            }
+
+            return moveValueAtPath(current, path, fromIndex, toIndex) as SectionData
         })
         setStatusMessage("")
         setErrorMessage("")
@@ -521,6 +697,7 @@ function SectionEditor({
                             onChange={handleChange}
                             onAddArrayItem={handleAddArrayItem}
                             onRemoveArrayItem={handleRemoveArrayItem}
+                            onMoveArrayItem={handleMoveArrayItem}
                         />
                     ))}
                 </div>
@@ -542,47 +719,49 @@ export default function DashboardEditor({
     sections
 }: DashboardEditorProps) {
     return (
-        <main className="min-h-screen px-6 py-10 text-neutral-100 md:px-10">
-            <div className="mx-auto my-10 max-w-7xl">
-                <div className="rounded-3xl p-6">
-                    <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                        <div>
-                            <h1 className="text-4xl font-oswald font-bold tracking-[0.2em] text-[var(--foreground)]">
-                                Welcome back, {userName ?? "User"}!
-                            </h1>
-                            <p className="mt-3 text-sm text-neutral-300">
-                                Signed in as <span className="font-medium text-[var(--foreground)]">{userEmail ?? userName}</span>
-                            </p>
-                            <p className="mt-1 text-sm text-neutral-300">
-                                Portfolio URL: <span className="font-mono text-[var(--foreground)]">/{portfolioURL}</span>
-                            </p>
-                            <p className="mt-3 max-w-2xl text-xs leading-6 text-mono-4/75">
-                                Each section saves independently. Cancel restores the last saved version for that section only.
-                            </p>
-                        </div>
+        <DndProvider backend={HTML5Backend}>
+            <main className="min-h-screen px-6 py-10 text-neutral-100 md:px-10">
+                <div className="mx-auto my-10 max-w-7xl">
+                    <div className="rounded-3xl p-6">
+                        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                            <div>
+                                <h1 className="text-4xl font-oswald font-bold tracking-[0.2em] text-[var(--foreground)]">
+                                    Welcome back, {userName ?? "User"}!
+                                </h1>
+                                <p className="mt-3 text-sm text-neutral-300">
+                                    Signed in as <span className="font-medium text-[var(--foreground)]">{userEmail ?? userName}</span>
+                                </p>
+                                <p className="mt-1 text-sm text-neutral-300">
+                                    Portfolio URL: <span className="font-mono text-[var(--foreground)]">/{portfolioURL}</span>
+                                </p>
+                                <p className="mt-3 max-w-2xl text-xs leading-6 text-mono-4/75">
+                                    Each section saves independently. Drag array items with the grip handle, and cancel restores the last saved version for that section only.
+                                </p>
+                            </div>
 
-                        <button
-                            type="button"
-                            onClick={() => signOut({ callbackUrl: "/login" })}
-                            className="self-start rounded-full border border-neutral-700 px-5 py-2 text-sm font-medium text-neutral-100 transition-colors hover:border-[var(--mono-4)]/60 hover:bg-[var(--mono-4)]/10"
-                        >
-                            Logout
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => signOut({ callbackUrl: "/login" })}
+                                className="self-start rounded-full border border-neutral-700 px-5 py-2 text-sm font-medium text-neutral-100 transition-colors hover:border-[var(--mono-4)]/60 hover:bg-[var(--mono-4)]/10"
+                            >
+                                Logout
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6">
-                {sections.map((section) => (
-                    <SectionEditor
-                        key={section.id}
-                        id={section.id}
-                        title={section.title}
-                        data={section.data}
-                        missingMessage={section.missingMessage}
-                    />
-                ))}
-            </div>
-        </main>
+                <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6">
+                    {sections.map((section) => (
+                        <SectionEditor
+                            key={section.id}
+                            id={section.id}
+                            title={section.title}
+                            data={section.data}
+                            missingMessage={section.missingMessage}
+                        />
+                    ))}
+                </div>
+            </main>
+        </DndProvider>
     )
 }
