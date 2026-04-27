@@ -115,6 +115,40 @@ function appendValueAtPath(
     return current
 }
 
+function removeValueAtPath(
+    current: JsonValue,
+    path: Array<string | number>
+): JsonValue {
+    if (path.length === 0) {
+        return current
+    }
+
+    const [head, ...rest] = path
+
+    if (Array.isArray(current) && typeof head === "number") {
+        if (rest.length === 0) {
+            return current.filter((_, index) => index !== head)
+        }
+
+        return current.map((item, index) => {
+            if (index !== head) {
+                return item
+            }
+
+            return removeValueAtPath(item, rest)
+        })
+    }
+
+    if (isRecord(current) && typeof head === "string") {
+        return {
+            ...current,
+            [head]: removeValueAtPath(current[head], rest)
+        }
+    }
+
+    return current
+}
+
 function createEmptyValueFromTemplate(template: JsonValue): JsonValue {
     if (template === null) {
         return ""
@@ -234,13 +268,15 @@ function FieldNode({
     label,
     value,
     onChange,
-    onAddArrayItem
+    onAddArrayItem,
+    onRemoveArrayItem
 }: {
     path: Array<string | number>
     label: string
     value: JsonValue
     onChange: (path: Array<string | number>, value: JsonValue) => void
     onAddArrayItem: (path: Array<string | number>, template: JsonValue[]) => void
+    onRemoveArrayItem: (path: Array<string | number>) => void
 }) {
     if (Array.isArray(value)) {
         return (
@@ -253,9 +289,9 @@ function FieldNode({
                     <button
                         type="button"
                         onClick={() => onAddArrayItem(path, value)}
-                        className="rounded-full border border-[var(--mono-4)]/50 px-3 py-1 text-xs font-medium text-neutral-100 transition-colors hover:bg-[var(--mono-4)]/10"
+                        className="rounded-full px-4 py-1 text-xs font-medium text-green-400 transition-colors hover:bg-green-400/80 hover:text-green-200"
                     >
-                        Add Item
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                     </button>
                 </div>
 
@@ -264,14 +300,29 @@ function FieldNode({
                 ) : (
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
                         {value.map((item, index) => (
-                            <FieldNode
+                            <div
                                 key={pathToString([...path, index])}
-                                path={[...path, index]}
-                                label={`${label} #${index + 1}`}
-                                value={item}
-                                onChange={onChange}
-                                onAddArrayItem={onAddArrayItem}
-                            />
+                                className="rounded-2xl border border-[var(--mono-4)]/50 px-4 py-4"
+                            >
+                                <div className="mb-3 flex items-center justify-between gap-3">
+                                    <div className="text-xs font-mono font-medium text-neutral-400"></div>
+                                    <button
+                                        type="button"
+                                        onClick={() => onRemoveArrayItem([...path, index])}
+                                        className="rounded-full px-4 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/80 hover:text-red-200"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    </button>
+                                </div>
+                                <FieldNode
+                                    path={[...path, index]}
+                                    label={`${label ? label.charAt(0).toUpperCase() + label.slice(1).toLowerCase() : ""} #${index + 1}`}
+                                    value={item}
+                                    onChange={onChange}
+                                    onAddArrayItem={onAddArrayItem}
+                                    onRemoveArrayItem={onRemoveArrayItem}
+                                />
+                            </div>
                         ))}
                     </div>
                 )}
@@ -300,6 +351,7 @@ function FieldNode({
                                 value={child}
                                 onChange={onChange}
                                 onAddArrayItem={onAddArrayItem}
+                                onRemoveArrayItem={onRemoveArrayItem}
                             />
                         ))}
                     </div>
@@ -368,6 +420,22 @@ function SectionEditor({
         setErrorMessage("")
     }
 
+    function handleRemoveArrayItem(path: Array<string | number>) {
+        if (!draftData) {
+            return
+        }
+
+        setDraftData((current) => {
+            if (!current) {
+                return current
+            }
+
+            return removeValueAtPath(current, path) as SectionData
+        })
+        setStatusMessage("")
+        setErrorMessage("")
+    }
+
     async function handleSave() {
         if (!draftData) {
             return
@@ -425,17 +493,17 @@ function SectionEditor({
                         type="button"
                         onClick={handleCancel}
                         disabled={!isDirty || isSaving || !draftData}
-                        className="rounded-full border border-neutral-700 px-4 py-2 text-sm text-neutral-200 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-full px-4 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/80 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                        Cancel
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                     </button>
                     <button
                         type="button"
                         onClick={handleSave}
                         disabled={!isDirty || isSaving || !draftData}
-                        className="rounded-full border border-[var(--mono-4)]/60 bg-[var(--mono-4)]/10 px-4 py-2 text-sm font-medium text-neutral-100 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-full px-4 py-1 text-xs font-medium text-blue-500 transition-colors hover:bg-blue-500/80 hover:text-blue-200 disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                        {isSaving ? "Saving..." : "Save"}
+                        {isSaving ? "Saving..." : <><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-save-icon lucide-save"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></>}
                     </button>
                 </div>
             </header>
@@ -452,6 +520,7 @@ function SectionEditor({
                             value={value}
                             onChange={handleChange}
                             onAddArrayItem={handleAddArrayItem}
+                            onRemoveArrayItem={handleRemoveArrayItem}
                         />
                     ))}
                 </div>
