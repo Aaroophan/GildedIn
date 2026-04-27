@@ -82,22 +82,7 @@ export default function Header() {
                 <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
                     <Link href={`/${username}`} className="text-2xl font-bold font-oswald tracking-tight flex overflow-hidden group">
                         <motion.span
-                            className="inline-block cursor-default bg-gradient-to-br from-mono-3 via-mono-4 to-mono-5 bg-clip-text text-transparent border border-2 border-r-[var(--mono-4)]/60 px-2 flex items-center justify-center"
-                        >
-                            {"GildedIn".split("").map((char, index) => (
-                                <motion.span
-                                    key={index}
-                                    variants={letterAnimation}
-                                    initial="rest"
-                                    whileHover="hover"
-                                    className="inline-block cursor-default bg-gradient-to-br from-mono-3 via-mono-4 to-mono-5 bg-clip-text text-transparent"
-                                >
-                                    {char}
-                                </motion.span>
-                            ))}
-                        </motion.span>
-                        <motion.span
-                            className="inline-block cursor-default bg-gradient-to-br from-mono-3 via-mono-4 to-mono-5 bg-clip-text text-transparent border border-2 border-l-[var(--mono-4)]/60 px-2 flex flex-col items-center justify-center"
+                            className="inline-block cursor-default bg-gradient-to-br from-foreground via-foreground to-foreground bg-clip-text text-transparent px-2 flex flex-col items-center justify-center"
                         >
                             {username.split("").map((char, index) => (
                                 <motion.span
@@ -105,7 +90,7 @@ export default function Header() {
                                     variants={letterAnimation}
                                     initial="rest"
                                     whileHover="hover"
-                                    className="inline-block cursor-default bg-gradient-to-br from-mono-3 via-mono-4 to-mono-5 bg-clip-text text-transparent"
+                                    className="inline-block cursor-default bg-gradient-to-br from-foreground via-foreground to-foreground bg-clip-text text-transparent"
                                 >
                                     {char}
                                 </motion.span>
