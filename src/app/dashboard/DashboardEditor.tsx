@@ -5,21 +5,26 @@ import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { GripVertical } from "lucide-react"
 import { signOut } from "next-auth/react"
-
-type JsonPrimitive = string | number | boolean | null
-type JsonValue = JsonPrimitive | JsonObject | JsonValue[]
-type JsonObject = { [key: string]: JsonValue }
-type SectionData = Record<string, JsonValue>
+import {
+    createArrayItemTemplate,
+    normalizePortfolioURLInput,
+    type DashboardSectionId,
+    type JsonPrimitive,
+    type JsonValue,
+    type JsonObject,
+    type SectionData
+} from "./sectionTemplates"
 
 type SectionConfig = {
-    id: string
+    id: DashboardSectionId
     title: string
-    data: SectionData | null
+    data: SectionData
     missingMessage: string
 }
 
 type DashboardEditorProps = {
     portfolioURL: string
+    hasPortfolio: boolean
     userName?: string | null
     userEmail?: string | null
     sections: SectionConfig[]
@@ -534,26 +539,27 @@ function SectionEditor({
     id,
     title,
     data,
-    missingMessage
-}: SectionConfig) {
-    const [savedData, setSavedData] = useState<SectionData | null>(() => (data ? deepClone(data) : null))
-    const [draftData, setDraftData] = useState<SectionData | null>(() => (data ? deepClone(data) : null))
+    portfolioURL,
+    hasPortfolio,
+    onPortfolioReady
+}: SectionConfig & {
+    portfolioURL: string
+    hasPortfolio: boolean
+    onPortfolioReady: (portfolioURL: string) => void
+}) {
+    const [savedData, setSavedData] = useState<SectionData>(() => deepClone(data))
+    const [draftData, setDraftData] = useState<SectionData>(() => deepClone(data))
     const [isSaving, setIsSaving] = useState(false)
     const [statusMessage, setStatusMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
 
     const isDirty = JSON.stringify(savedData) !== JSON.stringify(draftData)
+    const normalizedPortfolioURL = normalizePortfolioURLInput(portfolioURL)
+    const canCreatePortfolio = !hasPortfolio
+    const canSave = !isSaving && (isDirty || (canCreatePortfolio && normalizedPortfolioURL.length > 0))
 
     function handleChange(path: Array<string | number>, value: JsonValue) {
-        if (!draftData) {
-            return
-        }
-
         setDraftData((current) => {
-            if (!current) {
-                return current
-            }
-
             return setValueAtPath(current, path, value) as SectionData
         })
         setStatusMessage("")
@@ -561,19 +567,11 @@ function SectionEditor({
     }
 
     function handleAddArrayItem(path: Array<string | number>, template: JsonValue[]) {
-        if (!draftData) {
-            return
-        }
-
         const newItem = template.length > 0
             ? createEmptyValueFromTemplate(template[0])
-            : ""
+            : createEmptyValueFromTemplate(createArrayItemTemplate(id, path))
 
         setDraftData((current) => {
-            if (!current) {
-                return current
-            }
-
             return appendValueAtPath(current, path, newItem) as SectionData
         })
         setStatusMessage("")
@@ -581,15 +579,7 @@ function SectionEditor({
     }
 
     function handleRemoveArrayItem(path: Array<string | number>) {
-        if (!draftData) {
-            return
-        }
-
         setDraftData((current) => {
-            if (!current) {
-                return current
-            }
-
             return removeValueAtPath(current, path) as SectionData
         })
         setStatusMessage("")
@@ -597,15 +587,11 @@ function SectionEditor({
     }
 
     function handleMoveArrayItem(path: Array<string | number>, fromIndex: number, toIndex: number) {
-        if (!draftData || fromIndex === toIndex) {
+        if (fromIndex === toIndex) {
             return
         }
 
         setDraftData((current) => {
-            if (!current) {
-                return current
-            }
-
             return moveValueAtPath(current, path, fromIndex, toIndex) as SectionData
         })
         setStatusMessage("")
@@ -613,7 +599,7 @@ function SectionEditor({
     }
 
     async function handleSave() {
-        if (!draftData) {
+        if (!canSave) {
             return
         }
 
@@ -627,7 +613,10 @@ function SectionEditor({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(draftData)
+                body: JSON.stringify({
+                    data: draftData,
+                    portfolioURL: normalizedPortfolioURL
+                })
             })
 
             const result = await response.json().catch(() => null)
@@ -641,6 +630,9 @@ function SectionEditor({
             setSavedData(nextSaved)
             setDraftData(nextSaved)
             setStatusMessage(result?.Message ?? `${title} saved`)
+            if (typeof result?.PortfolioURL === "string" && result.PortfolioURL.length > 0) {
+                onPortfolioReady(result.PortfolioURL)
+            }
         } catch (error) {
             setErrorMessage(error instanceof Error ? error.message : `Failed to save ${title}`)
         } finally {
@@ -649,7 +641,7 @@ function SectionEditor({
     }
 
     function handleCancel() {
-        setDraftData(savedData ? deepClone(savedData) : null)
+        setDraftData(deepClone(savedData))
         setStatusMessage("")
         setErrorMessage("")
     }
@@ -660,7 +652,9 @@ function SectionEditor({
                 <div>
                     <h2 className="text-2xl font-oswald font-semibold tracking-widest text-neutral-100">{title}</h2>
                     <p className="mt-1 text-xs text-neutral-400">
-                        {draftData ? (isDirty ? "Unsaved changes" : "Saved") : "Missing"}
+                        {canCreatePortfolio
+                            ? (isDirty ? "Ready to create portfolio" : "Fill this section, then save to create your portfolio")
+                            : (isDirty ? "Unsaved changes" : "Saved")}
                     </p>
                 </div>
 
@@ -668,7 +662,7 @@ function SectionEditor({
                     <button
                         type="button"
                         onClick={handleCancel}
-                        disabled={!isDirty || isSaving || !draftData}
+                        disabled={!isDirty || isSaving}
                         className="rounded-full px-4 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-500/80 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -676,32 +670,28 @@ function SectionEditor({
                     <button
                         type="button"
                         onClick={handleSave}
-                        disabled={!isDirty || isSaving || !draftData}
+                        disabled={!canSave}
                         className="rounded-full px-4 py-1 text-xs font-medium text-blue-500 transition-colors hover:bg-blue-500/80 hover:text-blue-200 disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                        {isSaving ? "Saving..." : <><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-save-icon lucide-save"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></>}
+                        {isSaving ? "Saving..." : (canCreatePortfolio ? "Create + Save" : <><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-save-icon lucide-save"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg></>)}
                     </button>
                 </div>
             </header>
 
-            {!draftData ? (
-                <p className="text-sm text-neutral-400">{missingMessage}</p>
-            ) : (
-                <div className="grid grid-cols-1 gap-4">
-                    {Object.entries(draftData).map(([key, value]) => (
-                        <FieldNode
-                            key={key}
-                            path={[key]}
-                            label={key}
-                            value={value}
-                            onChange={handleChange}
-                            onAddArrayItem={handleAddArrayItem}
-                            onRemoveArrayItem={handleRemoveArrayItem}
-                            onMoveArrayItem={handleMoveArrayItem}
-                        />
-                    ))}
-                </div>
-            )}
+            <div className="grid grid-cols-1 gap-4">
+                {Object.entries(draftData).map(([key, value]) => (
+                    <FieldNode
+                        key={key}
+                        path={[key]}
+                        label={key}
+                        value={value}
+                        onChange={handleChange}
+                        onAddArrayItem={handleAddArrayItem}
+                        onRemoveArrayItem={handleRemoveArrayItem}
+                        onMoveArrayItem={handleMoveArrayItem}
+                    />
+                ))}
+            </div>
 
             {(statusMessage || errorMessage) && (
                 <p className={`mt-4 text-sm ${errorMessage ? "text-red-400" : "text-emerald-400"}`}>
@@ -714,10 +704,20 @@ function SectionEditor({
 
 export default function DashboardEditor({
     portfolioURL,
+    hasPortfolio: initialHasPortfolio,
     userName,
     userEmail,
     sections
 }: DashboardEditorProps) {
+    const [activePortfolioURL, setActivePortfolioURL] = useState(portfolioURL)
+    const [hasPortfolio, setHasPortfolio] = useState(initialHasPortfolio)
+    const normalizedPortfolioURL = normalizePortfolioURLInput(activePortfolioURL)
+
+    function handlePortfolioReady(nextPortfolioURL: string) {
+        setActivePortfolioURL(nextPortfolioURL)
+        setHasPortfolio(true)
+    }
+
     return (
         <DndProvider backend={HTML5Backend}>
             <main className="min-h-screen px-6 py-10 text-neutral-100 md:px-10">
@@ -726,16 +726,20 @@ export default function DashboardEditor({
                         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                             <div>
                                 <h1 className="text-4xl font-oswald font-bold tracking-[0.2em] text-[var(--foreground)]">
-                                    Welcome back, {userName ?? "User"}!
+                                    Welcome, {userName ?? "User"}!
                                 </h1>
                                 <p className="mt-3 text-sm text-neutral-300">
                                     Signed in as <span className="font-medium text-[var(--foreground)]">{userEmail ?? userName}</span>
                                 </p>
-                                <p className="mt-1 text-sm text-neutral-300">
-                                    Portfolio URL: <span className="font-mono text-[var(--foreground)]">/{portfolioURL}</span>
-                                </p>
+                                {hasPortfolio ? (
+                                    <p className="mt-1 text-sm text-neutral-300">
+                                        Portfolio URL: <span className="font-mono text-[var(--foreground)]">/{activePortfolioURL}</span>
+                                    </p>
+                                ) : null}
                                 <p className="mt-3 max-w-2xl text-xs leading-6 text-mono-4/75">
-                                    Each section saves independently. Drag array items with the grip handle, and cancel restores the last saved version for that section only.
+                                    {hasPortfolio
+                                        ? "Each section saves independently. Drag array items with the grip handle, and cancel restores the last saved version for that section only."
+                                        : "Choose your portfolio URL, then save any section to create your portfolio and claim that URL."}
                                 </p>
                             </div>
 
@@ -747,6 +751,32 @@ export default function DashboardEditor({
                                 Logout
                             </button>
                         </div>
+
+                        {!hasPortfolio ? (
+                            <div className="mt-6 rounded-2xl border border-[var(--mono-4)]/30 bg-[var(--mono-4)]/5 p-5">
+                                <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
+                                    <div className="flex-1">
+                                        <label htmlFor="portfolio-url" className="block text-sm font-mono font-medium text-neutral-200">
+                                            Portfolio URL
+                                        </label>
+                                        <input
+                                            id="portfolio-url"
+                                            type="text"
+                                            value={activePortfolioURL}
+                                            onChange={(event) => setActivePortfolioURL(normalizePortfolioURLInput(event.target.value))}
+                                            placeholder="your-name"
+                                            className="mt-2 w-full rounded-2xl border border-[var(--mono-4)]/50 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500"
+                                        />
+                                        <p className="mt-2 text-xs leading-6 text-neutral-400">
+                                            Use letters, numbers, hyphens, or underscores. Preview: <span className="font-mono text-neutral-200">/{normalizedPortfolioURL || "your-name"}</span>
+                                        </p>
+                                    </div>
+                                    <div className="max-w-sm text-xs leading-6 text-neutral-500">
+                                        Your first section save will claim this URL and create the starter portfolio documents behind it.
+                                    </div>
+                                </div>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
 
@@ -758,6 +788,9 @@ export default function DashboardEditor({
                             title={section.title}
                             data={section.data}
                             missingMessage={section.missingMessage}
+                            portfolioURL={normalizedPortfolioURL}
+                            hasPortfolio={hasPortfolio}
+                            onPortfolioReady={handlePortfolioReady}
                         />
                     ))}
                 </div>

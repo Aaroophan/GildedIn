@@ -87,7 +87,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
         }
     }
 
-    const paragraphs = Data?.About?.Description.split('\n\n')
+const paragraphs = Data?.About?.Description?.split('\n\n') || []
 
     useEffect(() => {
         if (!initialData) {
@@ -97,8 +97,9 @@ export const About = ({ initialData }: { initialData?: any }) => {
 
     if (error) return <ErrorMessage message={error} />
     if (isLoading) return <Loading />
+	if (!Data || !Data.Title) return null
 
-    // Prepare data for GridBackground (inject Name)
+	const safeTitle = Data?.Title || "About"
     const backgroundData = { ...Data, Name: decodedUsername }
 
     return (
@@ -128,7 +129,7 @@ export const About = ({ initialData }: { initialData?: any }) => {
                                     transition={{ duration: 0.5 }}
                                 >
                                     <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default inline-block cursor-default">
-                                        {Data.Title.split('').map((letter: string, idx: number) => (
+                                        {safeTitle.split('').map((letter: string, idx: number) => (
                                             <motion.span
                                                 key={idx}
                                                 initial={{ opacity: 0 }}

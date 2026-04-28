@@ -98,12 +98,12 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
     if (isLoading || !data) return <Loading />
     if (!data.Projects?.length) return <ErrorMessage message="No projects are available right now." />
 
-    const allProjects = data.Projects
+    const allProjects = data?.Projects || []
     const visibleProjects = isExpanded ? allProjects : allProjects.slice(0, 6)
-    const activeProject = allProjects.find((project) => project.Name === activeProjectName) || allProjects[0]
-    const activeProjectIndex = allProjects.findIndex((project) => project.Name === activeProject.Name)
-    const spotlightSkills = normalizeSkills(activeProject.Skills)
-    const spotlightLinks = activeProject.Links ?? []
+    const activeProject = allProjects.find((project) => project?.Name === activeProjectName) || allProjects[0] || null
+    const activeProjectIndex = allProjects.findIndex((project) => project?.Name === activeProject?.Name)
+    const spotlightSkills = normalizeSkills(activeProject?.Skills)
+    const spotlightLinks = activeProject?.Links ?? []
     const selectedProjectIndex = selectedProject
         ? allProjects.findIndex((project) => project.Name === selectedProject.Name)
         : -1
@@ -165,7 +165,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
                         >
                             <div className="inline-block">
                                 <h2 className="mb-2 font-oswald text-4xl font-bold tracking-[0.08em] text-[var(--foreground)] sm:text-6xl">
-                                    {data.Title}
+                                    {data?.Title || "Projects"}
                                 </h2>
                                 <div className="relative h-2 w-full overflow-hidden rounded-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent">
                                     <motion.div
@@ -190,7 +190,7 @@ export const Projects = ({ initialData }: { initialData?: ProjectsResult }) => {
 
                                 <AnimatePresence mode="wait" initial={false}>
                                     <motion.div
-                                        key={activeProject.Name}
+                                        key={activeProject?.Name || 'project'}
                                         initial={{ opacity: 0, y: 18 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -18 }}

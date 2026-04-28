@@ -53,6 +53,8 @@ export const References = ({ initialData }: { initialData?: any }) => {
     if (error) return <ErrorMessage message={error} />
     if (!references || references.length === 0) return null
 
+    const safeTitle = Title || "References"
+
     // Prepare data for GridBackground (inject Name)
     const backgroundData = { References: references.length, Name: decodedUsername }
 

@@ -68,6 +68,8 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
+        if (!contact?.Email) return
+        
         setIsSubmitting(true)
 
         // Simulate network delay for better UX
@@ -98,7 +100,8 @@ export const Contacts = ({ initialData }: { initialData?: any }) => {
     if (error) return <ErrorMessage message={error} />
     if (!contact) return null
 
-    const displayEmail = contact.Email ? contact.Email.replace("mailto:", "") : ""
+    const safeTitle = Title || "Contact"
+    const displayEmail = contact?.Email ? contact.Email.replace("mailto:", "") : ""
     const displayPhone = contact.Phone ? (contact.Phone.split("wa.me/")[1] || contact.Phone) : ""
     // Prepare data for GridBackground based on form fields to make it look "live"
     const backgroundData = { ...formData, ...contact, Section: "CONTACT", Name: decodedUsername }

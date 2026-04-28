@@ -167,10 +167,13 @@ export default function Hero({ initialData }: { initialData?: any }) {
 
 	if (error) return <ErrorMessage message={error} />
 	if (isLoading) return <Loading />
+	if (!Data || !Data.Name) return null
+
+	const safeName = Data?.Name || ""
 
 	const Socials = Data?.Links?.map((Social: any, index: number) => {
-		const IconComponent = LucideIcons[Social.Icon as keyof typeof LucideIcons]
-		if (!IconComponent) return null
+		const IconComponent = LucideIcons[Social?.Icon as keyof typeof LucideIcons]
+		if (!IconComponent || !Social?.Href) return null
 
 		return (
 			<motion.a
@@ -247,7 +250,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 
 								{/* Case ID Label */}
 								<div className="absolute top-2 sm:top-4 right-3 sm:right-6 text-[8px] sm:text-[10px] tracking-widest text-[var(--mono-4)] font-bold opacity-70">
-									CASE_FILE_#: {Array.from(Data.Name.split(' ')[0]).map((char: any) => char.charCodeAt(0).toString(16).toUpperCase()).join("")}
+									CASE_FILE_#: {safeName.split(' ')[0]?.split('').map((char: string) => char.charCodeAt(0).toString(16).toUpperCase()).join("") || "N/A"}
 								</div>
 
 								<div className="flex flex-col items-center text-center gap-10 sm:gap-3 md:gap-4">
@@ -260,7 +263,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
 										className="relative rotate-[4deg] px-2 sm:px-0"
 									>
 										<div className="absolute -top-4 sm:-top-6 -left-2 sm:-left-4 text-[var(--mono-4)] text-lg sm:text-2xl opacity-50">"</div>
-										<TimelyGreeting Data={Data.Greeting} />
+										<TimelyGreeting Data={Data?.Greeting} />
 										<div className="absolute -bottom-6 sm:-bottom-8 -right-2 sm:-right-4 text-[var(--mono-4)] text-lg sm:text-2xl opacity-50">"</div>
 									</motion.div>
 
@@ -272,50 +275,54 @@ export default function Hero({ initialData }: { initialData?: any }) {
 											cursor-default select-none
 											drop-shadow-lg px-2 sm:px-4 lg:px-4 leading-tight
 										">
-											{Data.Name.split(' ').map((SplitName: string, ind: number) => (
-												<React.Fragment key={`name-part-${ind}`}>
-													{SplitName.split('').map((letter: string, idx: number) => (
-														<motion.span
-															key={`letter-${ind}-${idx}-${letter}`}
-															initial={{ opacity: 0, filter: "blur(10px)" }}
-															animate={{ opacity: 1, filter: "blur(0px)" }}
-															transition={{
-																duration: 0.1,
-																delay: idx * 0.1 + ind * 0.1,
-																type: "spring",
-																stiffness: 100
-															}}
-															className="rounded-md hover:text-[var(--mono-4)] transition-colors"
-														>
-															{letter}
-														</motion.span>
-													))}
-													<br />
-												</React.Fragment>
-											))}
+											{Data?.Name ? (
+												Data.Name.split(' ').map((SplitName: string, ind: number) => (
+													<React.Fragment key={`name-part-${ind}`}>
+														{SplitName.split('').map((letter: string, idx: number) => (
+															<motion.span
+																key={`letter-${ind}-${idx}-${letter}`}
+																initial={{ opacity: 0, filter: "blur(10px)" }}
+																animate={{ opacity: 1, filter: "blur(0px)" }}
+																transition={{
+																	duration: 0.1,
+																	delay: idx * 0.1 + ind * 0.1,
+																	type: "spring",
+																	stiffness: 100
+																}}
+																className="rounded-md hover:text-[var(--mono-4)] transition-colors"
+															>
+																{letter}
+															</motion.span>
+														))}
+														<br />
+													</React.Fragment>
+												))
+											) : <span className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl">Welcome</span>}
 										</h1>
 										<p className="mt-3 sm:mt-5 h-auto cursor-default font-inkfree font-bold text-xs sm:text-sm md:text-base w-full px-4 flex flex-wrap break-words justify-center text-[var(--foreground)]/75">
-											{Data.Tagline.split(' ').map((SplitName: string, ind: number) => (
-												<React.Fragment key={`name-part-${ind}`}>
-													{SplitName.split('').map((letter: string, idx: number) => (
-														<motion.span
-															key={`letter-${ind}-${idx}-${letter}`}
-															initial={{ opacity: 0, filter: "blur(10px)" }}
-															animate={{ opacity: 1, filter: "blur(0px)" }}
-															transition={{
-																duration: 0.1,
-																delay: idx * 0.05 + ind * 0.1,
-																type: "spring",
-																stiffness: 100
-															}}
-															className="rounded-md hover:text-[var(--mono-4)] transition-colors"
-														>
-															{letter}
-														</motion.span>
-													))}
-													<i className="me-1"></i>
-												</React.Fragment>
-											))}
+											{Data?.Tagline ? (
+												Data.Tagline.split(' ').map((SplitName: string, ind: number) => (
+													<React.Fragment key={`name-part-${ind}`}>
+														{SplitName.split('').map((letter: string, idx: number) => (
+															<motion.span
+																key={`letter-${ind}-${idx}-${letter}`}
+																initial={{ opacity: 0, filter: "blur(10px)" }}
+																animate={{ opacity: 1, filter: "blur(0px)" }}
+																transition={{
+																	duration: 0.1,
+																	delay: idx * 0.05 + ind * 0.1,
+																	type: "spring",
+																	stiffness: 100
+																}}
+																className="rounded-md hover:text-[var(--mono-4)] transition-colors"
+															>
+																{letter}
+															</motion.span>
+														))}
+														<i className="me-1"></i>
+													</React.Fragment>
+												))
+											) : <span className="text-xs sm:text-sm md:text-base">Loading...</span>}
 										</p>
 
 										{/* Underline scanning effect */}
@@ -327,17 +334,19 @@ export default function Hero({ initialData }: { initialData?: any }) {
 										/>
 									</div>
 									<h2 className="h-auto font-mono font-bold text-center cursor-default text-xs sm:text-sm md:text-base lg:text-lg bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent mt-3 sm:mt-4 px-2">
-										{Data.Tags[currentTagIndex].split("").map((letter: string, index: number) => (
-											<motion.span
-												key={index}
-												initial={{ opacity: 0, y: 10 }}
-												animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-												transition={{ duration: 0.05, delay: index * 0.01 }}
-												className="text-xs sm:text-sm md:text-base lg:text-lg bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent hover:text-[var(--mono-4)] dark:hover:text-[var(--mono-4)] transition-colors tracking-widest"
-											>
-												{letter}
-											</motion.span>
-										))}
+										{Data?.Tags?.length ? (
+											Data.Tags[currentTagIndex]?.split("").map((letter: string, index: number) => (
+												<motion.span
+													key={index}
+													initial={{ opacity: 0, y: 10 }}
+													animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+													transition={{ duration: 0.05, delay: index * 0.01 }}
+													className="text-xs sm:text-sm md:text-base lg:text-lg bg-gradient-to-br from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] bg-clip-text text-transparent hover:text-[var(--mono-4)] dark:hover:text-[var(--mono-4)] transition-colors tracking-widest"
+												>
+													{letter}
+												</motion.span>
+											))
+										) : <span className="text-xs sm:text-sm md:text-base lg:text-lg">Loading...</span>}
 									</h2>
 								</div>
 							</motion.div>

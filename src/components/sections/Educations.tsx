@@ -57,6 +57,8 @@ export const Educations = ({ initialData }: { initialData?: any }) => {
     if (error) return <ErrorMessage message={error} />
     if (!educations || educations.length === 0) return null
 
+    const safeTitle = Title || "Education"
+
     // Prepare data for GridBackground (inject Name)
     const backgroundData = { Educations: educations.length, Name: decodedUsername }
 

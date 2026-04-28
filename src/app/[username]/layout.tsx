@@ -83,9 +83,9 @@ export default async function UserLayout({
     params: Promise<{ username: string }>
 }) {
     const { username } = await params
-    if (!ALLOWED_USERS.includes(username) && username.toLowerCase() !== 'login') {
-        redirect(`/${DEFAULT_USER}`)
-    }
+    // if (!ALLOWED_USERS.includes(username) && username.toLowerCase() !== 'login') {
+    //     redirect(`/${DEFAULT_USER}`)
+    // }
 
     const mobileFontStyle = `@media (max-width: 640px) { .font-comic, .font-inkfree { font-family: var(--font-roboto), sans-serif !important; } }`;
 

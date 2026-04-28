@@ -91,6 +91,9 @@ export const Blog = ({ initialData }: { initialData?: any }) => {
 
     if (error) return <ErrorMessage message={error} />
     if (isLoading) return <Loading />
+    if (!Data || !Data.feed) return null
+
+    const safeTitle = Data?.feed?.title || "Blog"
 
     const backgroundData = { ...Data, Name: decodedUsername }
 
@@ -113,7 +116,7 @@ export const Blog = ({ initialData }: { initialData?: any }) => {
                                 className="inline-block"
                             >
                                 <h2 className="text-4xl sm:text-6xl font-bold mb-2 font-oswald text-[var(--foreground)] tracking-wide cursor-default">
-                                    {Data.feed.title || "Blog"}
+                                    {safeTitle}
                                 </h2>
                                 <div className="h-2 w-full bg-gradient-to-r from-transparent via-[var(--mono-4)] to-transparent rounded-full overflow-hidden relative">
                                     <motion.div
@@ -127,7 +130,7 @@ export const Blog = ({ initialData }: { initialData?: any }) => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {(isExpanded ? Data?.items : Data?.items.slice(0, 6)).map((Blog: any, index: number) => (
+                            {(isExpanded ? Data?.items : Data?.items?.slice(0, 6))?.map((Blog: any, index: number) => (
                                 <div
                                     key={`${Blog.title}-${index}`}
                                     ref={el => { BlogRefs.current[index] = el }}
