@@ -27,6 +27,19 @@ interface LandingPageClientProps {
     contactData?: unknown
 }
 
+// Helper function to check if data is valid
+function isDataValid(data: unknown): boolean {
+    if (data === undefined || data === null) return false
+
+    // Additional validation: check if data has required properties if it's an object
+    if (typeof data === 'object') {
+        // Example: for Hero, check if it has a title property (adjust based on actual schema)
+        if ('title' in data && data.title === undefined) return false
+    }
+    
+    return true
+}
+
 export default function LandingPageClient({
     heroData,
     aboutData,
@@ -100,7 +113,7 @@ export default function LandingPageClient({
                         height: `${heroHeight}px`
                     }}
                 >
-                    {showHero && <Hero initialData={heroData} />}
+                    {showHero && isDataValid(heroData) && <Hero initialData={heroData} />}
                 </div>
 
                 <div style={{ height: `${heroHeight}px` }} />
@@ -109,35 +122,35 @@ export default function LandingPageClient({
                     ref={aboutRef}
                     className="relative z-30 transition-transform duration-700 ease-out"
                 >
-                    <About initialData={aboutData} />
+                    {isDataValid(aboutData) && <About initialData={aboutData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Experiences initialData={experiencesData} />
+                    {isDataValid(experiencesData) && <Experiences initialData={experiencesData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Projects initialData={projectsData} />
+                    {isDataValid(projectsData) && <Projects initialData={projectsData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Skills initialData={SkillsData} />
+                    {isDataValid(SkillsData) && <Skills initialData={SkillsData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Blog initialData={BlogData} />
+                    {isDataValid(BlogData) && <Blog initialData={BlogData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Educations initialData={educationsData} />
+                    {isDataValid(educationsData) && <Educations initialData={educationsData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <References initialData={referencesData} />
+                    {isDataValid(referencesData) && <References initialData={referencesData} />}
                 </div>
 
                 <div className="relative z-10 bg-[var(--background)]">
-                    <Contacts initialData={contactData} />
+                    {isDataValid(contactData) && <Contacts initialData={contactData} />}
                 </div>
             </div>
         </GlowCapture>

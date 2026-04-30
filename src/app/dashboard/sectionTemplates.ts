@@ -132,12 +132,12 @@ export function createSectionTemplate(
                 Skills: [
                     [
                         "Primary Stack",
-                        "Describe your main lane here.",
+                        "Main lane.",
                         [
                             [
                                 "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-                                "Example Skill",
-                                "Describe how you use this skill."
+                                "React",
+                                "https://reactjs.org"
                             ]
                         ]
                     ]
