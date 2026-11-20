@@ -1,0 +1,79 @@
+{
+  "fixtureSchemaVersion": 1,
+  "purpose": "Synthetic two-tenant privacy, accessibility and responsiveness tests; NOT published data",
+  "noRealProviderAccountsOrCustomerData": true,
+  "scenarios": [
+    {
+      "id": "novice",
+      "accountId": "8a1154d0-4119-48a5-87dd-674710a48011",
+      "portfolioId": "7e7b93a1-452f-4fe6-9fc6-41fd178f6301",
+      "slug": "sam-novice",
+      "displayName": "Sam Example",
+      "identityLabel": "Early-career learner",
+      "intro": "Starting my professional journey with curiosity.",
+      "sections": ["Hero", "About"],
+      "collections": [],
+      "fields": [
+        { "id": "intro", "value": "I enjoy learning through small projects.", "visibility": "published", "aiApproved": true },
+        { "id": "personalNotes", "value": "PRIVATE_SENTINEL_NOVICE_NOT_FOR_PUBLIC", "visibility": "private", "aiApproved": false }
+      ]
+    },
+    {
+      "id": "developer",
+      "accountId": "29d154d0-4119-48a5-87dd-674710a48012",
+      "portfolioId": "51482a5b-4119-48a5-87dd-674710a48012",
+      "slug": "alex-developer",
+      "displayName": "Alex Example",
+      "identityLabel": "Software developer",
+      "intro": "Creating reliable and usable applications.",
+      "sections": ["Hero", "Projects", "Projects", "Experience", "Skills", "Contact"],
+      "collections": ["projects", "skills", "experience"],
+      "fields": [
+        { "id": "tech", "value": "TypeScript, testing, interfaces", "visibility": "published", "aiApproved": true },
+        { "id": "draftProject", "value": "PRIVATE_SENTINEL_DRAFT_PROJECT", "visibility": "draft", "aiApproved": false },
+        { "id": "referenceEmail", "value": "PRIVATE_SENTINEL_REFERENCE_EMAIL", "visibility": "private", "aiApproved": false },
+        { "id": "publicButNotAi", "value": "PUBLIC_BUT_AI_DENIED_SENTINEL", "visibility": "published", "aiApproved": false }
+      ]
+    },
+    {
+      "id": "designer",
+      "accountId": "337b93a1-452f-4fe6-9fc6-41fd178f6303",
+      "portfolioId": "637b93a1-452f-4fe6-9fc6-41fd178f6303",
+      "slug": "river-designer",
+      "displayName": "River Example",
+      "identityLabel": "Product designer",
+      "intro": "Accessible layouts from first principles.",
+      "sections": ["Hero", "Projects", "About", "Contact"],
+      "collections": ["case-studies"],
+      "fields": [
+        { "id": "headline", "value": "Interface design for inclusive products", "visibility": "published", "aiApproved": true },
+        { "id": "unpublishedMoodboard", "value": "PRIVATE_SENTINEL_MOODBOARD", "visibility": "draft", "aiApproved": false }
+      ]
+    },
+    {
+      "id": "freelancer",
+      "accountId": "447b93a1-452f-4fe6-9fc6-41fd178f6304",
+      "portfolioId": "747b93a1-452f-4fe6-9fc6-41fd178f6304",
+      "slug": "casey-freelance",
+      "displayName": "Casey Example",
+      "identityLabel": "Independent creative",
+      "intro": "Exploring partnerships and outcomes.",
+      "sections": ["Hero", "Services", "Testimonials", "Contact"],
+      "collections": ["services", "testimonials"],
+      "fields": [
+        { "id": "publicServices", "value": "Consulting and communication design", "visibility": "published", "aiApproved": true },
+        { "id": "inboxText", "value": "PRIVATE_SENTINEL_INBOX_DO_NOT_PUBLISH", "visibility": "private", "aiApproved": false }
+      ]
+    }
+  ],
+  "layoutStressCases": {
+    "longHeroHeading": "An exceptionally long professional heading that should wrap without covering interactive controls or becoming unreachable on a narrow viewport",
+    "rtlLikeStressOnly": "مرحبا بالعالم — this is a layout stress string, not multilingual product support",
+    "unusualAspectRatios": ["1:4", "4:1", "9:16"],
+    "viewportsCssPx": [320, 375, 767, 768, 1023, 1024, 1440],
+    "zoomPercent": [100, 200, 400],
+    "motionModes": ["off", "subtle", "standard", "cinematic"],
+    "keyboardTraversalRequired": true,
+    "screenReaderLogicalOrderIndependentOfZIndex": true
+  }
+}

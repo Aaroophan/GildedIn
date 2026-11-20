@@ -1,0 +1,1559 @@
+{
+  "product": "GildedIn",
+  "authority": "02-requirements-and-scope.md",
+  "notImplementationEvidence": true,
+  "requirements": [
+    {
+      "id": "IAM-001",
+      "priority": "P0",
+      "requirement": "Public Google OIDC and GitHub OAuth registration/sign-in",
+      "acceptance": "Success and rejection paths proven with provider simulation; no custom passwords (T-IAM-01)",
+      "verificationIds": [
+        "T-IAM-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 57
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-002",
+      "priority": "P0",
+      "requirement": "Identity joins on `(provider, stable subject)`, not email",
+      "acceptance": "Same email with different provider creates no silent takeover (T-IAM-02)",
+      "verificationIds": [
+        "T-IAM-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 58
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-003",
+      "priority": "P0",
+      "requirement": "Account linking requires current session + fresh confirmation of target identity",
+      "acceptance": "Cross-account merge rejected unless both identities controlled (T-IAM-03)",
+      "verificationIds": [
+        "T-IAM-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 59
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-004",
+      "priority": "P0",
+      "requirement": "Cannot remove last usable verified provider",
+      "acceptance": "Conflict response; owner remains able to authenticate (T-IAM-04)",
+      "verificationIds": [
+        "T-IAM-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 60
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-005",
+      "priority": "P0",
+      "requirement": "Revocable secure host-only session on apex",
+      "acceptance": "No session cookie sent to tenant subdomain; logout invalidation (T-IAM-05)",
+      "verificationIds": [
+        "T-IAM-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 61
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-006",
+      "priority": "P0",
+      "requirement": "Admin role provisioned in trusted procedure, not first sign-up",
+      "acceptance": "Unprivileged users cannot become admin; bootstrap auditable (T-IAM-06)",
+      "verificationIds": [
+        "T-IAM-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 62
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-007",
+      "priority": "P1",
+      "requirement": "Registration may end without portfolio",
+      "acceptance": "Dashboard offers onboarding; no null-owner anomalies (T-IAM-07)",
+      "verificationIds": [
+        "T-IAM-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 63
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-008",
+      "priority": "P0",
+      "requirement": "Sensitive actions demand recent reauthentication",
+      "acceptance": "Delete, unlink, ownership changes, admin actions checked (T-IAM-08)",
+      "verificationIds": [
+        "T-IAM-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 64
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "IAM-009",
+      "priority": "P1",
+      "requirement": "Verified GitHub subject permitted without public email",
+      "acceptance": "Email-dependent feature stays disabled until verification (T-IAM-09)",
+      "verificationIds": [
+        "T-IAM-09"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 65
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-001",
+      "priority": "P0",
+      "requirement": "Separate stable `accountId` and `portfolioId`",
+      "acceptance": "Rename does not change ownership or references (T-TEN-01)",
+      "verificationIds": [
+        "T-TEN-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 66
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-002",
+      "priority": "P0",
+      "requirement": "All private tenant operations enforce owner or admin check",
+      "acceptance": "Cross-account ID substitution always 403/404 (T-TEN-02)",
+      "verificationIds": [
+        "T-TEN-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 67
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-003",
+      "priority": "P0",
+      "requirement": "One active portfolio per account in beta",
+      "acceptance": "Concurrency-safe uniqueness; schema allows later expansion (T-TEN-03)",
+      "verificationIds": [
+        "T-TEN-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 68
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-004",
+      "priority": "P0",
+      "requirement": "Unique canonical ASCII slug 3–30, lowercased; reserved words blocked",
+      "acceptance": "Parallel claims yield one winner; consistent normalized handling (T-TEN-04)",
+      "verificationIds": [
+        "T-TEN-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 69
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-005",
+      "priority": "P1",
+      "requirement": "Keep old slugs assigned to same portfolio while it exists",
+      "acceptance": "Old path and subdomain redirect; hijack prevented (T-TEN-05)",
+      "verificationIds": [
+        "T-TEN-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 70
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-006",
+      "priority": "P0",
+      "requirement": "Path and subdomain host resolve the same portfolio/release",
+      "acceptance": "All detail routes mirror content and are tested with actual TLS (T-TEN-06)",
+      "verificationIds": [
+        "T-TEN-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 71
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-007",
+      "priority": "P0",
+      "requirement": "Trusted hostname validation and unknown subdomain 404",
+      "acceptance": "Forged Host/X-Forwarded-Host has no cross-tenant effect (T-TEN-07)",
+      "verificationIds": [
+        "T-TEN-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 72
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-008",
+      "priority": "P1",
+      "requirement": "`www` redirects to apex; both URL models support same navigation",
+      "acceptance": "Subdomain links stay on subdomain; canonical points to path (T-TEN-08)",
+      "verificationIds": [
+        "T-TEN-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 73
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "TEN-009",
+      "priority": "P0",
+      "requirement": "Suspended/disabled portfolio suppressed even with stale release cached",
+      "acceptance": "Every public entry path checks authoritative policy (T-TEN-09)",
+      "verificationIds": [
+        "T-TEN-09"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 74
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-001",
+      "priority": "P0",
+      "requirement": "Hero mandatory, unique and first; other sections repeatable",
+      "acceptance": "Validation rejects duplicate Hero and invalid order (T-CNT-01)",
+      "verificationIds": [
+        "T-CNT-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 80
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-002",
+      "priority": "P0",
+      "requirement": "Typed configurable fields, nested objects/lists, constraints",
+      "acceptance": "Known types and JSON imports cannot smuggle untrusted operations (T-CNT-02)",
+      "verificationIds": [
+        "T-CNT-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 81
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-003",
+      "priority": "P0",
+      "requirement": "Reusable stable content IDs and references",
+      "acceptance": "Update once changes all draft bindings; public unchanged until Publish (T-CNT-03)",
+      "verificationIds": [
+        "T-CNT-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 82
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-004",
+      "priority": "P1",
+      "requirement": "User-defined sections and safe layouts from block catalog",
+      "acceptance": "No executable components, CSS or scripts accepted (T-CNT-04)",
+      "verificationIds": [
+        "T-CNT-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 83
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-005",
+      "priority": "P0",
+      "requirement": "Referential integrity across owner-scoped collections",
+      "acceptance": "Deletion with live references requires explicit detach; no foreign tenant binding (T-CNT-05)",
+      "verificationIds": [
+        "T-CNT-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 84
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-006",
+      "priority": "P1",
+      "requirement": "Hidden section content persists in draft but is not published/AI-visible",
+      "acceptance": "Public and Gilden omit excluded content (T-CNT-06)",
+      "verificationIds": [
+        "T-CNT-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 85
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-007",
+      "priority": "P1",
+      "requirement": "Visual schema designer and safe JSON-schema-subset import",
+      "acceptance": "Unsupported `$ref`, recursive/remote refs and prototypes rejected (T-CNT-07)",
+      "verificationIds": [
+        "T-CNT-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 86
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-008",
+      "priority": "P1",
+      "requirement": "Built-in derived dates/durations only",
+      "acceptance": "No arbitrary formula evaluation; deterministic output (T-CNT-08)",
+      "verificationIds": [
+        "T-CNT-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 87
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-009",
+      "priority": "P1",
+      "requirement": "Projects: categories, filtering, feature flag, shareable case-study detail pages",
+      "acceptance": "Correct canonical, links, and stable slug behavior (T-CNT-09)",
+      "verificationIds": [
+        "T-CNT-09"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 88
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-010",
+      "priority": "P1",
+      "requirement": "Medium RSS/username/manual links, preview metadata only",
+      "acceptance": "Feed outage leaves cached content; SSRF checks (T-CNT-10)",
+      "verificationIds": [
+        "T-CNT-10"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 89
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CNT-011",
+      "priority": "P1",
+      "requirement": "Public portfolio search uses generated release-only client index",
+      "acceptance": "Hidden/private content absent from index (T-CNT-11)",
+      "verificationIds": [
+        "T-CNT-11"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 90
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-001",
+      "priority": "P0",
+      "requirement": "Inline edits plus inspector for structured objects",
+      "acceptance": "Local preview updates immediately; input remains valid (T-EDT-01)",
+      "verificationIds": [
+        "T-EDT-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 91
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-002",
+      "priority": "P0",
+      "requirement": "Per-section free-positioning with auto/absolute/hybrid groups",
+      "acceptance": "Coordinates/constraints serialize and reproduce across viewport modes (T-EDT-02)",
+      "verificationIds": [
+        "T-EDT-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 92
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-003",
+      "priority": "P0",
+      "requirement": "Desktop/tablet/mobile previews with derived layouts and overrides",
+      "acceptance": "No unexpected horizontal overflow, missing controls or text clipping (T-EDT-03)",
+      "verificationIds": [
+        "T-EDT-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 93
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-004",
+      "priority": "P0",
+      "requirement": "Semantic reading order distinct from visual stacking",
+      "acceptance": "Keyboard/screen-reader traversal makes sense at every width (T-EDT-04)",
+      "verificationIds": [
+        "T-EDT-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 94
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-005",
+      "priority": "P1",
+      "requirement": "Grouping, resizing, snapping, z-order, locking, multi-select, undo/redo",
+      "acceptance": "Non-drag keyboard or inspector alternatives (T-EDT-05)",
+      "verificationIds": [
+        "T-EDT-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 95
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-006",
+      "priority": "P1",
+      "requirement": "Repeater block renders typed collection with accessible navigation",
+      "acceptance": "Generated cards don't each count toward owner node limit (T-EDT-06)",
+      "verificationIds": [
+        "T-EDT-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 96
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-007",
+      "priority": "P1",
+      "requirement": "Safe interactions: tabs, modal, carousel, scroll, show/hide, form",
+      "acceptance": "No arbitrary JS; equivalent keyboard interaction (T-EDT-07)",
+      "verificationIds": [
+        "T-EDT-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 97
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-008",
+      "priority": "P0",
+      "requirement": "Draft autosaves with debounce, visible save/failure status",
+      "acceptance": "Network failure retains changes; no silent loss (T-EDT-08)",
+      "verificationIds": [
+        "T-EDT-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 98
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-009",
+      "priority": "P0",
+      "requirement": "Optimistic draft revision and compare/recovery on 409 conflict",
+      "acceptance": "Two tabs cannot silently overwrite (T-EDT-09)",
+      "verificationIds": [
+        "T-EDT-09"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 99
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "EDT-010",
+      "priority": "P0",
+      "requirement": "Owner-only preview and Play Animation Preview",
+      "acceptance": "URL guessing does not expose draft (T-EDT-10)",
+      "verificationIds": [
+        "T-EDT-10"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 100
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-001",
+      "priority": "P0",
+      "requirement": "Validate schema, semantic accessibility, links, file readiness and output byte limits before publish",
+      "acceptance": "Hard violations block atomic activation (T-PUB-01)",
+      "verificationIds": [
+        "T-PUB-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 101
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-002",
+      "priority": "P0",
+      "requirement": "Immutable release and single atomic active pointer",
+      "acceptance": "No mixed content across concurrent readers (T-PUB-02)",
+      "verificationIds": [
+        "T-PUB-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 102
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-003",
+      "priority": "P0",
+      "requirement": "Idempotent publish operation keyed to owner+portfolio+key",
+      "acceptance": "Retry yields same release/status (T-PUB-03)",
+      "verificationIds": [
+        "T-PUB-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 103
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-004",
+      "priority": "P1",
+      "requirement": "Cache propagation status and safe recheck/retry",
+      "acceptance": "Failure after activation reports `propagation_pending` (T-PUB-04)",
+      "verificationIds": [
+        "T-PUB-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 104
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-005",
+      "priority": "P0",
+      "requirement": "Restore version as draft; explicit re-publish",
+      "acceptance": "Existing public release not overwritten on restore (T-PUB-05)",
+      "verificationIds": [
+        "T-PUB-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 105
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-006",
+      "priority": "P1",
+      "requirement": "Retain three release versions and referenced media",
+      "acceptance": "GC never removes media used by retained revision (T-PUB-06)",
+      "verificationIds": [
+        "T-PUB-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 106
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-007",
+      "priority": "P0",
+      "requirement": "Separate visibility (`public | unlisted`) and moderation",
+      "acceptance": "Changes apply without content re-publication and bypass stale release (T-PUB-07)",
+      "verificationIds": [
+        "T-PUB-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 107
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PUB-008",
+      "priority": "P1",
+      "requirement": "Owner may disable/unpublish or permanently delete portfolio",
+      "acceptance": "Correct 404/410 and cache suppression behavior (T-PUB-08)",
+      "verificationIds": [
+        "T-PUB-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 108
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-001",
+      "priority": "P0",
+      "requirement": "Gilden optional, owner opt-in, English only",
+      "acceptance": "Disabled default; enable only with released approved intro content (T-AI-01)",
+      "verificationIds": [
+        "T-AI-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 114
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-002",
+      "priority": "P0",
+      "requirement": "Section + field allowlist, newly added fields default denied",
+      "acceptance": "New private fields never enter generated context (T-AI-02)",
+      "verificationIds": [
+        "T-AI-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 115
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-003",
+      "priority": "P0",
+      "requirement": "Gilden uses matching approved published release, not draft",
+      "acceptance": "In-progress publish never mixes knowledge versions (T-AI-03)",
+      "verificationIds": [
+        "T-AI-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 116
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-004",
+      "priority": "P0",
+      "requirement": "Live revocation/pause before every request",
+      "acceptance": "Policy-store outage fails closed; old context rejected (T-AI-04)",
+      "verificationIds": [
+        "T-AI-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 117
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-005",
+      "priority": "P0",
+      "requirement": "Factual answers use validated release source IDs",
+      "acceptance": "No fabricated project links; unsupported claims refused (T-AI-05)",
+      "verificationIds": [
+        "T-AI-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 118
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-006",
+      "priority": "P1",
+      "requirement": "Streams where supported, with cancellation and fallback",
+      "acceptance": "Interrupted output marked; quota still consumed (T-AI-06)",
+      "verificationIds": [
+        "T-AI-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 119
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-007",
+      "priority": "P0",
+      "requirement": "15 visitor messages/day, owner/month and platform global ceilings",
+      "acceptance": "Atomic counters, 429/503 safe degradation (T-AI-07)",
+      "verificationIds": [
+        "T-AI-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 120
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-008",
+      "priority": "P0",
+      "requirement": "No visitor chat transcript or identity stored by GildedIn",
+      "acceptance": "Only short-lived technical rate-limit tokens/aggregate counts (T-AI-08)",
+      "verificationIds": [
+        "T-AI-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 121
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-009",
+      "priority": "P1",
+      "requirement": "Owner selects Gilden name, tone preset, greeting, placement",
+      "acceptance": "No arbitrary system prompt / control bypass (T-AI-09)",
+      "verificationIds": [
+        "T-AI-09"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 122
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "AI-010",
+      "priority": "P1",
+      "requirement": "Optionally approved public PDF text and FAQ",
+      "acceptance": "Explicit document-level consent and sensitive text redaction (T-AI-10)",
+      "verificationIds": [
+        "T-AI-10"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 123
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "MED-001",
+      "priority": "P0",
+      "requirement": "Secure image and PDF uploads with ownership, limits, signatures",
+      "acceptance": "Spoofed/malicious files rejected; no raw user path usage (T-MED-01)",
+      "verificationIds": [
+        "T-MED-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 124
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "MED-002",
+      "priority": "P0",
+      "requirement": "EXIF removal, image re-encode, alt text and crop/focal data",
+      "acceptance": "New safe variant, original never accidentally exposed (T-MED-02)",
+      "verificationIds": [
+        "T-MED-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 125
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "MED-003",
+      "priority": "P0",
+      "requirement": "Provider/global and per-portfolio quotas enforce before write",
+      "acceptance": "Concurrent uploads cannot exceed allocated safe capacity (T-MED-03)",
+      "verificationIds": [
+        "T-MED-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 126
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "MED-004",
+      "priority": "P0",
+      "requirement": "Referenced media survives revisions; orphan cleanup and deletion",
+      "acceptance": "No broken release on replace/delete (T-MED-04)",
+      "verificationIds": [
+        "T-MED-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 127
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "MED-005",
+      "priority": "P1",
+      "requirement": "View/download résumé with restrictive response headers",
+      "acceptance": "PDFs not served as executable HTML; owner privacy controls (T-MED-05)",
+      "verificationIds": [
+        "T-MED-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 128
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "CON-001",
+      "priority": "P1",
+      "requirement": "Consent-based text-only contact form, owner inbox",
+      "acceptance": "No exposed owner email needed; 30-day TTL; abuse protected (T-CON-01)",
+      "verificationIds": [
+        "T-CON-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 129
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "ANA-001",
+      "priority": "P1",
+      "requirement": "Privacy-preserving aggregated views/clicks and optional public stats",
+      "acceptance": "No fingerprinting; public counters owner-opt-in (T-ANA-01)",
+      "verificationIds": [
+        "T-ANA-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 130
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "ADM-001",
+      "priority": "P0",
+      "requirement": "Admin suspensions and per-item moderation overlay",
+      "acceptance": "Policy wins over cached release/search/AI (T-ADM-01)",
+      "verificationIds": [
+        "T-ADM-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 131
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "ADM-002",
+      "priority": "P1",
+      "requirement": "Abuse report and owner appeal mechanism",
+      "acceptance": "Admin records action, scoped reason and timestamps (T-ADM-02)",
+      "verificationIds": [
+        "T-ADM-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 132
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "ADM-003",
+      "priority": "P1",
+      "requirement": "Compact operational status panel, no secrets",
+      "acceptance": "Restricted admin access; no public internal error details (T-ADM-03)",
+      "verificationIds": [
+        "T-ADM-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 133
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "ACC-001",
+      "priority": "P1",
+      "requirement": "Export structured data, layouts, asset manifest and available original media",
+      "acceptance": "Archive readable outside GildedIn, accessible only by owner (T-ACC-01)",
+      "verificationIds": [
+        "T-ACC-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 134
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "ACC-002",
+      "priority": "P0",
+      "requirement": "Idempotent account deletion, immediate public suppression, queued cleanup",
+      "acceptance": "No public access after acceptance; disclosed backup lag (T-ACC-02)",
+      "verificationIds": [
+        "T-ACC-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 135
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-001",
+      "priority": "P0",
+      "requirement": "Threat-model high-risk data flows before implementation",
+      "acceptance": "Reviewed threat register with owners and tests (T-SEC-01)",
+      "verificationIds": [
+        "T-SEC-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 141
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-002",
+      "priority": "P0",
+      "requirement": "Default-deny server-side authorization including property-level controls",
+      "acceptance": "BOLA/BOPLA mutation and reads fail consistently (T-SEC-02)",
+      "verificationIds": [
+        "T-SEC-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 142
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-003",
+      "priority": "P0",
+      "requirement": "HTTPS, secure cookies, CSRF and origin checks, CSP",
+      "acceptance": "Production headers/callback tests (T-SEC-03)",
+      "verificationIds": [
+        "T-SEC-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 143
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-004",
+      "priority": "P0",
+      "requirement": "Structured validation for every input and safe output encoding",
+      "acceptance": "XSS, prototype pollution, unsafe URL tests (T-SEC-04)",
+      "verificationIds": [
+        "T-SEC-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 144
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-005",
+      "priority": "P0",
+      "requirement": "SSRF-defended RSS, link preview and remote asset fetches",
+      "acceptance": "DNS rebinding, redirect and metadata-IP rejection (T-SEC-05)",
+      "verificationIds": [
+        "T-SEC-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 145
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-006",
+      "priority": "P0",
+      "requirement": "Secrets server-only, least privilege, rotate and audit",
+      "acceptance": "No secrets in client bundle or logs (T-SEC-06)",
+      "verificationIds": [
+        "T-SEC-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 146
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-007",
+      "priority": "P0",
+      "requirement": "Upload, CSP and iframe allowlisting prevent arbitrary code execution",
+      "acceptance": "Polyglot file, malicious PDF, rich-text fuzz tests (T-SEC-07)",
+      "verificationIds": [
+        "T-SEC-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 147
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-008",
+      "priority": "P0",
+      "requirement": "Public AI cannot access data beyond policy-approved release",
+      "acceptance": "Prompt injection + hidden-field leakage tests (T-SEC-08)",
+      "verificationIds": [
+        "T-SEC-08"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 148
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-009",
+      "priority": "P0",
+      "requirement": "Rate limits, body limits, budget ceilings and bot mitigations",
+      "acceptance": "Abuse tests avoid unbounded resource requests (T-SEC-09)",
+      "verificationIds": [
+        "T-SEC-09"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 149
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-010",
+      "priority": "P0",
+      "requirement": "Audit admin access, publishing, identity linking, deletion, moderation",
+      "acceptance": "No sensitive chat data or token logging (T-SEC-10)",
+      "verificationIds": [
+        "T-SEC-10"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 150
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-011",
+      "priority": "P0",
+      "requirement": "Production secrets protected against untrusted PR execution",
+      "acceptance": "Branch protection and restricted CI permissions (T-SEC-11)",
+      "verificationIds": [
+        "T-SEC-11"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 151
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEC-012",
+      "priority": "P1",
+      "requirement": "Privacy notice, explicit AI visibility, retention/deletion rules",
+      "acceptance": "Data-inventory and legal launch checklist (T-SEC-12)",
+      "verificationIds": [
+        "T-SEC-12"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 152
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "UX-001",
+      "priority": "P0",
+      "requirement": "WCAG 2.2 AA target on public and essential editor flows",
+      "acceptance": "axe + manual keyboard/VoiceOver/NVDA (T-UX-01)",
+      "verificationIds": [
+        "T-UX-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 153
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "UX-002",
+      "priority": "P0",
+      "requirement": "No WebGL or animation required for core content",
+      "acceptance": "Motion-off and WebGL-disabled tests (T-UX-02)",
+      "verificationIds": [
+        "T-UX-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 154
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "UX-003",
+      "priority": "P1",
+      "requirement": "Signature dark-blue aesthetic, font rules and 3D scene presets",
+      "acceptance": "Responsive design QA + font license check (T-UX-03)",
+      "verificationIds": [
+        "T-UX-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 155
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "UX-004",
+      "priority": "P1",
+      "requirement": "Off/Subtle/Standard/Cinematic controls and system reduced motion precedence",
+      "acceptance": "Preference and visibility lifecycle tests (T-UX-04)",
+      "verificationIds": [
+        "T-UX-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 156
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEO-001",
+      "priority": "P1",
+      "requirement": "Unique server-rendered metadata, canonicals, sitemaps, JSON-LD and OG",
+      "acceptance": "Compare path/subdomain detail pages (T-SEO-01)",
+      "verificationIds": [
+        "T-SEO-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 157
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "SEO-002",
+      "priority": "P0",
+      "requirement": "Draft/unlisted/suspended excluded from index/discovery",
+      "acceptance": "robots/noindex/sitemap status tests (T-SEO-02)",
+      "verificationIds": [
+        "T-SEO-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 158
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PRF-001",
+      "priority": "P1",
+      "requirement": "Representative public Lighthouse ≥90 in four applicable categories",
+      "acceptance": "CI artifacts and manual device validation (T-PRF-01)",
+      "verificationIds": [
+        "T-PRF-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 159
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PRF-002",
+      "priority": "P1",
+      "requirement": "p75 LCP≤2.5s, INP≤200ms, CLS≤0.1",
+      "acceptance": "Real-user or documented lab proxy until sample sufficient (T-PRF-02)",
+      "verificationIds": [
+        "T-PRF-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 160
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "PRF-003",
+      "priority": "P1",
+      "requirement": "Progressive WebGL and JS/asset transfer budgets",
+      "acceptance": "Budget checks, adaptive quality and fallback (T-PRF-03)",
+      "verificationIds": [
+        "T-PRF-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 161
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-001",
+      "priority": "P0",
+      "requirement": "Zero new spending and no payment-card dependency",
+      "acceptance": "Provider-plan evidence and cost gate (T-OPS-01)",
+      "verificationIds": [
+        "T-OPS-01"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 162
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-002",
+      "priority": "P0",
+      "requirement": "Hosting portability, no hidden Vercel business logic",
+      "acceptance": "Build/deploy adapter proof (T-OPS-02)",
+      "verificationIds": [
+        "T-OPS-02"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 163
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-003",
+      "priority": "P0",
+      "requirement": "Production isolation from local tests; no test writes to live resources",
+      "acceptance": "CI environment guard and negative test (T-OPS-03)",
+      "verificationIds": [
+        "T-OPS-03"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 164
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-004",
+      "priority": "P1",
+      "requirement": "Structured redacted logging, metrics and bounded retention",
+      "acceptance": "30-day logs, 90-day audit where technically feasible (T-OPS-04)",
+      "verificationIds": [
+        "T-OPS-04"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 165
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-005",
+      "priority": "P0",
+      "requirement": "Allow free-tier exhaustion to degrade safely, never bypass authorization or charge",
+      "acceptance": "Quota/failure simulations (T-OPS-05)",
+      "verificationIds": [
+        "T-OPS-05"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 166
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-006",
+      "priority": "P0",
+      "requirement": "Clear disclosure: no guaranteed backup, availability or disaster recovery",
+      "acceptance": "Owner-facing notice verified (T-OPS-06)",
+      "verificationIds": [
+        "T-OPS-06"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 167
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    },
+    {
+      "id": "OPS-007",
+      "priority": "P0",
+      "requirement": "Review hosting provider content-use/model-training terms and verify opt-out/privacy settings before processing tenant data",
+      "acceptance": "Config evidence, terms review and safe alternate host when necessary (T-OPS-07)",
+      "verificationIds": [
+        "T-OPS-07"
+      ],
+      "source": {
+        "file": "docs/specifications/02-requirements-and-scope.md",
+        "line": 168
+      },
+      "implementationStatus": "NOT STARTED",
+      "verificationStatus": "NOT RUN",
+      "evidence": []
+    }
+  ]
+}

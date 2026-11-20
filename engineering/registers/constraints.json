@@ -1,0 +1,177 @@
+{
+  "product": "GildedIn",
+  "note": "Fixed limits are not owner-configurable. Conditional dual-host delivery is not enabled without actual provider evidence.",
+  "constraints": [
+    {
+      "key": "zeroNewSpendUSD",
+      "value": 0,
+      "meaning": "New platform spending must be zero; no payment card or billable overages",
+      "binding": "FIXED",
+      "requirementId": "OPS-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "activePortfoliosPerAccount",
+      "value": 1,
+      "meaning": "One active portfolio per account initially",
+      "binding": "FIXED",
+      "requirementId": "TEN-003",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "canonicalUrl",
+      "value": "https://aaroophan.dev/{slug}",
+      "meaning": "Apex-path canonical public URL, deployment-gated",
+      "binding": "FIXED",
+      "requirementId": "TEN-006",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "subdomainUrl",
+      "value": "https://{slug}.aaroophan.dev",
+      "meaning": "Equivalent tenant hostname, contingent on real DNS/TLS evidence",
+      "binding": "FIXED",
+      "requirementId": "TEN-006",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "requiredHeroCount",
+      "value": 1,
+      "meaning": "Exactly one Hero and first in section order",
+      "binding": "FIXED",
+      "requirementId": "CNT-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "schemaNestingDepth",
+      "value": 3,
+      "meaning": "User-defined nested object/list schema container levels",
+      "binding": "FIXED",
+      "requirementId": "CNT-002",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "customFieldsPerSection",
+      "value": 20,
+      "meaning": "User-authored schema definitions; platform-defined fields excluded",
+      "binding": "FIXED",
+      "requirementId": "CNT-002",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "authoredVisualNodesPortfolioWide",
+      "value": 20,
+      "meaning": "All authored nodes including nested groups; generated repeats and platform scaffolding excluded",
+      "binding": "FIXED",
+      "requirementId": "EDT-006",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "collectionItems",
+      "value": 20,
+      "meaning": "Stored items per collection (not filtered rendered copies)",
+      "binding": "FIXED",
+      "requirementId": "CNT-007",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "publishedReleaseUtf8Bytes",
+      "value": 102400,
+      "meaning": "Canonical serialization including content/layout/schema/metadata references; binary media excluded",
+      "binding": "FIXED",
+      "requirementId": "PUB-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "retainedPublishedReleases",
+      "value": 3,
+      "meaning": "Active release plus at most 2 older successful releases",
+      "binding": "FIXED",
+      "requirementId": "PUB-006",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "mediaOriginalBytesPerPortfolio",
+      "value": 15728640,
+      "meaning": "Verified originals only, not variants; global physical cap still applies",
+      "binding": "FIXED",
+      "requirementId": "MED-003",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "mediaOriginalFileCount",
+      "value": 30,
+      "meaning": "Committed originals and outstanding reservation counts",
+      "binding": "FIXED",
+      "requirementId": "MED-003",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "imageInputBytes",
+      "value": 1048576,
+      "meaning": "Verified bytes per original image",
+      "binding": "FIXED",
+      "requirementId": "MED-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "pdfInputBytes",
+      "value": 2097152,
+      "meaning": "Verified bytes per PDF original",
+      "binding": "FIXED",
+      "requirementId": "MED-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "maxImageWidth",
+      "value": 4096,
+      "meaning": "Verified decoded image width",
+      "binding": "FIXED",
+      "requirementId": "MED-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "maxImageHeight",
+      "value": 4096,
+      "meaning": "Verified decoded image height",
+      "binding": "FIXED",
+      "requirementId": "MED-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "initialGildenVisitorDailyMessages",
+      "value": 15,
+      "meaning": "Server-authoritative anonymous visitor daily budget, plus tenant/global caps",
+      "binding": "FIXED",
+      "requirementId": "AI-007",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    },
+    {
+      "key": "contactInboxRetentionDays",
+      "value": 30,
+      "meaning": "Read-time suppression as well as best-effort TTL deletion",
+      "binding": "FIXED",
+      "requirementId": "CON-001",
+      "source": "docs/specifications/02-requirements-and-scope.md",
+      "verificationStatus": "NOT RUN"
+    }
+  ]
+}

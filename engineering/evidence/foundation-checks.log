@@ -1,0 +1,257 @@
+
+> gildedin@0.1.0 verify:foundation
+> npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run test:domain && npm run typecheck:domain
+
+
+> gildedin@0.1.0 check:requirements
+> node --experimental-strip-types scripts/check-requirements.mjs
+
+(node:2333) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS: 97 canonical requirements (63 P0, 34 P1), 36 ADRs, 18 deployment gates, fixed limit constants, all 13 documents.
+
+> gildedin@0.1.0 check:boundaries
+> node scripts/check-boundaries.mjs
+
+PASS: 28 sources checked; no forbidden/cyclic static dependencies.
+
+> gildedin@0.1.0 check:secrets
+> node scripts/check-secrets.mjs
+
+PASS: no local .env, private-key files, or high-confidence embedded credentials in shipped source.
+
+> gildedin@0.1.0 test:domain
+> node --experimental-strip-types --test tests/unit/*.test.ts
+
+TAP version 13
+# (node:2408) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: API conventions reserve v1 and signed status protocol without raw exception data
+ok 1 - API conventions reserve v1 and signed status protocol without raw exception data
+  ---
+  duration_ms: 5.924321
+  type: 'test'
+  ...
+# Subtest: page sizes are bounded with no automatic acceptance of coercible strings
+ok 2 - page sizes are bounded with no automatic acceptance of coercible strings
+  ---
+  duration_ms: 0.223472
+  type: 'test'
+  ...
+# Subtest: apex and development-only hosts allowed; unknown or forged hosts denied
+ok 3 - apex and development-only hosts allowed; unknown or forged hosts denied
+  ---
+  duration_ms: 0.463028
+  type: 'test'
+  ...
+# Subtest: wildcard classification is distinct from owner/policy proof and explicitly launch gated
+ok 4 - wildcard classification is distinct from owner/policy proof and explicitly launch gated
+  ---
+  duration_ms: 0.191113
+  type: 'test'
+  ...
+# (node:2409) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: canonical requirements exactly equal source 02 and cannot drop an ID undetected
+ok 5 - canonical requirements exactly equal source 02 and cannot drop an ID undetected
+  ---
+  duration_ms: 10.61627
+  type: 'test'
+  ...
+# Subtest: ADRs/statuses and 18 actual deployment gates preserve source authority
+ok 6 - ADRs/statuses and 18 actual deployment gates preserve source authority
+  ---
+  duration_ms: 17.393218
+  type: 'test'
+  ...
+# Subtest: static dependency checker catches route-to-database, domain-to-Next and cycle injection
+ok 7 - static dependency checker catches route-to-database, domain-to-Next and cycle injection
+  ---
+  duration_ms: 2.161561
+  type: 'test'
+  ...
+# Subtest: secret checker fails when a malicious env file or private key is shipped
+ok 8 - secret checker fails when a malicious env file or private key is shipped
+  ---
+  duration_ms: 0.588454
+  type: 'test'
+  ...
+# (node:2410) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: four reproducible synthetic personas with isolated identities and at least one Hero each
+ok 9 - four reproducible synthetic personas with isolated identities and at least one Hero each
+  ---
+  duration_ms: 1.539527
+  type: 'test'
+  ...
+# Subtest: privacy sentinels are absent from the expected public and AI allowlist projections
+ok 10 - privacy sentinels are absent from the expected public and AI allowlist projections
+  ---
+  duration_ms: 0.375598
+  type: 'test'
+  ...
+# Subtest: privacy test sentinel deliberately fails if a future projection includes denied content
+ok 11 - privacy test sentinel deliberately fails if a future projection includes denied content
+  ---
+  duration_ms: 0.285704
+  type: 'test'
+  ...
+# Subtest: responsive, long text, RTL-like and zoom stress fixtures are deterministic
+ok 12 - responsive, long text, RTL-like and zoom stress fixtures are deterministic
+  ---
+  duration_ms: 0.229281
+  type: 'test'
+  ...
+# (node:2441) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: review blocks billable, unknown-terms providers before using real tenant data
+ok 13 - review blocks billable, unknown-terms providers before using real tenant data
+  ---
+  duration_ms: 0.724496
+  type: 'test'
+  ...
+# Subtest: compatible patch can proceed through routine technical review while contract changes require ADR
+ok 14 - compatible patch can proceed through routine technical review while contract changes require ADR
+  ---
+  duration_ms: 0.11397
+  type: 'test'
+  ...
+# Subtest: audit adapter allowlists fields and refuses request bodies and unsafe codes
+ok 15 - audit adapter allowlists fields and refuses request bodies and unsafe codes
+  ---
+  duration_ms: 0.496036
+  type: 'test'
+  ...
+# (node:2447) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opaque IDs accept valid typed UUIDs but reject slugs, email and arbitrary object IDs
+ok 16 - opaque IDs accept valid typed UUIDs but reject slugs, email and arbitrary object IDs
+  ---
+  duration_ms: 1.759674
+  type: 'test'
+  ...
+# Subtest: typed monotonic revision refuses coercion, negatives and non-integers
+ok 17 - typed monotonic revision refuses coercion, negatives and non-integers
+  ---
+  duration_ms: 0.415687
+  type: 'test'
+  ...
+# Subtest: canonical slug uses ASCII-only case normalization, shared reserved words and strict grammar
+ok 18 - canonical slug uses ASCII-only case normalization, shared reserved words and strict grammar
+  ---
+  duration_ms: 0.590848
+  type: 'test'
+  ...
+# Subtest: strict command fields deny foreign fields, Mongo operators, getters and malicious prototype
+ok 19 - strict command fields deny foreign fields, Mongo operators, getters and malicious prototype
+  ---
+  duration_ms: 1.369956
+  type: 'test'
+  ...
+# Subtest: deep JSON must exclude unknown prototypes, cycles, prototype pollution and executable data
+ok 20 - deep JSON must exclude unknown prototypes, cycles, prototype pollution and executable data
+  ---
+  duration_ms: 0.792478
+  type: 'test'
+  ...
+# Subtest: field length counts Unicode scalars and rejects control characters
+ok 21 - field length counts Unicode scalars and rejects control characters
+  ---
+  duration_ms: 0.392773
+  type: 'test'
+  ...
+# Subtest: timestamps are strict UTC, not invalid adjusted calendar values
+ok 22 - timestamps are strict UTC, not invalid adjusted calendar values
+  ---
+  duration_ms: 1.019214
+  type: 'test'
+  ...
+# Subtest: HTTPS parser is structural and explicitly does not confer egress/SSRF permission
+ok 23 - HTTPS parser is structural and explicitly does not confer egress/SSRF permission
+  ---
+  duration_ms: 2.296501
+  type: 'test'
+  ...
+# (node:2459) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all non-negotiable byte and count constants are exact
+ok 24 - all non-negotiable byte and count constants are exact
+  ---
+  duration_ms: 0.621233
+  type: 'test'
+  ...
+# Subtest: authored nodes count nested groups, and forged platform markers still count
+ok 25 - authored nodes count nested groups, and forged platform markers still count
+  ---
+  duration_ms: 0.576186
+  type: 'test'
+  ...
+# Subtest: authored node cycles are rejected, even if the loop avoids the first level
+ok 26 - authored node cycles are rejected, even if the loop avoids the first level
+  ---
+  duration_ms: 0.282419
+  type: 'test'
+  ...
+# Subtest: schema depth counts object/list containers, not scalar fields or visual groups
+ok 27 - schema depth counts object/list containers, not scalar fields or visual groups
+  ---
+  duration_ms: 0.578951
+  type: 'test'
+  ...
+# Subtest: field and collection caps accept exactly 20 but reject 21
+ok 28 - field and collection caps accept exactly 20 but reject 21
+  ---
+  duration_ms: 0.385102
+  type: 'test'
+  ...
+# Subtest: canonical release bytes count real UTF-8, not JS characters or bytes of media
+ok 29 - canonical release bytes count real UTF-8, not JS characters or bytes of media
+  ---
+  duration_ms: 2.563568
+  type: 'test'
+  ...
+# Subtest: media preflight enforces verified file/original caps and dimensions, and is not quota reservation
+ok 30 - media preflight enforces verified file/original caps and dimensions, and is not quota reservation
+  ---
+  duration_ms: 0.483167
+  type: 'test'
+  ...
+# (node:2474) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: protected dashboard and preview deny before any data entrypoints exist
+ok 31 - protected dashboard and preview deny before any data entrypoints exist
+  ---
+  duration_ms: 0.986526
+  type: 'test'
+  ...
+# Subtest: guessed public paths and internal rewritten tenants cannot read private draft
+ok 32 - guessed public paths and internal rewritten tenants cannot read private draft
+  ---
+  duration_ms: 0.301668
+  type: 'test'
+  ...
+# Subtest: proxy wildcard cannot be enabled by unreviewed environment flag
+ok 33 - proxy wildcard cannot be enabled by unreviewed environment flag
+  ---
+  duration_ms: 0.21537
+  type: 'test'
+  ...
+# Subtest: API v1 placeholder uses no-store Problem Details and never connects a provider
+ok 34 - API v1 placeholder uses no-store Problem Details and never connects a provider
+  ---
+  duration_ms: 0.174489
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 420.852291
+
+> gildedin@0.1.0 typecheck:domain
+> tsc --noEmit -p tsconfig.domain.json
+

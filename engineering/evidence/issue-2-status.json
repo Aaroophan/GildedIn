@@ -1,0 +1,19 @@
+{
+  "issue": 2,
+  "artifactKind": "implementation-with-explicit-blocked-verification",
+  "subissues": [
+    {"id":"2.1","code":"IMPLEMENTED","localEvidence":"config preflight tests, src/server/config/server.ts (Zod)","verification":"BLOCKED","reason":"Zod/npm install + full Next server startup proof unavailable offline"},
+    {"id":"2.2","code":"IMPLEMENTED","localEvidence":"isolated test harness + test poisoning adversarial suite","verification":"PASS","reason":"dependency-free guard and denied socketless test bootstrap"},
+    {"id":"2.3","code":"PARTIAL","localEvidence":"Node test harness, deterministic fakes and runner reference configs","verification":"BLOCKED","reason":"Vitest/Playwright/axe/LHCI dependencies and browser execution not installed/audited"},
+    {"id":"2.4","code":"IMPLEMENTED","localEvidence":"server HTTP ingress checks plus adversarial request tests","verification":"INCONCLUSIVE","reason":"full browser/real host CSRF/CORS interaction not verified"},
+    {"id":"2.5","code":"IMPLEMENTED","localEvidence":"random token/hash/timing-safe comparison + rotation runbook","verification":"INCONCLUSIVE","reason":"no real session/runtime secret rotation until Issue 4"},
+    {"id":"2.6","code":"IMPLEMENTED","localEvidence":"allowlisted log projection, sink failure tests","verification":"PASS","reason":"local synthetic tests only, provider retention unresolved"},
+    {"id":"2.7","code":"PORT","localEvidence":"typed atomic audit port and scoped in-memory fake","verification":"BLOCKED","reason":"Mongo durable enforcement/retention and real authorization pending Issue 3"},
+    {"id":"2.8","code":"IMPLEMENTED","localEvidence":"pinned read-only GitHub workflow, secret/lock/license scanners","verification":"BLOCKED","reason":"online npm advisory/install + real fork CI proof not run"},
+    {"id":"2.9","code":"IMPLEMENTED","localEvidence":"nonce CSP, route no-store response profile unit tests","verification":"BLOCKED","reason":"actual Next/browser CSP, TLS, private-cache proof pending"},
+    {"id":"2.10","code":"GOVERNANCE_READY","localEvidence":"PR/release template, static workflow attack dry-run","verification":"BLOCKED","reason":"GitHub main protection, fork PR, release job/rollback prove require maintainer configuration"}
+  ],
+  "liveProviderGates":"BLOCKED",
+  "releaseDecision":"NO-GO",
+  "warnings":["No production deployment authorized","No live credentials or billing accounts used","Source spec conflicts from Issue 1 are preserved"]
+}

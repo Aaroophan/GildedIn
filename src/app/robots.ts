@@ -1,14 +1,3 @@
-import { MetadataRoute } from 'next'
-
-export default function robots(): MetadataRoute.Robots {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://aaroophan.dev' || 'https://aaroophan.vercel.app'
-
-    return {
-        rules: {
-            userAgent: '*',
-            allow: '/',
-            disallow: '/private/',
-        },
-        sitemap: `${baseUrl}/sitemap.xml`,
-    }
-}
+import type { MetadataRoute } from 'next';
+/** During Issue 1 there are no published releases and no indexable tenant URLs. */
+export default function robots(): MetadataRoute.Robots { return {rules: {userAgent:'*',disallow:'/'} }; }

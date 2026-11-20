@@ -1,0 +1,83 @@
+{
+  "issue": "1",
+  "title": "Establish the specification baseline and executable architecture boundaries",
+  "state": "BLOCKED FOR COMPLETE ISSUE GATE - local Issue 1 artifacts implemented; Next runtime and provider evidence outstanding",
+  "subissues": [
+    {
+      "id": "1.1",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.2",
+      "implementation": "IMPLEMENTED",
+      "verification": "BLOCKED",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Depends on installation/runtime or actual external eligibility evidence"
+    },
+    {
+      "id": "1.3",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.4",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.5",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.6",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.7",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.8",
+      "implementation": "IMPLEMENTED",
+      "verification": "BLOCKED",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Depends on installation/runtime or actual external eligibility evidence"
+    },
+    {
+      "id": "1.9",
+      "implementation": "IMPLEMENTED",
+      "verification": "PASS",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Narrow local foundation assertions only; source-11 acceptance not automatically passed"
+    },
+    {
+      "id": "1.10",
+      "implementation": "IMPLEMENTED",
+      "verification": "BLOCKED",
+      "evidence": "engineering/evidence/issue-1-report.md",
+      "meaning": "Depends on installation/runtime or actual external eligibility evidence"
+    }
+  ],
+  "blocker": "Dependency installation and Next.js build unavailable offline; external provider/DNS/license proof unperformed.",
+  "localAutomatedTests": {
+    "status": "PASS",
+    "testsPassed": 34,
+    "testsFailed": 0
+  }
+}

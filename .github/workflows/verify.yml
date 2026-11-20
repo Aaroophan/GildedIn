@@ -1,0 +1,60 @@
+name: GildedIn verification (unprivileged)
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verification-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  security-and-build:
+    name: security-and-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      APP_ENV: preview
+      APP_CANONICAL_ORIGIN: http://localhost:3000
+      APP_DOMAIN: localhost
+      APP_WILDCARD_ENABLED: 'false'
+      MEDIA_PROVIDER: memory
+      MONGODB_DB: gildedin_preview
+      FEATURE_AI_PLATFORM: 'off'
+      FEATURE_UPLOADS_PLATFORM: 'off'
+      FEATURE_RSS_SYNC: 'off'
+      FEATURE_REGISTRATION: 'off'
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Checkout without persisting token
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0, Node 24 runner
+        with:
+          persist-credentials: false
+      - name: Install supported Node without package cache
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0, Node 24 action
+        with:
+          node-version: '22.16.0'
+          package-manager-cache: false
+      - name: Locked dependency install, no lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Source and policy checks
+        run: npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run check:supply-chain && npm run check:licenses && npm run check:ci
+      - name: Verify test isolation and execute core tests
+        run: npm test
+        env:
+          APP_ENV: test
+          MONGODB_DB: gildedin_test_12345678
+          MEDIA_PROVIDER: memory
+          APP_CANONICAL_ORIGIN: http://localhost:3000
+      - name: TypeScript - domain and application
+        run: npm run typecheck:domain && npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Build synthetic placeholder application
+        run: npm run build
+      - name: Dependency advisory gate for production tree
+        run: npm audit --omit=dev --audit-level=high
+      # No production tokens, no preview deployment, no Mongo/AI/Redis/external service calls.
+      # Browser/axe/LHCI acceptance remains blocked until an audited lockfile includes those packages.

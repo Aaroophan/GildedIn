@@ -1,0 +1,437 @@
+{
+  "product": "GildedIn",
+  "providerClaimsVerified": false,
+  "lastExternalReview": null,
+  "operationalSpendingAuthorized": false,
+  "gates": [
+    {
+      "id": "DEP-01",
+      "condition": "Hosting eligibility and tenant data-use setting verified",
+      "requiredEvidence": "Terms review, exact use case, privacy opt-out screenshot or approved replacement",
+      "requirementsAndDecisions": "OPS-007; ADR-023",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2038
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-02",
+      "condition": "Every required service demonstrably $0/no-card/no-overage",
+      "requiredEvidence": "Plan names, quota/hard-stop proof, provider policy register",
+      "requirementsAndDecisions": "OPS-001; ADR-022",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2039
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-03",
+      "condition": "Apex/www/wildcard DNS/TLS works",
+      "requiredEvidence": "Zone inventory, live cert, NS proof, both URL model traces",
+      "requirementsAndDecisions": "TEN-006..008; ADR-011",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2040
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-04",
+      "condition": "OAuth, host-only cookies and CSRF validated",
+      "requiredEvidence": "Exact callbacks, origin and subdomain cookie tests",
+      "requirementsAndDecisions": "IAM-001..008; SEC-003",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2041
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-05",
+      "condition": "MongoDB uniqueness/transaction/CAS protocol verified",
+      "requiredEvidence": "Real approved tier integration report",
+      "requirementsAndDecisions": "TEN-004; PUB-002; [05](05-data-model.md)",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2042
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-06",
+      "condition": "Media private staging, processing and quota admission proven",
+      "requiredEvidence": "File-type adversarial tests, direct URL check, global reservation race",
+      "requirementsAndDecisions": "MED-001..004; ADR-017..018",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2043
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-07",
+      "condition": "Cached content cannot bypass live policy",
+      "requiredEvidence": "Warm-cache suspension, unlisted and AI revoke tests on both hosts",
+      "requirementsAndDecisions": "TEN-009; AI-004; ADR-012..014",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2044
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-08",
+      "condition": "CI branch, secrets, code scan and deployment provenance protected",
+      "requiredEvidence": "Fork PR negative test, ruleset screenshot, commit SHA/release audit",
+      "requirementsAndDecisions": "SEC-011; ADR-029",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2045
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-09",
+      "condition": "Production smoke, representative accessibility/performance checks pass",
+      "requiredEvidence": "Browser matrices, Lighthouse and reduced-motion evidence",
+      "requirementsAndDecisions": "UX and NFR in [02](02-requirements-and-scope.md)",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2046
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-10",
+      "condition": "Accurate privacy, data loss and abuse support information",
+      "requiredEvidence": "Notice review, export deletion UX, abuse report route",
+      "requirementsAndDecisions": "SEC-012; OPS-006",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2047
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-11",
+      "condition": "Safe deployment/rollback protocol rehearsed",
+      "requiredEvidence": "Staged production promotion and application compatibility test",
+      "requirementsAndDecisions": "ADR-006; ADR-023",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2048
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-12",
+      "condition": "Config, secret lifecycle and provider accounts verified",
+      "requiredEvidence": "Redacted env schema report, roles/rotation checklist",
+      "requirementsAndDecisions": "SEC-006; ADR-026",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2049
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-13",
+      "condition": "SSRF-safe remote metadata path verified or disabled",
+      "requiredEvidence": "DNS rebinding/redirect tests, bounded egress evidence",
+      "requirementsAndDecisions": "SEC-005; ADR-019",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2050
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-14",
+      "condition": "AI has quota hard stops and policy isolation",
+      "requiredEvidence": "Release/policy pair checks, no transcript storage, 429 handling",
+      "requirementsAndDecisions": "AI-002..008",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2051
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-15",
+      "condition": "Security audit and fail-closed operations verified",
+      "requiredEvidence": "Restricted audit sample and failed audit-write test",
+      "requirementsAndDecisions": "SEC-010; [09](09-error-handling-and-logging.md)",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2052
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-16",
+      "condition": "Provider failure modes and public continuity stated",
+      "requiredEvidence": "Offline provider simulation, truthful status UX",
+      "requirementsAndDecisions": "OPS-005; ADR-034",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2053
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-17",
+      "condition": "Versioned content/renderer compatibility proven",
+      "requiredEvidence": "Previous deployment/release fixtures + index migration rehearsal",
+      "requirementsAndDecisions": "ADR-005..009",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2054
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "DEP-18",
+      "condition": "Documentation, license and maintenance ownership established",
+      "requiredEvidence": "Requirement-ID links, MIT license ownership review, runbook sign-off",
+      "requirementsAndDecisions": "ADR-031; SEC-001",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md",
+        "line": 2055
+      },
+      "owner": "Deployment operator / product owner",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified or affected optional feature disabled",
+      "fallback": "Keep unsafe integration disabled; choose eligible provider through reviewed ADR if needed",
+      "latestVerificationPoint": "Issue 19 provider validation, before any real tenant data"
+    },
+    {
+      "id": "FG-001",
+      "condition": "Vercel Hobby public nonmonetized SaaS eligibility and current terms",
+      "requiredEvidence": "Official current terms plus exact account/use-case determination",
+      "requirementsAndDecisions": "DEP-01",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Hosting is conditional; select compatible portable zero-cost host",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data",
+      "publicDocumentationReviewedOn": "2026-11-20",
+      "externalEvidenceClassification": "OFFICIAL PUBLIC GUIDANCE ONLY - NOT ACCOUNT PROOF",
+      "officialUrl": "https://vercel.com/legal/terms"
+    },
+    {
+      "id": "FG-002",
+      "condition": "Training/content-use opt-out in actual hosting settings",
+      "requiredEvidence": "Actual provider account opt-out evidence and privacy terms",
+      "requirementsAndDecisions": "DEP-01",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Do not process tenant content on unverified host",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data",
+      "publicDocumentationReviewedOn": "2026-11-20",
+      "externalEvidenceClassification": "OFFICIAL PUBLIC GUIDANCE ONLY - NOT ACCOUNT PROOF",
+      "officialUrl": "https://vercel.com/changelog/updates-to-terms-of-service-march-2026"
+    },
+    {
+      "id": "FG-003",
+      "condition": "Wildcard DNS, certificates and hostname trust",
+      "requiredEvidence": "Apex/tenant live TLS, nameserver, browser network observations",
+      "requirementsAndDecisions": "DEP-03",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Disable subdomain routing until proof",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    },
+    {
+      "id": "FG-004",
+      "condition": "Atlas free-tier unique indexes, CAS and transaction support",
+      "requiredEvidence": "Actual eligible tier tested with synthetic data; no production writes",
+      "requirementsAndDecisions": "DEP-05",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Use verified single-document CAS and idempotent recovery",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    },
+    {
+      "id": "FG-005",
+      "condition": "Object storage private staging and billable hard stop",
+      "requiredEvidence": "Provider account configuration, verified byte budget, raw URL denial",
+      "requirementsAndDecisions": "DEP-02; DEP-06",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Disable uploads; never offer billable overflow",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data",
+      "publicDocumentationReviewedOn": "2026-11-20",
+      "externalEvidenceClassification": "OFFICIAL PUBLIC GUIDANCE ONLY - NOT ACCOUNT PROOF",
+      "officialUrl": "https://vercel.com/docs/vercel-blob/usage-and-pricing"
+    },
+    {
+      "id": "FG-006",
+      "condition": "Groq and Upstash quotas and privacy",
+      "requiredEvidence": "Current account plan, terms, hard denial under quota authority outage",
+      "requirementsAndDecisions": "DEP-02; DEP-14",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Keep Gilden disabled and fail closed",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    },
+    {
+      "id": "FG-007",
+      "condition": "Google/GitHub OAuth exact callback and cookie scope",
+      "requiredEvidence": "Real configured callbacks and signed-in apex/subdomain browser traces",
+      "requirementsAndDecisions": "DEP-04",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Keep provider login unavailable until configured",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    },
+    {
+      "id": "FG-008",
+      "condition": "Third party asset and font redistribution rights",
+      "requiredEvidence": "License evidence per asset, Ink Free/Mistral embedding permission",
+      "requirementsAndDecisions": "DEP-18",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Omit or substitute with licensed fallbacks",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    },
+    {
+      "id": "FG-009",
+      "condition": "MIT repository license ownership and dependency compliance",
+      "requiredEvidence": "Ownership proof and asset/third-party license inventory",
+      "requirementsAndDecisions": "DEP-18",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Do not add unreviewed MIT license to project",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    },
+    {
+      "id": "FG-010",
+      "condition": "Applicable privacy/legal obligations, truthful no-backup disclosures",
+      "requiredEvidence": "Review notice, retention claims, support contact and accepted risk",
+      "requirementsAndDecisions": "DEP-10",
+      "source": {
+        "file": "docs/specifications/10-deployment-strategy.md and 12-architecture-decision-record.md",
+        "line": null
+      },
+      "owner": "Product owner / deployment operator",
+      "verificationStatus": "BLOCKED",
+      "goNoGo": "NO-GO until verified",
+      "fallback": "Block public registration pending adequate review",
+      "latestVerificationPoint": "Before enabling the dependent feature or processing tenant data"
+    }
+  ]
+}

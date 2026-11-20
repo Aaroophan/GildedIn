@@ -1,0 +1,438 @@
+{
+  "product": "GildedIn",
+  "note": "Retains normative ADR status; a Baseline decision does not mean the corresponding implementation is tested.",
+  "decisions": [
+    {
+      "id": "ADR-001",
+      "title": "Modular monolith",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[01](01-system-overview.md), [04](04-c4-diagrams.md)",
+      "verificationObligation": "Module and dependency-boundary checks",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 116
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-002",
+      "title": "Server-first semantic public rendering",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[03](03-ui-ux.md)",
+      "verificationObligation": "Accessibility, JS-off and CWV tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 117
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-003",
+      "title": "MongoDB, tenant-scoped identifiers and records",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[05](05-data-model.md)",
+      "verificationObligation": "Unique indexes and isolation tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 118
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-004",
+      "title": "OAuth/OIDC providers and deliberate account linking",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Provider and account-takeover tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 119
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-005",
+      "title": "Draft state independent from public content",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[05](05-data-model.md), [08](08-storage-and-sync-strategy.md)",
+      "verificationObligation": "No draft exposure",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 120
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-006",
+      "title": "Immutable publication",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[08](08-storage-and-sync-strategy.md)",
+      "verificationObligation": "Atomic pointer, retry and concurrency tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 121
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-007",
+      "title": "Hybrid free-positioned responsive composition",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[03](03-ui-ux.md)",
+      "verificationObligation": "Breakpoint/semantic/focus tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 122
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-008",
+      "title": "Fixed product content quotas",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[02](02-requirements-and-scope.md)",
+      "verificationObligation": "Edge and bypass tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 123
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-009",
+      "title": "Versioned content schemas and safe block catalogue",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[05](05-data-model.md)",
+      "verificationObligation": "Malicious schema and migration tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 124
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-010",
+      "title": "Host-only sessions and CSRF controls",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Cross-origin, session fixation tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 125
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-011",
+      "title": "Path/subdomain portfolio routing",
+      "sourceStatus": "Conditional",
+      "primarySpecification": "[10](10-deployment-strategy.md)",
+      "verificationObligation": "DNS, wildcard TLS, host validation, SEO",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 126
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-012",
+      "title": "Dynamic security and moderation gate",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Warm-cache revocation tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 127
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-013",
+      "title": "Split cache strategy: content versus policy",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[08](08-storage-and-sync-strategy.md)",
+      "verificationObligation": "No stale-policy disclosure",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 128
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-014",
+      "title": "Opt-in Gilden on approved published knowledge",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Negative AI disclosure tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 129
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-015",
+      "title": "Groq adapter without initial vector/RAG stack",
+      "sourceStatus": "Conditional",
+      "primarySpecification": "[06](06-api-design.md)",
+      "verificationObligation": "Quota/availability/provider terms",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 130
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-016",
+      "title": "Redis rate accounting with fail-closed AI admission",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[09](09-error-handling-and-logging.md)",
+      "verificationObligation": "Concurrency and Redis-outage tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 131
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-017",
+      "title": "Managed media objects with global quota reservations",
+      "sourceStatus": "Conditional",
+      "primarySpecification": "[08](08-storage-and-sync-strategy.md)",
+      "verificationObligation": "Zero-billing proof and storage limits",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 132
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-018",
+      "title": "Safe image/PDF handling and retention",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Malformed files and revalidation tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 133
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-019",
+      "title": "SSRF-protected external feed/metadata ingestion",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "DNS rebinding and redirects",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 134
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-020",
+      "title": "One active owner portfolio initially",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[05](05-data-model.md)",
+      "verificationObligation": "Parallel registration/creation tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 135
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-021",
+      "title": "No guaranteed independent backup",
+      "sourceStatus": "Accepted risk",
+      "primarySpecification": "[10](10-deployment-strategy.md)",
+      "verificationObligation": "Disclosure and deletion semantics",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 136
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-022",
+      "title": "Absolute $0 and no silent overages",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[10](10-deployment-strategy.md)",
+      "verificationObligation": "Billing/card/eligibility checklist",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 137
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-023",
+      "title": "Vercel Hobby as provisional hosting",
+      "sourceStatus": "Conditional",
+      "primarySpecification": "[10](10-deployment-strategy.md)",
+      "verificationObligation": "Eligibility, content-training opt-out and domain feasibility",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 138
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-024",
+      "title": "Progressive cinematic rendering and motion",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[03](03-ui-ux.md)",
+      "verificationObligation": "WebGL-off and reduced-motion tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 139
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-025",
+      "title": "Replaceable editor/animation library adapters",
+      "sourceStatus": "Conditional",
+      "primarySpecification": "[03](03-ui-ux.md)",
+      "verificationObligation": "Compatibility, license, perf tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 140
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-026",
+      "title": "Encryption, secrets, header and CSP baselines",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Security deployment tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 141
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-027",
+      "title": "Aggregate-only analytics and public opt-in",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[09](09-error-handling-and-logging.md)",
+      "verificationObligation": "No raw visitor tracing",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 142
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-028",
+      "title": "Minimal contact data and retention",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "TTL and export/deletion tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 143
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-029",
+      "title": "Local-isolated tests; no production test writes",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[11](11-testing-strategy.md)",
+      "verificationObligation": "Environment-block tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 144
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-030",
+      "title": "No payment, broker, external job worker or native blog CMS",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[02](02-requirements-and-scope.md)",
+      "verificationObligation": "Scope review",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 145
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-031",
+      "title": "MIT source licensing",
+      "sourceStatus": "Pending",
+      "primarySpecification": "[10](10-deployment-strategy.md)",
+      "verificationObligation": "Ownership and license audit",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 146
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-032",
+      "title": "HTTP API contracts, Problem Details and OpenAPI",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[06](06-api-design.md)",
+      "verificationObligation": "Contract and error consistency",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 147
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-033",
+      "title": "One primary RSS feed and owner-reviewed external links",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[06](06-api-design.md)",
+      "verificationObligation": "Cache/outage/SSRF tests",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 148
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-034",
+      "title": "Independent optional integration failures",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[09](09-error-handling-and-logging.md)",
+      "verificationObligation": "Failure injection",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 149
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-035",
+      "title": "Minimal truthful privacy notice and consent controls",
+      "sourceStatus": "Conditional",
+      "primarySpecification": "[07](07-security-design.md)",
+      "verificationObligation": "Applicable-law and provider policy review",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 150
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    },
+    {
+      "id": "ADR-036",
+      "title": "Semantic content and independent public access controls",
+      "sourceStatus": "Baseline",
+      "primarySpecification": "[03](03-ui-ux.md), [07](07-security-design.md)",
+      "verificationObligation": "noindex not treated as access protection",
+      "canonicalSource": {
+        "file": "docs/specifications/12-architecture-decision-record.md",
+        "line": 151
+      },
+      "implementationEvidenceStatus": "NOT RUN"
+    }
+  ]
+}
