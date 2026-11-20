@@ -13,3 +13,14 @@ coverage/
 .vercel/
 .DS_Store
 npm-debug.log*
+# Synthetic browser artifacts only (never upload auth cookies, traces or screenshots)
+test-results/
+playwright-report/
+playwright/.auth/
+.lighthouseci/
+*.har
+*.trace.zip
+# Preserve generated fixture logs locally unless explicitly audited/redacted
+engineering/evidence/local-*.*
+# Private deployment state
+*.tfstate*

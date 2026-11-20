@@ -18,15 +18,17 @@ export function importsOf(source) {
 function section(f) {
   const rel=path.relative(src,f).replace(/\\/g,'/');
   const first=rel.split('/')[0];
-  return ['shared','domain','app','application','infrastructure','editor'].includes(first)?first:'other';
+  return ['shared','domain','app','application','infrastructure','editor','server','testing'].includes(first)?first:'other';
 }
 export function checkEdge(from,to) {
   const srcClass=section(from),dstClass=section(to);
   if (srcClass==='shared' && dstClass!=='shared') return 'Pure shared domain cannot import application, feature or infrastructure code';
-  if(srcClass==='domain' && ['app','application','infrastructure','editor'].includes(dstClass)) return 'Domain must not import an adapter, editor, app or use case';
-  if(srcClass==='application' && ['app','infrastructure','editor'].includes(dstClass)) return 'Use cases depend only on domains and owned ports';
-  if(srcClass==='app' && dstClass==='infrastructure') return 'HTTP route must not access infrastructure/collections directly';
+  if(srcClass==='domain' && ['app','application','infrastructure','editor','server','testing'].includes(dstClass)) return 'Domain must not import an adapter, editor, app or use case';
+  if(srcClass==='application' && ['app','infrastructure','editor','testing'].includes(dstClass)) return 'Use cases depend only on domains and owned ports';
+  if(srcClass==='app' && (dstClass==='infrastructure' || dstClass==='testing')) return 'HTTP route must not access infrastructure/collections directly';
   if(srcClass==='domain' && /[/\\]delivery[/\\]/.test(from) && /[/\\](editor|publishing)[/\\]/.test(to)) return 'Public release reader cannot use editor/draft internals';
+  if(srcClass==='server' && ['app','editor','testing'].includes(dstClass))return 'Server service cannot depend on app/editor/test internals';
+  if(srcClass==='server' && /[/\\]observability[/\\]/.test(to)===false && /[/\\]infrastructure[/\\]/.test(to))return 'Server service cannot bypass adapter ports';
   return null;
 }
 export function assertNoForbiddenImports(fileSources) {
@@ -36,7 +38,7 @@ export function assertNoForbiddenImports(fileSources) {
     for(const specifier of importsOf(content)) {
       if(['domain','shared','application'].includes(section(filename)) && /^(next(?:\/|$)|react(?:\/|$)|mongodb$|groq-sdk$|@upstash\/|@vercel\/)/.test(specifier))
         errors.push(`${filename}: pure layer imported framework/vendor ${specifier}`);
-      if(section(filename)==='app' && /^(mongodb|groq-sdk|@upstash\/|@vercel\/)/.test(specifier))
+      if(['app','server'].includes(section(filename)) && /^(mongodb|groq-sdk|@upstash\/|@vercel\/)/.test(specifier))
         errors.push(`${filename}: route reached provider SDK ${specifier}`);
       const candidate=specifier.startsWith('@/')?path.join(src,specifier.slice(2)):
         specifier.startsWith('.')?path.resolve(path.dirname(filename),specifier):null;

@@ -6,7 +6,7 @@ const principles = [
 ] as const;
 export default function HomePage() {
   return <>
-    <header className="site-header"><span className="brand">Gilded<span>In</span></span><span className="phase">Foundation / Issue 1</span></header>
+    <header className="site-header"><span className="brand">Gilded<span>In</span></span><span className="phase">Foundation / Issue 2</span></header>
     <main id="main" className="main-wrap">
       <section className="hero" aria-labelledby="hero-title">
         <span className="eyebrow">A NEW FOUNDATION FOR DISTINCTIVE PORTFOLIOS</span>
@@ -19,7 +19,7 @@ export default function HomePage() {
           <span className="module-index">0{index+1} / ENGINE</span><h2>{item.title}</h2><p>{item.detail}</p>
         </article>)}
       </section>
-      <p className="foundation-note">No private portfolio data or production providers are connected in Issue 1.</p>
+      <p className="foundation-note">No private portfolio data or production providers are connected in Issue 2.</p>
     </main>
     <footer className="footer">GildedIn · Specification-led architecture · <a href="/login">Account availability</a></footer>
   </>;

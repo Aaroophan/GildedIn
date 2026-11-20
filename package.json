@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - specification-led modular-monolith foundation (Issue 1)",
+  "description": "GildedIn - issue 2 secure isolated engineering foundation",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,12 +14,24 @@
     "check:requirements": "node --experimental-strip-types scripts/check-requirements.mjs",
     "check:boundaries": "node scripts/check-boundaries.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
-    "verify:foundation": "npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run test:domain && npm run typecheck:domain"
+    "verify:foundation": "npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run test && npm run typecheck:domain",
+    "test:unit": "node --experimental-strip-types scripts/test-bootstrap.mjs unit",
+    "test:integration": "node --experimental-strip-types scripts/test-bootstrap.mjs integration",
+    "test": "node --experimental-strip-types scripts/test-bootstrap.mjs all",
+    "test:security": "node --experimental-strip-types scripts/test-bootstrap.mjs all",
+    "test:browser": "node scripts/check-browser-prerequisites.mjs",
+    "test:accessibility": "node scripts/check-browser-prerequisites.mjs",
+    "test:performance": "node scripts/check-browser-prerequisites.mjs",
+    "check:supply-chain": "node scripts/check-supply-chain.mjs",
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "verify:issue2": "npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run check:supply-chain && npm run check:licenses && npm run test && npm run typecheck:domain",
+    "check:ci": "node scripts/check-ci.mjs"
   },
   "dependencies": {
     "next": "16.2.4",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "zod": "4.1.13"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -32,5 +44,6 @@
   "engines": {
     "node": ">=22.16.0"
   },
-  "type": "module"
+  "type": "module",
+  "packageManager": "npm@10.9.2"
 }

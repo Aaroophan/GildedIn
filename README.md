@@ -1,42 +1,38 @@
 # GildedIn
 
-GildedIn is a new, specification-led, free, open-source portfolio creation and publishing product. The earlier GildedIn application is a **prototype reference only**, not the runtime source or a set of trusted services.
+**GildedIn** is the new free, open-source, multi-user, specification-led portfolio platform. The previously existing GildedIn app is solely a **prototype/visual reference**, not a trusted runtime baseline. This ZIP continues the Issue 1 foundation with code for **Issue 2 — isolated development, secure configuration, CI and test foundations**.
 
-This ZIP implements **Issue 1: Establish the specification baseline and executable architecture boundaries**. It is **not** a working multi-tenant SaaS, and does not enable authentication, media, drafts, publishing, Gilden or external-provider access. The application shell intentionally returns no owner or portfolio records.
+The 12 authoritative specifications and implementation plan are bundled in `docs/specifications/`. Do not describe these early shells as a functional SaaS: authentication, Mongo-backed repositories, content editor, publishing, owner dashboard, media and Gilden remain disabled until their assigned issues.
 
-## Local setup
+## What was added in Issue 2
 
-Requires Node.js 22.16+ for the dependency-free TypeScript test runner (Next.js itself supports additional Node versions) and npm, with access to the npm registry for the first install. This environment could not reach the registry, so dependency-dependent build/lint checks remain `BLOCKED`, not `PASS`.
+- **2.1:** Zod schema and dependency-free fail-closed config preflight (`src/server/config/*`); optional providers OFF; no secret payload serialized to clients.
+- **2.2:** Isolated test bootstrap and loopback-only Mongo identity guard; rejects production indicators, real keys and live adapter selection before executing a test (`scripts/test-bootstrap.mjs`).
+- **2.3:** Node-native isolated test runner, synthetic clock/store, adversarial unit/integration tests, plus explicitly blocked Vitest, Playwright, axe and Lighthouse reference configurations until dependencies can be installed and audited.
+- **2.4:** Exact-origin and host checks, Fetch Metadata/CSRF enforcement, content type/method/body-size limits, default-deny credentialed CORS (`src/server/http/ingress.ts`).
+- **2.5:** Cryptographic one-time tokens, verifier hashes, constant-time checks and a rotation procedure. No actual OAuth/session credentials are enabled yet.
+- **2.6:** Allowlisted structured logging with privacy-safe fields, server-generated request IDs and a safe sink-failure fallback (`src/server/observability/logger.ts`).
+- **2.7:** Typed, idempotent **security audit port** with a scoped synthetic fake; *real durable Mongo storage is deferred to Issue 3*, so privileged actions remain disabled.
+- **2.8:** Fork-safe read-only workflow with full-SHA pinned Actions, locked install, zero provider keys, test/lock/secret/license/CI checks, npm dependency advisory gate.
+- **2.9:** Strict CSP, randomized nonce, no-store private response profile, no HSTS includeSubDomains until verified live-host evidence. Browser CSP testing remains blocked.
+- **2.10:** PR and release checklists, static malicious-workflow dry-run, issue-to-test traceability and explicit **NO-GO** gates.
 
-```bash
-npm ci
-npm run check:requirements
-npm run check:boundaries
-npm run test:domain
-npm run typecheck:domain
+## Local use (Node.js 22.16.0 + npm 10.9.2)
+
+```sh
+npm ci --ignore-scripts
+npm run verify:issue2
 npm run typecheck
 npm run lint
 npm run build
-npm run dev
 ```
 
-Open `http://localhost:3000` for the static foundation screen. `/login` explains that OAuth is not enabled; `/dashboard`, `/dashboard/preview`, all portfolio slugs and tenant subdomains deny access. No `.env` is required and you must **not** supply production credentials for Issue 1.
+For a local-only placeholder UI, copy `.env.example` to ignored `.env.local` (in PowerShell: `Copy-Item .env.example .env.local`), then run `npm run dev` and visit `http://localhost:3000`. Test commands invoke a preflight and set a random `gildedin_test_*` namespace; no cloud account or production data is required. You can run unit/integration tests **without npm install** in Node.js 22.16+ using `npm test`.
 
-## Source of truth
+Use `engineering/issue-2-setup.md` for detailed instructions, and `engineering/evidence/issue-2-report.md` + `issue-2-status.json` for recorded PASS/BLOCKED/INCONCLUSIVE outcomes. `npm run test:browser`, `test:accessibility` and `test:performance` deliberately report `BLOCKED` until the required packages and browsers can be installed in a reviewed lockfile.
 
-All twelve normative documents and the entire implementation plan are included unchanged under [`docs/specifications`](docs/specifications/). A source-controlled register contains all 97 requirements exactly as extracted from the canonical requirement tables (including the source's `PUB-007` malformed Markdown row, reported in the conflict ledger), alongside the 36 existing ADRs, product limits, dependency rules, and 18 deployment gates.
+## Trust and deployment status
 
-- [`engineering/issue-1-walkthrough.md`](engineering/issue-1-walkthrough.md): ten sub-issue deliverables.
-- [`engineering/architecture.md`](engineering/architecture.md): import graph, trust zones and forbidden edges.
-- [`engineering/prototype-audit.md`](engineering/prototype-audit.md): read-only prototype inventory and excluded dangerous patterns.
-- [`engineering/decisions/spec-conflicts.md`](engineering/decisions/spec-conflicts.md): intentionally unresolved compatibility/specification decisions.
-- [`engineering/evidence/issue-1-report.md`](engineering/evidence/issue-1-report.md): local checks, blocked checks and exact reproduction commands.
-- [`engineering/registers`](engineering/registers/): machine-readable requirements, constraints, ADRs and launch gates.
+**NOT ready for launch.** No production host/provider connection, real OAuth, Mongo transaction proof, wildcard DNS/TLS, media store, paid service or billable feature has been enabled. External provider, browser and GitHub branch enforcement evidence remains blocked. Do not equate a green isolated test run with production security or accessibility proof.
 
-## Intended architecture
-
-One Next.js/React/TypeScript **modular monolith**. `src/shared/domain/` contains safe, pure values and limits. `src/domain/` defines separate Content, Composition and Publishing engines and supporting domain-owned ports. `src/application/` will own authorized use cases, `src/infrastructure/` will implement replaceable providers in later issues, and `src/app/` exposes thin web surfaces. Public SSR never imports draft repositories; browsers never import persistence or keys.
-
-## Project restrictions
-
-No testing against live customer data, automatic paid overflow, optional-service auto-activation, fake password account, arbitrary owner scripts, unlicensed prototype media, or claim of independent backups. The intended public URL models and provider choices remain **conditional** until verified on actual infrastructure. No MIT license file has been added because ADR-031 requires an ownership/license audit.
+No `.env`, OAuth tokens, private prototype media, real personal profile assets or font binaries are included. The ZIP is source and tests only, not a ZIP of `node_modules`. The selected project's open-source license is still an ADR-031 decision, not a granted license file.
