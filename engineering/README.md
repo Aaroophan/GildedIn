@@ -1,10 +1,7 @@
-# Engineering handoff
+# GildedIn engineering handoff
 
-- Start with [Issue 1 walkthrough](issue-1-walkthrough.md).
-- Understand the [dependency and trust boundaries](architecture.md).
-- Review the [prototype safety audit](prototype-audit.md) before handling any historical code.
-- Review the [verification report](evidence/issue-1-report.md), [verification matrix](verification-matrix.md), and [initial official provider research](provider-research.md).
-- Consult [decision governance](decisions/change-control.md), [open conflicts](decisions/spec-conflicts.md), and machine registers in [registers](registers/).
-- The complete authoritative source documentation is at [docs/specifications](../docs/specifications/).
+Start with the canonical twelve docs and `docs/specifications/13-implementation-plan.md`, followed by the [Issue 1 walkthrough](issue-1-walkthrough.md) and [Issue 2 setup](issue-2-setup.md). For the current work, read [Issue 3 setup](issue-3-setup.md) and the three records under [persistence](persistence/): `collection-ownership.md`, `consistency.md`, and `migration-and-proofs.md`.
 
-`NOT STARTED`, `NOT RUN` and `BLOCKED` should not be conflated with functional failure or production readiness. See source 11. No production environment or deployment is authorized by this package.
+The original [architecture](architecture.md), [prototype audit](prototype-audit.md), [verification matrix](verification-matrix.md), [decision/change control](decisions/change-control.md), [spec conflicts](decisions/spec-conflicts.md) and [feasibility gates](registers/feasibility-gates.json) remain authoritative. Issue 3's exact evidence is [issue-3-report.md](evidence/issue-3-report.md) and [issue-3-status.json](evidence/issue-3-status.json).
+
+`PASS` for synthetic/local checks **is not** `PASS` for an external MongoDB tier, host, credentials, TLS, or publishing safety. A required `BLOCKED` or `NOT RUN` gate remains a NO-GO. No production environment or deployment is authorized by this package.

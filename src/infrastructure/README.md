@@ -1,3 +1,7 @@
-# Replaceable infrastructure adapters (reserved for later issues)
+# Infrastructure adapters
 
-The original prototype's HTTP-fetch-to-own-API service singletons and per-call MongoClient helpers are not reused. Infrastructure adapters may implement **domain-owned ports** when their feature's authorization, validation, privacy and billing gates are satisfied. No production adapter, secret, database client or provider activation is included in Issue 1.
+The code in `mongodb/` is the Issue 3 **real MongoDB CRUD/query contract** implemented through a narrow, dependency-injected interface matching the official MongoDB Node driver Db/Collection operations. It intentionally does not construct a global Mongo connection at import time, expose generic CRUD APIs or choose a production URI. The real driver and isolated live MongoDB proof are **BLOCKED pending installation/network/approved tier evidence**. There is no MongoDB wire protocol reimplementation.
+
+`manifest.ts` defines 19 fixed collections, reviewed `$jsonSchema` validators and exact unique/TTL indexes. The explicit `applyMongoSchemaAndIndexes(db, approvedLocalMigration)` must only be invoked in a verified local database migration context and never automatically in a request handler or on a real production connection without reviewed change control. The fake in `src/testing/mongo-fake.ts` is exclusively for synthetic deterministic tests; do not use it as a production fallback.
+
+Owner commands receive verified server-side actor context. Public reads require verified host/slug resolution plus fresh policy, and draft/private data has no public path. See `engineering/persistence/` for record owners, CAS, publication and quota recovery semantics, audit transactions and migration constraints. Full domain services, authenticated app wiring, media provider and publication compiler belong to Issues 4–16 and are not implied by these adapters.

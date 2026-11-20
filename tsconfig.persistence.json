@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target":"ES2022", "lib":["ES2022","DOM"],
+    "module":"ESNext", "moduleResolution":"Bundler",
+    "allowImportingTsExtensions":true,"strict":true,"skipLibCheck":true,"noEmit":true,
+    "types":["node"]
+  },
+  "include":[
+    "src/domain/persistence/**/*.ts", "src/infrastructure/mongodb/**/*.ts",
+    "src/shared/domain/**/*.ts", "src/testing/mongo-fake.ts",
+    "src/server/security/crypto.ts", "src/server/observability/audit.ts"
+  ]
+}

@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - issue 2 secure isolated engineering foundation",
+  "description": "GildedIn - issue 3 typed MongoDB persistence and tenant-safe domain repository foundation",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -25,7 +25,11 @@
     "check:supply-chain": "node scripts/check-supply-chain.mjs",
     "check:licenses": "node scripts/check-licenses.mjs",
     "verify:issue2": "npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run check:supply-chain && npm run check:licenses && npm run test && npm run typecheck:domain",
-    "check:ci": "node scripts/check-ci.mjs"
+    "check:ci": "node scripts/check-ci.mjs",
+    "typecheck:persistence": "tsc --noEmit -p tsconfig.persistence.json",
+    "db:prove-local": "node --experimental-strip-types scripts/prove-mongodb-local.mjs",
+    "verify:issue3": "npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run check:supply-chain && npm run check:licenses && npm run check:ci && npm test && npm run typecheck:domain",
+    "verify:issue3:full": "npm run verify:issue3 && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-local"
   },
   "dependencies": {
     "next": "16.2.4",

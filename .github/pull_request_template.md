@@ -1,26 +1,23 @@
-## What changes and why
+# Change summary
 
-## Binding requirements / acceptance test IDs
+## Scope and traceability
+- Issue/sub-issue:
+- Canonical requirements (e.g., TEN-002):
+- Test cases (e.g., T-TEN-02):
+- Threats / ADRs / SPEC-CONFLICT records:
 
-## Threat IDs and tenant/visitor boundary effects
+## Evidence (never include private data)
+- Unit/contract tests PASS/FAIL/BLOCKED/NOT RUN:
+- Two-tenant negative tests and observed side effects:
+- Local database or provider-specific proof and exact environment:
+- Accessibility/browser evidence, if applicable:
 
-## ADRs, source sections and SPEC-CONFLICT review
+## Security and compatibility review
+- Ownership / policy / API projection impact:
+- Database migration and index impact:
+- Client bundle, private data, secrets and audit impact:
+- Deploy cost / quota / zero-charge impact:
+- Rollback and legacy version compatibility:
+- Unverified provider/hosting evidence and NO-GO gates:
 
-## Positive, negative, cross-tenant and failure evidence
-
-| Reproducible command | Observed outcome | Evidence path | Remaining blocker |
-| --- | --- | --- | --- |
-| | | | |
-
-## Privacy / secrets / $0 budget / license considerations
-
-## Data migration and compatibility (releases + rollback)
-
-## UI evidence, accessibility and browser failures (if applicable)
-
-## Manual provider, DNS/TLS and release gates (NOT inferred from CI green)
-
-- [ ] All required tests are PASS with evidence, or the release is NO-GO
-- [ ] No real credentials, private screenshots, customer content, contact/chat transcripts or production dumps
-- [ ] No new billable resources or card attached
-- [ ] No known exploitable tenant/auth, public-render or moderation bypass
+No production deployment, dataset, provider credentials or billable infrastructure may be enabled by this PR alone.

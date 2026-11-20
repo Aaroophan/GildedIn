@@ -1,0 +1,288 @@
+{
+  "project": "GildedIn",
+  "issue": "3",
+  "status": "BLOCKED - real database and provider proofs are not available",
+  "verificationAsOf": "2026-11-20",
+  "localTestCommand": "npm run verify:issue3",
+  "localTestStatus": "PASS - 92 synthetic tests, zero failures, foundation checks all passed (2026-11-20)",
+  "newLayerTypecheck": "PASS - local tsc persistence compile with explicitly sourced global Node typings; full Next typecheck not run",
+  "officialMongoDriverInstalled": false,
+  "liveMongoTests": "BLOCKED - no official mongodb Node module or isolated mongod",
+  "fullNextBuild": "NOT RUN - npm install not possible",
+  "production": "NO-GO",
+  "externalDeploymentGates": "BLOCKED - not authorized or tested",
+  "rehearsal": "Scripted local-only proof is provided. It exits safely before any network call when the driver is unavailable.",
+  "subissues": [
+    {
+      "issue": "3.1",
+      "title": "Define physical collection inventory and access ownership",
+      "implementedFiles": [
+        "src/domain/persistence/models.ts",
+        "src/infrastructure/mongodb/manifest.ts",
+        "engineering/persistence/collection-ownership.md"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "SEC-002",
+        "TEN-001",
+        "TEN-002"
+      ],
+      "canonicalTests": [
+        "T-SEC-02",
+        "T-TEN-01",
+        "T-TEN-02"
+      ],
+      "adrs": [
+        "ADR-003"
+      ],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.2",
+      "title": "Implement stable MongoDB identity, session and slug indexes",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/manifest.ts",
+        "src/infrastructure/mongodb/identity.ts",
+        "tests/integration/mongo-persistence.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "IAM-002",
+        "TEN-003",
+        "TEN-004",
+        "TEN-005"
+      ],
+      "canonicalTests": [
+        "T-IAM-02",
+        "T-TEN-03",
+        "T-TEN-04",
+        "T-TEN-05"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.3",
+      "title": "Build strict persistence validators and serialized document versions",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/validation.ts",
+        "src/infrastructure/mongodb/manifest.ts",
+        "tests/integration/mongo-persistence.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "CNT-002",
+        "PUB-001",
+        "SEC-004"
+      ],
+      "canonicalTests": [
+        "T-CNT-02",
+        "T-PUB-01",
+        "T-SEC-04"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.4",
+      "title": "Create actor-scoped repository interfaces",
+      "implementedFiles": [
+        "src/domain/persistence/ports.ts",
+        "src/infrastructure/mongodb/repositories.ts",
+        "tests/integration/mongo-persistence.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "SEC-002",
+        "SEC-004",
+        "TEN-002"
+      ],
+      "canonicalTests": [
+        "T-SEC-02",
+        "T-SEC-04",
+        "T-TEN-02"
+      ],
+      "adrs": [],
+      "threats": [
+        "TH-05"
+      ],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.5",
+      "title": "Implement authoritative portfolio control and current-policy storage",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/repositories.ts",
+        "src/domain/persistence/models.ts",
+        "tests/integration/mongo-failures.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "ADM-001",
+        "AI-004",
+        "PUB-007",
+        "TEN-009"
+      ],
+      "canonicalTests": [
+        "T-ADM-01",
+        "T-AI-04",
+        "T-PUB-07",
+        "T-TEN-09"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.6",
+      "title": "Implement draft aggregate with atomic revision comparison",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/repositories.ts",
+        "tests/integration/mongo-persistence.test.ts",
+        "tests/integration/mongo-failures.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "EDT-008",
+        "EDT-009",
+        "PUB-002"
+      ],
+      "canonicalTests": [
+        "T-EDT-08",
+        "T-EDT-09",
+        "T-PUB-02"
+      ],
+      "adrs": [
+        "ADR-005"
+      ],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.7",
+      "title": "Define immutable release and publication-operation repositories",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/repositories.ts",
+        "tests/integration/mongo-failures.test.ts",
+        "engineering/persistence/consistency.md"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "PUB-001",
+        "PUB-002",
+        "PUB-003"
+      ],
+      "canonicalTests": [
+        "T-PUB-01",
+        "T-PUB-02",
+        "T-PUB-03"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.8",
+      "title": "Define media records and atomic quota reservation storage",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/quota.ts",
+        "tests/integration/mongo-persistence.test.ts",
+        "tests/integration/mongo-failures.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "MED-001",
+        "MED-003",
+        "MED-004"
+      ],
+      "canonicalTests": [
+        "T-MED-01",
+        "T-MED-03",
+        "T-MED-04"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.9",
+      "title": "Define TTL/read-time privacy and low-cardinality aggregate records",
+      "implementedFiles": [
+        "src/infrastructure/mongodb/ai-context.ts",
+        "src/infrastructure/mongodb/repositories.ts",
+        "tests/integration/mongo-ai.test.ts"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "AI-008",
+        "ANA-001",
+        "CON-001",
+        "OPS-004"
+      ],
+      "canonicalTests": [
+        "T-AI-08",
+        "T-ANA-01",
+        "T-CON-01",
+        "T-OPS-04"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    },
+    {
+      "issue": "3.10",
+      "title": "Prove selected MongoDB tier consistency and migration behavior",
+      "implementedFiles": [
+        "scripts/prove-mongodb-local.mjs",
+        "engineering/persistence/migration-and-proofs.md",
+        "engineering/evidence/issue-3-report.md"
+      ],
+      "localCodeAndSyntheticTests": "PASS",
+      "liveMongoDriverProof": "BLOCKED",
+      "canonicalSource11Verification": "PARTIAL - synthetic checks only; live proof blocked",
+      "requirements": [
+        "OPS-001",
+        "OPS-005",
+        "PUB-002",
+        "PUB-003"
+      ],
+      "canonicalTests": [
+        "T-OPS-01",
+        "T-OPS-05",
+        "T-PUB-02",
+        "T-PUB-03"
+      ],
+      "adrs": [],
+      "threats": [],
+      "notes": "No full close until official MongoDB-driver/real-local instance proof succeeds."
+    }
+  ],
+  "openLimitations": [
+    "The genuine MongoDB Node driver has not been installed or pinned in package-lock.json due to offline npm; structural adapter cannot prove live driver compatibility.",
+    "Real free-tier MongoDB transaction, session and change-stream behavior are unverified. No multi-document atomicity is assumed.",
+    "Actual database schema/index installation, unique index concurrent races, disk/index footprint and crash/restart proofs remain blocked.",
+    "Current verified OAuth/host identity entry points and publication pipeline remain future issues. No persistence methods are exported as public API endpoints.",
+    "A canonical source-11 test ID is traceability, not a claim every exhaustive case was executed."
+  ]
+}
