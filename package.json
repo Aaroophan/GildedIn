@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - Issues 1-7: safe declarative composition with local synthetic verification (not production ready)",
+  "description": "GildedIn - Issues 1-8: declarative composition, branded design system and optional cinematic layer (production NO-GO)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -43,7 +43,12 @@
     "verify:issue6:full": "npm run verify:issue6:offline && npm run typecheck:content && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser",
     "typecheck:composition": "tsc --noEmit -p tsconfig.domain.json",
     "verify:issue7:offline": "npm run verify:issue6:offline && npm run typecheck:composition && npm run check:ci",
-    "verify:issue7:full": "npm run verify:issue7:offline && npm run typecheck:content && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser"
+    "verify:issue7:full": "npm run verify:issue7:offline && npm run typecheck:content && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser",
+    "deps:visual": "npm install --save-exact animejs@4.5.0 three@0.187.0 && npm install --save-dev --save-exact @types/three@0.187.0",
+    "check:visual-contracts": "node scripts/check-visual-contracts.mjs",
+    "typecheck:design": "tsc --noEmit -p tsconfig.domain.json",
+    "verify:issue8:offline": "npm run verify:issue7:offline && npm run check:visual-contracts && npm run typecheck:design",
+    "verify:issue8:full": "npm run verify:issue8:offline && npm run typecheck && npm run build && npm run test:browser && npm run test:accessibility && npm run test:performance"
   },
   "dependencies": {
     "next": "16.2.4",

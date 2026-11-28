@@ -15,6 +15,7 @@ import {applyContentOperations,parseContentMutation} from '../../domain/content/
 import type {MutationCommand} from '../../domain/content/commands.ts';
 import {parseContentDraft} from '../../domain/content/model.ts';
 import {parseCompositionNodes} from '../../domain/composition/validation.ts';
+import {parseDesignTheme} from '../../domain/design/theme.ts';
 import {importJsonSchema,parseCollectionDefinition} from '../../domain/content/schema.ts';
 import {previewSchemaChange} from '../../domain/content/migration.ts';
 import {ContentDenied} from '../../domain/content/errors.ts';
@@ -157,8 +158,18 @@ export class MongoContentRepository {
       return parseContentDraft({...stored,nodes:normalized});
     });
   }
+  /** Dedicated owner-only theme mutation. It cannot change layout, profile, release or security policy. */
+  async putTheme(actor:AuthenticatedActor,id:PortfolioId,raw:unknown,
+    expectedRevision:number,clientMutationId:string):Promise<ContentSaveResult>{
+    const theme=parseDesignTheme(raw);
+    if(!Number.isSafeInteger(expectedRevision)||expectedRevision<0||
+      !/^[A-Za-z0-9_-]{8,96}$/.test(clientMutationId))throw new ContentDenied('CONTENT_INVALID');
+    return this.save(actor,id,{expectedRevision,clientMutationId,
+      operations:[{type:'putTheme',theme}]},async stored=>({...parseContentDraft(stored),
+      theme:theme as unknown as Record<string,unknown>}));
+  }
   private async save(actor:AuthenticatedActor,id:PortfolioId,cmd:MutationCommand,
-    make:(stored:DraftRecord)=>Promise<ContentDraftShape>):Promise<ContentSaveResult>{
+    make:(stored:DraftRecord)=>Promise<ContentDraftShape & {theme?:Record<string,unknown>}>):Promise<ContentSaveResult>{
     const fingerprint=sha256({expectedRevision:cmd.expectedRevision,operations:cmd.operations});
     return this.transaction(async session=>{
       const stored=await this.readOwned(actor,id,session);
@@ -167,12 +178,15 @@ export class MongoContentRepository {
         return {kind:'replayed',draft:{...stored,...parseContentDraft(stored)}};
       }
       if(stored.revision!==cmd.expectedRevision)return {kind:'conflict',currentRevision:stored.revision};
-      const candidate=parseContentDraft(await make(stored));
+      const output=await make(stored);
+      const candidate=parseContentDraft(output);
+      const theme=output.theme===undefined?stored.theme:
+        parseDesignTheme(output.theme) as unknown as Record<string,unknown>;
       await this.verifyMedia(actor,id,candidate,session);
       const timestamp=this.validTime();
       const normalized:DraftRecord={...stored,profile:candidate.profile,sections:candidate.sections,
         collectionDefinitions:candidate.collectionDefinitions,contentCollections:candidate.contentCollections,
-        nodes:candidate.nodes,mediaRefs:candidate.mediaRefs,revision:stored.revision+1,
+        nodes:candidate.nodes,mediaRefs:candidate.mediaRefs,theme,revision:stored.revision+1,
         draftMutationId:cmd.clientMutationId,draftMutationFingerprint:fingerprint,
         updatedAt:timestamp,updatedBy:actor.accountId};
       parseDraftRecord(normalized);

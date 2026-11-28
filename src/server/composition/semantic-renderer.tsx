@@ -4,9 +4,17 @@
 import type {ReactNode} from 'react';
 import type {SemanticRenderPlan,SemanticNode} from '../../domain/composition/types.ts';
 import type {RichInline,RichTextDoc} from '../../domain/content/rich-text.ts';
+import type {DesignTheme} from '../../domain/design/theme.ts';
+import type {SceneGraph} from '../../domain/design/scene.ts';
+import {defaultTheme,parseDesignTheme} from '../../domain/design/theme.ts';
+import {ThemeScope} from '../../ui/design/theme-scope.tsx';
+import {MotionProvider} from '../../ui/design/motion-settings.tsx';
+import {SceneBackdrop} from '../../ui/design/scene-backdrop.tsx';
+import {IntroHeading} from '../../ui/design/intro.tsx';
 import {COMPONENT_REGISTRY_VERSION,COMPOSITION_COMPILER_VERSION,COMPOSITION_SERIALIZER_VERSION} from '../../domain/composition/types.ts';
 import {TabsIsland,CarouselIsland,ActionIsland} from '../../ui/composition/client-islands.tsx';
-interface RenderOptions {plan:SemanticRenderPlan;nonce:string;basePath:string;mediaUrl?:(id:string)=>string|null;modalTargets?:ReadonlySet<string>;}
+interface RenderOptions {plan:SemanticRenderPlan;nonce:string;basePath:string;mediaUrl?:(id:string)=>string|null;
+  modalTargets?:ReadonlySet<string>;theme?:DesignTheme;sceneGraph?:SceneGraph;enableCinematic?:boolean;}
 function hrefForPlan(href:unknown,basePath:string):string|undefined{
   if(typeof href!=='string')return undefined;
   if(/^\/(?!\/)[a-z0-9\/-]*$/.test(href))return basePath+(href==='/'?'':href)||'/';
@@ -70,7 +78,7 @@ function renderNode(node:SemanticNode,options:RenderOptions):ReactNode{
   const href=hrefForPlan(node.href,options.basePath);
   let content:ReactNode=null;
   switch(node.componentType){
-  case 'heading':content=node.role==='h1'?<h1>{node.text}</h1>:
+  case 'heading':content=node.role==='h1'?<IntroHeading title={node.text??''}/>:
       node.role==='h3'?<h3>{node.text}</h3>:<h2>{node.text}</h2>;break;
   case 'text':content=node.richText?<div>{renderRichText(node.richText,options)}</div>:<p>{node.text}</p>;break;
   case 'button':case 'link':
@@ -128,7 +136,7 @@ function renderNode(node:SemanticNode,options:RenderOptions):ReactNode{
   if(node.role==='decorative')return <div id={id} key={node.nodeId} className={className} aria-hidden="true">{content}</div>;
   return <div id={id} key={node.nodeId} className={className}>{content}</div>;
 }
-export function SemanticComposition({plan,nonce,mediaUrl,basePath}:RenderOptions){
+export function SemanticComposition({plan,nonce,mediaUrl,basePath,theme,sceneGraph,enableCinematic=false}:RenderOptions){
   if(plan.schemaVersion!==1||plan.compilerVersion!==COMPOSITION_COMPILER_VERSION||plan.registryVersion!==COMPONENT_REGISTRY_VERSION||
     plan.serializerVersion!==COMPOSITION_SERIALIZER_VERSION||!/^[A-Za-z0-9+/=_-]{16,96}$/.test(nonce))
     throw new Error('UNSUPPORTED_SEMANTIC_RENDER_PLAN');
@@ -139,12 +147,15 @@ export function SemanticComposition({plan,nonce,mediaUrl,basePath}:RenderOptions
   if(basePath!==''&&!/^\/[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])$/.test(basePath))
     throw new Error('UNTRUSTED_RENDER_BASE_PATH');
   const options={plan,nonce,mediaUrl,basePath,modalTargets};
-  return <div className="gi-composition">
+  const appearance=parseDesignTheme(theme??defaultTheme());
+  return <ThemeScope theme={appearance}><MotionProvider defaultMotion={appearance.defaultMotion}>
+    {enableCinematic?<SceneBackdrop theme={appearance} sceneGraph={sceneGraph}/>:null}
+    <div className="gi-composition">
     {/* CSS generated exclusively from validated finite tokens, with the trusted request CSP nonce. */}
     <style nonce={nonce}>{plan.css}</style>
     {plan.sections.map(section=><section className="gi-composition-section" key={section.sectionId}
       id={`gi-section-${section.sectionId.replace(/-/g,'')}`}>
       {section.nodes.map(n=>renderNode(n,options))}
     </section>)}
-  </div>;
+    </div></MotionProvider></ThemeScope>;
 }

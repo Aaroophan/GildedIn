@@ -1,0 +1,210 @@
+{
+  "project": "GildedIn",
+  "issue": 8,
+  "date": "2026-11-28",
+  "overall": "SOURCE_IMPLEMENTED_LOCAL_RELEASE_BLOCKED",
+  "productionDecision": "NO_GO",
+  "authority": {
+    "sourceSpecs": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12"
+    ],
+    "implementationPlan": "13-implementation-plan.md"
+  },
+  "checks": {
+    "isolatedOfflineVerification": "PASS",
+    "totalSyntheticTests": 288,
+    "previousIssueRegressionTests": 256,
+    "issue8FocusedUnit": 16,
+    "issue8FocusedSyntheticIntegration": 8,
+    "issue8StaticSourceChecks": 8,
+    "testFailures": 0,
+    "domainTypecheck": "PASS",
+    "designDomainTypecheck": "PASS",
+    "contentTypecheckWithPreinstalledTypes": "PASS",
+    "identityTypecheckWithPreinstalledTypes": "PASS",
+    "tenancyTypecheckWithPreinstalledTypes": "PASS",
+    "persistenceTypecheckWithPreinstalledTypes": "PASS",
+    "sourceSyntaxParse": "PASS",
+    "sourceAndTestFilesParsed": 162,
+    "requirementsAndADRInventory": "PASS",
+    "architectureBoundaries": "PASS",
+    "secrets": "PASS",
+    "lockedSupplyChainInventory": "PASS",
+    "licensesInventory": "PASS",
+    "ciWorkflowStatic": "PASS",
+    "staticLightDarkFixtures": "CREATED_NOT_BROWSER_VALIDATED"
+  },
+  "releaseGates": {
+    "fullNextReactThreeAnimeBuild": "BLOCKED",
+    "officialMongoAuthJsAndVisualDependencyInstallAndLock": "BLOCKED",
+    "currentReactServerHTMLAndClientHydration": "BLOCKED",
+    "realBrowserAccessibilityAndScreenReader": "BLOCKED",
+    "real320px400PercentZoomAndMobileTouch": "BLOCKED",
+    "realWebGlContextLossGpuAndReducedMotion": "BLOCKED",
+    "fontLicensingAndActualBundledOswaldRobotoLoading": "BLOCKED",
+    "proprietaryInkFreeMistralEmbeddingRights": "BLOCKED",
+    "LighthouseAndCompressedBundleNetworkBudgets": "BLOCKED",
+    "realMongoDbTransactionsAndSecurityAudits": "BLOCKED",
+    "realOAuthAndBrowserCsrfCookies": "BLOCKED",
+    "realDnsWildcardTlsCsp": "BLOCKED",
+    "activeReleaseAndPublicSceneIntegration": "NOT_RUN",
+    "zeroChargeProductionProviderEligibility": "BLOCKED",
+    "manualCinematicMotionReview": "NOT_RUN"
+  },
+  "priorIssues": {
+    "preserved": "Issues 1-7 source and evidence retained",
+    "draftIfMatch409Versus412": "SPEC_CONFLICT_REVIEW_REQUIRED"
+  },
+  "subissues": [
+    {
+      "id": "8.1",
+      "planTitle": "Define dark/light theme and safe design tokens",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-SEC-07",
+        "T-EDT-02",
+        "T-PRF-01",
+        "T-UX-03"
+      ],
+      "notes": "Validated theme v1, contrast, scoped tokens and owner-only CAS; browser combination and visual reviews blocked."
+    },
+    {
+      "id": "8.2",
+      "planTitle": "Establish four-font typography roles and licensing gate",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-PRF-03",
+        "T-SEC-11"
+      ],
+      "notes": "Oswald/Roboto roles and system fallbacks set; Ink Free/Mistral restricted; actual licensed font loading/not distributed is blocked."
+    },
+    {
+      "id": "8.3",
+      "planTitle": "Build accessible shared navigation and form primitives",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-07",
+        "T-SEC-03",
+        "T-PRF-01"
+      ],
+      "notes": "Native controls and focus semantics implemented; browser axe, touch and screen-reader verification blocked."
+    },
+    {
+      "id": "8.4",
+      "planTitle": "Recreate signature technical-corner motion as reusable decoration",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-05",
+        "T-PRF-03"
+      ],
+      "notes": "CSS inert corner frames, focus/hover/static and Off/reduced motion suppression; browser visual proof blocked."
+    },
+    {
+      "id": "8.5",
+      "planTitle": "Implement accessible individual-letter introduction animation",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-PRF-03",
+        "T-SEO-01"
+      ],
+      "notes": "SSR heading retained, decorative letter overlay outside heading and replay control separate; actual Anime.js behavior blocked."
+    },
+    {
+      "id": "8.6",
+      "planTitle": "Define coordinated motion tokens and library responsibilities",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-PRF-03",
+        "T-EDT-05"
+      ],
+      "notes": "Finite motion tokens and CSS/Anime/Three ownership mapped; real library interruption proof blocked."
+    },
+    {
+      "id": "8.7",
+      "planTitle": "Build shared Three.js scene host with static fallback",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-PRF-03",
+        "T-SEO-01",
+        "T-UX-02"
+      ],
+      "notes": "Lazy client chunk and lazy Three dynamic import, static fallback, rAF cleanup/context loss; actual WebGL evidence blocked."
+    },
+    {
+      "id": "8.8",
+      "planTitle": "Implement content-driven spatial visuals with privacy filtering",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "NOT_RUN",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-06",
+        "T-TEN-09",
+        "T-SEC-08",
+        "T-PRF-03"
+      ],
+      "notes": "Pure scene projection requires approved verified release and scene opt-in, strips titles, caps nodes/edges; live Issue13/14 integration not run."
+    },
+    {
+      "id": "8.9",
+      "planTitle": "Implement adaptive scene-quality and visitor intensity controls",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-PRF-03",
+        "T-OPS-05",
+        "T-UX-04"
+      ],
+      "notes": "Off/Subtle/Standard/Cinematic, forced system reduction, browser-local choice, capped particle/FPS/DPR; real device measurement blocked."
+    },
+    {
+      "id": "8.10",
+      "planTitle": "Verify visual identity accessibility and bundle budgets",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-PRF-01",
+        "T-PRF-02",
+        "T-PRF-03",
+        "T-SEC-07"
+      ],
+      "notes": "32 synthetic Issue8 tests and source-contract checks passed, dark/light static files supplied; real 320px/zoom/axe/Lighthouse/p75/bundle/manual review blocked."
+    }
+  ]
+}
