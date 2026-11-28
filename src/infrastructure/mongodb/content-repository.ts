@@ -12,6 +12,7 @@ import type {MongoDatabase} from './driver.ts';
 import {parseDraftRecord,parseAccountRecord,parsePortfolioRecord,parseMediaRecord} from './validation.ts';
 import type {MongoTransactionRunner} from './audit.ts';
 import {applyContentOperations,parseContentMutation} from '../../domain/content/commands.ts';
+import {mergeEditorWorkspace} from '../../domain/editor/workspace.ts';
 import type {MutationCommand} from '../../domain/content/commands.ts';
 import {parseContentDraft} from '../../domain/content/model.ts';
 import {parseCompositionNodes} from '../../domain/composition/validation.ts';
@@ -157,6 +158,16 @@ export class MongoContentRepository {
       const normalized=parseCompositionNodes(candidate.nodes,source.sections,{allowLegacy:false}).nodes;
       return parseContentDraft({...stored,nodes:normalized});
     });
+  }
+  /** Issue 10 explicit editor save: one CAS for owned section/layer/content-item layout.
+   * No automatic saving, publication or preview route is authorized by this method. */
+  async putEditorWorkspace(actor:AuthenticatedActor,id:PortfolioId,raw:unknown,
+    expectedRevision:number,clientMutationId:string):Promise<ContentSaveResult>{
+    if(!Number.isSafeInteger(expectedRevision)||expectedRevision<0||
+      !/^[A-Za-z0-9_-]{8,96}$/.test(clientMutationId))throw new ContentDenied('CONTENT_INVALID');
+    return this.save(actor,id,{expectedRevision,clientMutationId,
+      operations:[{type:'putEditorWorkspace',raw}]},async stored=>
+      mergeEditorWorkspace(stored,raw,this.validTime()));
   }
   /** Dedicated owner-only theme mutation. It cannot change layout, profile, release or security policy. */
   async putTheme(actor:AuthenticatedActor,id:PortfolioId,raw:unknown,

@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - Issues 1-9: owner onboarding, branded platform, private dashboard and purpose-scoped settings (production NO-GO)",
+  "description": "GildedIn - Issues 1-10: authenticated visual canvas editor with typed private composition and explicit revision-controlled draft save (production NO-GO)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -50,7 +50,11 @@
     "verify:issue8:offline": "npm run verify:issue7:offline && npm run check:visual-contracts && npm run typecheck:design",
     "verify:issue8:full": "npm run verify:issue8:offline && npm run typecheck && npm run build && npm run test:browser && npm run test:accessibility && npm run test:performance",
     "verify:issue9:offline": "npm run verify:issue8:offline && npm run check:ci",
-    "verify:issue9:full": "npm run verify:issue9:offline && npm run typecheck:content && npm run typecheck:tenancy && npm run typecheck:identity && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser && npm run test:accessibility && npm run test:performance"
+    "verify:issue9:full": "npm run verify:issue9:offline && npm run typecheck:content && npm run typecheck:tenancy && npm run typecheck:identity && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser && npm run test:accessibility && npm run test:performance",
+    "check:editor-contracts": "node scripts/check-editor-contracts.mjs",
+    "typecheck:editor": "tsc --noEmit -p tsconfig.domain.json",
+    "verify:issue10:offline": "npm run verify:issue9:offline && npm run check:editor-contracts && npm run typecheck:editor",
+    "verify:issue10:full": "npm run verify:issue10:offline && npm run typecheck:content && npm run typecheck:tenancy && npm run typecheck:identity && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser && npm run test:accessibility && npm run test:performance"
   },
   "dependencies": {
     "next": "16.2.4",

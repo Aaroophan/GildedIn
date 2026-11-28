@@ -1,0 +1,208 @@
+{
+  "project": "GildedIn",
+  "issue": 10,
+  "date": "2026-11-29",
+  "overall": "LOCAL_SOURCE_AND_SYNTHETIC_CHECKS_PASSED_CLOSURE_BLOCKED",
+  "productionDecision": "NO_GO",
+  "authority": {
+    "sourceSpecs": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "implementationPlan": "13-implementation-plan.md",
+    "planIdenticalToUserUpload": true
+  },
+  "checks": {
+    "issue10OfflineVerification": "PASS",
+    "totalSyntheticTests": 381,
+    "priorIssueRegressions": 320,
+    "focusedUnit": 46,
+    "focusedSyntheticIntegration": 9,
+    "focusedStaticSecurity": 6,
+    "testFailures": 0,
+    "domainTypecheck": "PASS",
+    "contentTypecheckWithPreinstalledNodeTypes": "PASS",
+    "tenancyTypecheckWithPreinstalledNodeTypes": "PASS",
+    "identityTypecheckWithPreinstalledNodeTypes": "PASS",
+    "persistenceTypecheckWithPreinstalledNodeTypes": "PASS",
+    "sourceSyntaxParse": "PASS",
+    "sourceAndTestFilesParsed": 197,
+    "architectureBoundaries": "PASS",
+    "requirementsAndADRInventory": "PASS",
+    "secrets": "PASS",
+    "lockedSupplyChainInventory": "PASS",
+    "licensesInventory": "PASS",
+    "ciWorkflowStatic": "PASS",
+    "staticVisualAndEditorContracts": "PASS"
+  },
+  "releaseGates": {
+    "fullReactNextTypecheckBuildHydration": "BLOCKED",
+    "verifiedMoveableAndDndKitPackagesAndTouchSensors": "BLOCKED",
+    "realMongoDBTransactionsSessionAndCAS": "BLOCKED",
+    "actualBrowserPointerImeKeyboardTouchAndAxe": "BLOCKED",
+    "zoom200And400NoJSAndForcedColors": "BLOCKED",
+    "OAuthAndCookieHostCsrfIntegration": "BLOCKED",
+    "realPublicPolicyAndCdnCache": "BLOCKED",
+    "performanceAndFontLicensing": "BLOCKED",
+    "zeroChargeProviderAndPrivacyLegalReview": "BLOCKED",
+    "issue11AutosaveAndProtectedPreview": "NOT_RUN",
+    "issue12MediaIngestion": "NOT_RUN",
+    "issue13ImmutablePublishing": "NOT_RUN"
+  },
+  "priorIssuesPreserved": "Issues 1-9 source and previous engineering evidence retained",
+  "openSpecConflict": "Draft precondition 409 domain CAS vs 412 HTTP If-Match requires review",
+  "subissues": [
+    {
+      "id": "10.1",
+      "planTitle": "Build canvas editor shell, sections tree and inspector",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-01",
+        "T-EDT-02",
+        "T-EDT-03"
+      ],
+      "notes": "SSR/browser responsive closure blocked"
+    },
+    {
+      "id": "10.2",
+      "planTitle": "Implement selection, multi-select and layer navigation",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-05",
+        "T-EDT-04"
+      ],
+      "notes": "Assistive/focus/collision browser proof blocked"
+    },
+    {
+      "id": "10.3",
+      "planTitle": "Implement Moveable-backed dragging, resizing and snapping",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-02",
+        "T-EDT-05"
+      ],
+      "notes": "Typed pointer fallback implemented; React Moveable, equal-gap and real touch behavior blocked"
+    },
+    {
+      "id": "10.4",
+      "planTitle": "Implement drag-and-drop section and collection ordering",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-05",
+        "T-CNT-01",
+        "T-CNT-03"
+      ],
+      "notes": "Native desktop drag plus arrow fallback; dnd-kit and touch sensor/browser checks blocked"
+    },
+    {
+      "id": "10.5",
+      "planTitle": "Implement direct inline text editing and complex inspector forms",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-01",
+        "T-CNT-02",
+        "T-SEC-04"
+      ],
+      "notes": "Safe text/panels/Markdown subset implemented, full WYSIWYG/complex AST/IME unverified"
+    },
+    {
+      "id": "10.6",
+      "planTitle": "Implement responsive viewport modes and override editor",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-03",
+        "T-EDT-04",
+        "T-PRF-03"
+      ],
+      "notes": "Manual device/zoom and actual runtime tests blocked"
+    },
+    {
+      "id": "10.7",
+      "planTitle": "Implement binding controls and collection repeaters in canvas",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-06",
+        "T-CNT-03",
+        "T-CNT-06"
+      ],
+      "notes": "Public compiler/real release binding proof reserved for Issues 11-14"
+    },
+    {
+      "id": "10.8",
+      "planTitle": "Implement keyboard/touch geometry and accessibility inspector",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-04",
+        "T-EDT-05",
+        "T-SEC-07"
+      ],
+      "notes": "No-drag numeric controls/static diagnoses implemented; real assistive/touch closure blocked"
+    },
+    {
+      "id": "10.9",
+      "planTitle": "Implement session-scoped undo/redo and safe animation preview toggle",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-05",
+        "T-EDT-10",
+        "T-PRF-03"
+      ],
+      "notes": "Local history and CSS replay implemented; full cinematic preview/Issue11 autosave pending"
+    },
+    {
+      "id": "10.10",
+      "planTitle": "Verify complex canvas authoring with accessibility and limits",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalBrowserAndProviderAcceptance": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-01",
+        "T-EDT-02",
+        "T-EDT-03",
+        "T-EDT-04",
+        "T-EDT-05",
+        "T-EDT-06",
+        "T-EDT-07"
+      ],
+      "notes": "Local synthetic tests passed; real source-11 browser/host/provider acceptance blocked"
+    }
+  ]
+}

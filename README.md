@@ -1,3 +1,29 @@
+# GildedIn — Issue 10 source implementation
+
+This ZIP contains the **complete updated GildedIn source project through Issues 1–10**, all **12 normative source specifications** and the unchanged `13-implementation-plan.md` under `docs/specifications/`. It implements a private, authenticated free-positioned visual canvas editor with deterministic typed commands and explicit revision-controlled manual saving. **Production status: NO-GO.**
+
+## New in Issue 10
+
+The owner editor at `/dashboard/portfolios/{portfolioId}/editor` has three responsive panels: sections/layers/blocks/content, central section canvas, and contextual content/layout/responsive/accessibility/actions inspector. New blocks use Auto layout; 17 closed registry types can be inserted where valid. Owners can select, multi-select, group, duplicate, lock, reparent, reorder semantic versus visual layers, edit simple text inline, edit bounded typed collection fields and a safe round-trippable Markdown subset, and bind approved public-candidate fields without changing their approval state. Pointer drag/resize uses bounded normalized geometry, snapping guides and responsive overrides; every transform has a numeric/keyboard alternative. Desktop native drag/drop and up/down controls reorder sections and content items. One canonical content tree is used across desktop/tablet/mobile, with no arbitrary CSS/JS or public data leak.
+
+Local undo/redo keeps 50 snapshots and a static animation preview is optional. **Save draft** uses current apex session, CSRF, owned portfolio, `If-Match` revision and idempotent replay, updating the private draft only. No autosave, protected preview URL, public publishing or public release is enabled; these belong to Issues 11–14. The old Hero profile editor is still present separately and can advance the revision; reload canvas after changing Hero profile to avoid staleness.
+
+### Verification
+
+```bash
+npm run verify:issue10:offline
+```
+
+Observed **381/381 local tests passed**: 320 regression tests from Issues 1–9 and 61 focused Issue 10 tests (46 unit, 9 fake-Mongo integration, 6 static/security). Requirements, boundaries, secret/supply-chain/license/CI inventories, source visual/editor checks and isolated domain TS pass; 5 isolated TypeScript projects passed with externally preinstalled Node types; 197 TS/TSX files passed syntax parsing. All source specifications and prior issue artifacts are retained.
+
+**Outstanding release blockers:** real React/Next typecheck/build, actual React Moveable/dnd-kit installation and license/sensor verification (the current normalized pointer/native DnD implementation is a provisional fallback), real MongoDB and OAuth integration, browser zoom/touch/keyboard/screen reader/IME tests, CSP, legal/privacy and zero-spend host validation. Do not claim the editor is fully production-verified. See [Issue 10 setup](engineering/issue-10-setup.md), [editor contracts](engineering/editor/contracts.md), [evidence](engineering/evidence/issue-10-report.md), [status ledger](engineering/evidence/issue-10-status.json).
+
+The deliverable excludes private `.env` values, personal/prototype media binaries, `node_modules`, build caches and Git internals. Existing Issues 1–9 source code and tests are preserved.
+
+---
+
+## Prior Issue 9 README (retained historical context)
+
 # GildedIn — Issue 9 source implementation
 
 This ZIP contains the **complete updated GildedIn source project through Issues 1–9**, all **12 normative source specifications**, and the unchanged `13-implementation-plan.md` under `docs/specifications/`. This is a **source implementation and synthetic-test handoff, not a production-ready SaaS claim**. **Production status: NO-GO.**

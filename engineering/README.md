@@ -1,5 +1,9 @@
 # GildedIn engineering navigation
 
+**Current milestone: Issue 10 — free-positioned visual canvas editor.** Begin with [Issue 10 setup](issue-10-setup.md), [editor trust and command contracts](editor/contracts.md), [actual verification report](evidence/issue-10-report.md) and [per-subissue status ledger](evidence/issue-10-status.json). Core private canvas authoring is source-implemented with 381/381 passing synthetic tests; ADR-025 library and real-browser acceptance are still **BLOCKED** and production **NO-GO**.
+
+Prior documentation and evidence from Issues 1–9 remain in this folder. The canonical 12 specs and unchanged plan remain in `../docs/specifications/`. The editor saves only a private owned draft; Issues 11–14 must implement autosave, protected preview, approved media, immutable publication and public delivery. Do not treat source tests as OAuth/Mongo/browser proof.
+
 **Current milestone: Issue 9 — public onboarding, account dashboard and owner settings.** Read [Issue 9 setup](issue-9-setup.md), [owner trust-boundary contracts](onboarding/contracts.md), [actual verification evidence](evidence/issue-9-report.md) and [per-subissue status ledger](evidence/issue-9-status.json).
 
 Prior work retained: [Issue 8 design setup](issue-8-setup.md), [design contracts](design/contracts.md), [Issue 8 evidence](evidence/issue-8-report.md) and [synthetic visual fixtures](visual-fixtures/); [Issue 7](issue-7-setup.md), [composition contracts](composition/contracts.md); [Issue 6](issue-6-setup.md), [content contracts](content/contracts.md); [Issue 5](issue-5-setup.md), [Issue 4](issue-4-setup.md), [Issue 3](issue-3-setup.md), [Issue 2](issue-2-setup.md), [Issue 1](issue-1-walkthrough.md). The source [architecture](architecture.md), [decision control](decisions/change-control.md), [feasibility gates](registers/feasibility-gates.json) and all prior issue status reports remain unchanged.
