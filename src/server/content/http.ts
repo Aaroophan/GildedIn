@@ -39,12 +39,12 @@ function respond(payload:unknown,status=200,revision?:number):Response{
     headers:{...baseHeaders(id),...(revision===undefined?{}:{ETag:`"rev-${revision}"`})}});
 }
 function parseId(id:string){try{return parsePortfolioId(id);}catch{throw new ContentDenied('CONTENT_NOT_FOUND');}}
-function parseMutationToken(req:Request):string{
+export function parseMutationToken(req:Request):string{
   const id=req.headers.get('x-client-mutation-id');
   if(!id||!/^[a-zA-Z0-9_-]{8,96}$/.test(id))throw new ContentDenied('CONTENT_INVALID');
   return id;
 }
-function requiredIfMatch(req:Request):number {
+export function requiredIfMatch(req:Request):number {
   const head=req.headers.get('if-match');
   if(!head||!/^"rev-(?:0|[1-9][0-9]{0,9})"$/.test(head))throw new ContentDenied('CONTENT_INVALID');
   return Number(head.slice(5,-1));

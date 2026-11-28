@@ -1,6 +1,8 @@
 # Engineering navigation
 
-Current milestone: **Issue 6**, typed bounded content, secure private-draft editing, reusable owner data, safe schema migrations, stable references, explicit public/search/AI approvals and synthetic negative tests. Start with [Issue 6 setup](issue-6-setup.md), [content contract and privacy model](content/contracts.md), [Issue 6 test report](evidence/issue-6-report.md) and [per-subissue evidence/status](evidence/issue-6-status.json).
+Current milestone: **Issue 7**, safe declarative composition, deterministic compilation and responsive semantic rendering on top of Issue 6 typed bounded content, secure private-draft editing, reusable owner data, safe schema migrations, stable references, explicit public/search/AI approvals and synthetic negative tests. Start with [Issue 7 setup](issue-7-setup.md), [composition contract](composition/contracts.md), [Issue 7 verification](evidence/issue-7-report.md), then earlier [Issue 6 setup](issue-6-setup.md), [content contract and privacy model](content/contracts.md), [Issue 6 test report](evidence/issue-6-report.md) and [per-subissue evidence/status](evidence/issue-6-status.json).
+
+The authored React renderer is deliberately not connected to anonymous draft/public placeholders until immutable active releases (Issue 13) and live-policy route integration (Issue 14).
 
 The authoritative 12 specifications and 13th implementation plan are in [docs/specifications](../docs/specifications/). Earlier milestones: [Issue 1](issue-1-walkthrough.md), [Issue 2](issue-2-setup.md), [Issue 3](issue-3-setup.md), [Issue 4](issue-4-setup.md), [Issue 5](issue-5-setup.md), [Issue 5 evidence](evidence/issue-5-report.md) and [tenancy trust](tenancy/host-and-policy.md). Other references: [architecture](architecture.md), [decision control](decisions/change-control.md), [provider research](provider-research.md) and [feasibility gates](registers/feasibility-gates.json).
 

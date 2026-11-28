@@ -7,6 +7,7 @@ import {parseFieldDefinition,parseCollectionDefinition,parseFieldValue} from './
 import {contentIssue} from './errors.ts';
 import {shape,list,string,integer,flag,token,unique,ensureJson} from './strict.ts';
 import {SECTION_TYPES} from './types.ts';
+import {parseCompositionNodes} from '../composition/validation.ts';
 import type {SectionDefinition,CollectionDefinition,ContentCollection,ContentItem,ContentDraftShape,
   FieldDefinition,VisibilityUse,ContentBinding,ContentCandidate,ProjectionCandidates,DeletionImpact} from './types.ts';
 
@@ -188,10 +189,15 @@ export function parseContentDraft<T extends LooseContentDraft>(raw:T):ContentDra
   const nodes=list(draft.nodes,PRODUCT_LIMITS.authoredVisualNodesPerPortfolio,'nodes');
   try{validateAuthoredNodes(nodes as Parameters<typeof validateAuthoredNodes>[0]);}
   catch{contentIssue('nodes','block_limit','Authored nodes exceed safety limits.');}
+  // Canonical Issue 7 graphs are strictly validated; exact Issue 6 reference stubs remain
+  // private/editable until converted and may NOT be compiled into a public release.
+  const composition=parseCompositionNodes(nodes,sections,{allowLegacy:true});
+  const canonicalById=new Map(composition.nodes.map(n=>[n.nodeId,n] as const));
+  const parsedNodes=nodes.map(n=>canonicalById.get((n as {nodeId:string}).nodeId as never)??n);
   const mediaRefs=list(draft.mediaRefs,PRODUCT_LIMITS.originalMediaFilesPerPortfolio,'mediaRefs').map((m,i)=>
     anyId(m,'media',`mediaRefs.${i}`) as MediaId);
   unique(mediaRefs,x=>x,'mediaRefs');
-  const result:ContentDraftShape={profile:typedProfile,sections,collectionDefinitions,contentCollections,nodes,mediaRefs};
+  const result:ContentDraftShape={profile:typedProfile,sections,collectionDefinitions,contentCollections,nodes:parsedNodes,mediaRefs};
   validateReferenceGraph(result);
   return result;
 }
@@ -221,7 +227,13 @@ export function parseContentBinding(raw:unknown,path:string):ContentBinding{
   else if(r.collectionId!==undefined)contentIssue(path,'binding_source','Collection is not used by this binding.');
   if(source==='collectionItem')binding.contentId=anyId(r.contentId,'content',`${path}.contentId`) as ContentId;
   else if(r.contentId!==undefined)contentIssue(path,'binding_source','Item identity is not used by this binding.');
-  if(r.fieldId!==undefined)binding.fieldId=token(r.fieldId,`${path}.fieldId`);
+  if(r.fieldId!==undefined){
+    if(source==='profile'){
+      if(!['displayName','identityLabel','introduction'].includes(String(r.fieldId)))
+        contentIssue(`${path}.fieldId`,'invalid_profile_field','Only approved Hero profile fields can be bound.');
+      binding.fieldId=r.fieldId as string;
+    }else binding.fieldId=token(r.fieldId,`${path}.fieldId`);
+  }
   if(source==='derived'){
     if(!['experienceDuration','projectDuration','formattedDate'].includes(String(r.derivedKey)))
       contentIssue(path,'binding_derived','Unsupported derived value.');

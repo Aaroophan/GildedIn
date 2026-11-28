@@ -1,0 +1,214 @@
+{
+  "project": "GildedIn",
+  "issue": 7,
+  "date": "2026-11-28",
+  "overall": "SOURCE_IMPLEMENTED_LOCAL_RELEASE_BLOCKED",
+  "productionDecision": "NO_GO",
+  "authority": {
+    "sourceSpecs": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12"
+    ],
+    "implementationPlan": "13-implementation-plan.md"
+  },
+  "checks": {
+    "isolatedOfflineVerification": "PASS",
+    "testCount": 256,
+    "testFailures": 0,
+    "issue7FocusedUnit": 40,
+    "issue7FocusedIntegration": 9,
+    "issue7StaticSourceChecks": 3,
+    "previousIssueRegressionTests": 204,
+    "domainTypecheck": "PASS",
+    "contentTypecheckWithPreinstalledTypes": "PASS",
+    "identityTypecheckWithPreinstalledTypes": "PASS",
+    "tenancyTypecheckWithPreinstalledTypes": "PASS",
+    "persistenceTypecheckWithPreinstalledTypes": "PASS",
+    "sourceSyntaxParse": "PASS",
+    "sourceAndTestFilesParsed": 144,
+    "requirementsAndADRInventory": "PASS",
+    "architectureBoundaries": "PASS",
+    "secrets": "PASS",
+    "lockfileSupplyChainInventory": "PASS",
+    "licensesInventory": "PASS",
+    "ciWorkflowStatic": "PASS"
+  },
+  "releaseGates": {
+    "fullNextReactTypecheckAndBuild": "BLOCKED",
+    "realReactServerRenderAndHydration": "BLOCKED",
+    "actualMongoDbTransactionsAndIndexes": "BLOCKED",
+    "realOAuthCallbacks": "BLOCKED",
+    "browserStoredXssAndKeyboard": "BLOCKED",
+    "noJavascriptMobile400PercentZoomAndScreenReader": "BLOCKED",
+    "realCspNonceCookieAndCsrf": "BLOCKED",
+    "realDualHostDnsTls": "BLOCKED",
+    "immutableActiveReleaseAndLivePolicyIntegration": "NOT_RUN",
+    "approvedMediaAndContactService": "BLOCKED",
+    "threeRetainedReleaseRollback": "NOT_RUN",
+    "zeroChargeProviderAndLicenseApprovals": "BLOCKED"
+  },
+  "carriedForward": {
+    "draftIfMatch409Versus412": "SPEC_CONFLICT_REVIEW_REQUIRED",
+    "officialMongoAndNextAuthDependencyLock": "BLOCKED"
+  },
+  "subissues": [
+    {
+      "id": "7.1",
+      "planTitle": "Define versioned visual-node schema and parent rules",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-02",
+        "T-EDT-04",
+        "T-CNT-04",
+        "T-CNT-05"
+      ],
+      "notes": "Closed v1 UUID schema, parent/child integrity, 3-level and 20 authored-node limits; unknown code, versions and cross-section parents rejected."
+    },
+    {
+      "id": "7.2",
+      "planTitle": "Implement Auto, Absolute and Hybrid layout semantics",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-02",
+        "T-EDT-03",
+        "T-EDT-04"
+      ],
+      "notes": "Validated Auto/Absolute/Hybrid CSS tokens, parent-relative geometry, anchors, overflow and z-index; overlapping controls blocked by deterministic preflight."
+    },
+    {
+      "id": "7.3",
+      "planTitle": "Implement three breakpoints and derived responsive overrides",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-03",
+        "T-EDT-04",
+        "T-PRF-03"
+      ],
+      "notes": "Single tree + tablet/mobile CSS derived rules and explicit overrides; 320 px/400% visual checks still need actual browser."
+    },
+    {
+      "id": "7.4",
+      "planTitle": "Implement semantic reading order and accessibility compiler",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-04",
+        "T-SEO-01",
+        "T-SEC-07",
+        "T-UX-01"
+      ],
+      "notes": "Distinct semantic and visual order, H1/heading-level preflight and native element plan; screen-reader/focus order manual tests blocked."
+    },
+    {
+      "id": "7.5",
+      "planTitle": "Implement safe versioned block registry",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-04",
+        "T-EDT-07",
+        "T-SEC-07"
+      ],
+      "notes": "Seventeen reviewed components and closed prop schemas, safe HTTPS links, inert rich text and image gateway placeholders; actual React SSR blocked."
+    },
+    {
+      "id": "7.6",
+      "planTitle": "Implement bounded repeater and collection binding",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-06",
+        "T-CNT-03",
+        "T-CNT-05",
+        "T-CNT-06"
+      ],
+      "notes": "Public field allowlist repeater, stable item key, max 20 per collection, generated DOM budget and minimized public provenance."
+    },
+    {
+      "id": "7.7",
+      "planTitle": "Implement finite safe no-code interactions",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-07",
+        "T-SEC-04",
+        "T-SEC-07"
+      ],
+      "notes": "Closed action grammar, no unreviewed URLs/JS selectors, tabs/carousel/dialog client islands with no-JS readable fallback; keyboard browser proof blocked."
+    },
+    {
+      "id": "7.8",
+      "planTitle": "Implement component and serializer version compatibility",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-02",
+        "T-EDT-02",
+        "T-PUB-02"
+      ],
+      "notes": "Strict version tuple, legacy reference-only node migration warning and unknown/future component denial; actual three retained release/rollback tests blocked."
+    },
+    {
+      "id": "7.9",
+      "planTitle": "Implement pure composition compiler and validation reports",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-04",
+        "T-EDT-03",
+        "T-EDT-04",
+        "T-PUB-01"
+      ],
+      "notes": "Pure deterministic compiler, bounded CSS/release bytes, source immutability and explicit repair diagnostics, owner-only optimistic draft writes."
+    },
+    {
+      "id": "7.10",
+      "planTitle": "Verify composition accessibility and security boundaries",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-02",
+        "T-EDT-03",
+        "T-EDT-04",
+        "T-EDT-05",
+        "T-EDT-06",
+        "T-EDT-07",
+        "T-SEO-01"
+      ],
+      "notes": "Adversarial two-owner, rollback/replay, prototype/URL/media/privacy/rich-text negative tests; real browser and provider checks outstanding."
+    }
+  ]
+}

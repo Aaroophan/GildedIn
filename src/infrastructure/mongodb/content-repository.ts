@@ -14,6 +14,7 @@ import type {MongoTransactionRunner} from './audit.ts';
 import {applyContentOperations,parseContentMutation} from '../../domain/content/commands.ts';
 import type {MutationCommand} from '../../domain/content/commands.ts';
 import {parseContentDraft} from '../../domain/content/model.ts';
+import {parseCompositionNodes} from '../../domain/composition/validation.ts';
 import {importJsonSchema,parseCollectionDefinition} from '../../domain/content/schema.ts';
 import {previewSchemaChange} from '../../domain/content/migration.ts';
 import {ContentDenied} from '../../domain/content/errors.ts';
@@ -91,6 +92,11 @@ export class MongoContentRepository {
       const def=source.collectionDefinitions.find(x=>x.collectionId===c.collectionId)!;
       for(const item of c.items)for(const f of def.fields)gather(f,item.fields[f.fieldId]);
     }
+    // Composition media IDs need the same server-side owner/type/state verification as fields.
+    for(const node of parseCompositionNodes(source.nodes,source.sections,{allowLegacy:true}).nodes){
+      if(node.componentType==='image')push(node.props.mediaId as string,'image');
+      if(node.componentType==='gallery')for(const item of node.props.items as {mediaId:string}[])push(item.mediaId,'image');
+    }
     for(const section of source.sections){
       const def=source.collectionDefinitions.find(x=>x.schemaId===section.schemaDefinitionId);
       if(def)for(const f of def.fields)gather(f,section.customValues?.[f.fieldId]);
@@ -134,6 +140,21 @@ export class MongoContentRepository {
         sections:candidate.sections as DraftRecord['sections'],
         collectionDefinitions:candidate.collectionDefinitions as DraftRecord['collectionDefinitions'],
         contentCollections:candidate.contentCollections as DraftRecord['contentCollections']});
+    });
+  }
+  /** Single purpose owner composition write. Cannot change tenant, content, release, or security policy. */
+  async putComposition(actor:AuthenticatedActor,id:PortfolioId,raw:unknown,
+    expectedRevision:number,clientMutationId:string):Promise<ContentSaveResult>{
+    const candidate=shape(raw,['schemaVersion','nodes'],'composition');
+    if(candidate.schemaVersion!==1||!Array.isArray(candidate.nodes)||
+      !Number.isSafeInteger(expectedRevision)||expectedRevision<0||
+      !/^[A-Za-z0-9_-]{8,96}$/.test(clientMutationId))throw new ContentDenied('CONTENT_INVALID');
+    ensureJson(candidate,'composition',14,150_000);
+    return this.save(actor,id,{expectedRevision,clientMutationId,
+      operations:[{type:'putComposition',candidate}]},async stored=>{
+      const source=parseContentDraft(stored);
+      const normalized=parseCompositionNodes(candidate.nodes,source.sections,{allowLegacy:false}).nodes;
+      return parseContentDraft({...stored,nodes:normalized});
     });
   }
   private async save(actor:AuthenticatedActor,id:PortfolioId,cmd:MutationCommand,
