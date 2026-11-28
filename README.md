@@ -1,28 +1,23 @@
-# GildedIn - Issue 8 implementation candidate
+# GildedIn — Issue 9 source implementation
 
-This archive includes the **complete updated GildedIn source project** through Issues 1-8, with all **12 normative specifications** and the unchanged `13-implementation-plan.md` under `docs/specifications/`. **Release status: NO-GO.** This is a source implementation and synthetic-testing handoff, not a running or deployable SaaS claim.
+This ZIP contains the **complete updated GildedIn source project through Issues 1–9**, all **12 normative source specifications**, and the unchanged `13-implementation-plan.md` under `docs/specifications/`. This is a **source implementation and synthetic-test handoff, not a production-ready SaaS claim**. **Production status: NO-GO.**
 
-## Issue 8 - branded responsive design and progressive cinematic layer
+## New in Issue 9 — onboarding, dashboard, owner settings
 
-- Versioned, validated dark/light design tokens and CSS-scoped portfolio themes; exact contrast checks and no user-authored CSS/scripts.
-- Font roles for Oswald (headings) and Roboto (body) with readable system fallbacks. Ink Free and Mistral selectors are disabled until their web-embedding rights are verified; font binaries are **not shipped**.
-- Accessible reusable buttons, links, labelled fields, select controls, notices, native dialogs and keyboard tabs with JavaScript-free text fallback.
-- GildedIn technical-corner ornaments and semantic individual-letter introduction; original heading is always SSR-readable, animation is decorative only.
-- Off, Subtle, Standard and Cinematic visual modes with browser-local preference, system reduced-motion override and no visitor tracking.
-- Optional lazy Three.js scene with always-visible static CSS fallback, bounded scene graph, responsive quality, offscreen/hidden pause and context-loss cleanup. No GPU, editor DOM or third-party shader is a prerequisite to reading a page.
-- Strict public-release projection contract for scene content (explicit public **and** scene approval, stable IDs, no private labels) and owner-authenticated theme draft changes using the existing revision CAS. Anonymous draft delivery remains denied.
-- Responsive Issue 8 branded platform **implementation preview**. Full marketing/onboarding, visual editor, active-release publishing and public portfolio delivery are later planned issues and are not claimed complete.
+The branded platform homepage now explains the product, links to a working owner-only onboarding route, and displays only **eligible published** directory entries. An unavailable directory shows an honest empty state—not a fictional example or a private draft. The Google/GitHub-only sign-in interface supports bounded failure messages and a validated same-site dashboard return path; no new password mechanism or email-based identity merge is introduced.
 
-### Repeat local checks
+An authenticated owner can see the no-portfolio dashboard, create a first draft through a five-step guided wizard, choose a safe appearance preset, optionally include one private project (or deliberately opt in to clearly marked editable sample text) and skip employment/projects entirely. Creation uses the already-owned portfolio, slug-claim and audit APIs with idempotency. The project is inserted as `draft_only` into the same transaction as the first Hero: it cannot be published by onboarding. Recovery between steps uses short-lived, account-scoped browser-local data that is explicitly **not a backup**; the user can clear it.
+
+After a confirmed create, the owner reaches a **private Hero text editor** with manual typed revision-controlled save (not the future visual canvas). The private dashboard shows **server-acknowledged** draft revisions, published/unlisted/owner-disabled status, live quota counters and links to identity/visibility settings. The account page uses existing profile and provider link/unlink/revoke APIs; portfolio settings use purpose-specific rename/visibility/disable/enable APIs, with live security-version checks. The sidebar exposes honest unavailable states for future publication/media/AI/analytics/export features. A pre-launch privacy notice and no-guaranteed-backup disclosure are included.
+
+### Verification
 
 ```bash
-npm run verify:issue8:offline
+npm run verify:issue9:offline
 ```
 
-This command runs the pre-existing 256 tests plus 32 new Issue 8 tests and foundational checks; it does not run a full installed Next.js build or browser. See [Issue 8 setup](engineering/issue-8-setup.md), [design contract](engineering/design/contracts.md), [test evidence](engineering/evidence/issue-8-report.md), and [per-subissue statuses](engineering/evidence/issue-8-status.json).
+Observed **320/320 local tests passed**: 288 earlier regression checks plus 32 new Issue 9 tests (13 unit, 10 fake-Mongo transactional integration, 9 static/security), zero failures. Requirements/ADR inventory, architecture boundaries, secrets, locked dependency/license inventory, CI and static visual-contract checks pass. Global TypeScript syntax parse passed for **182 TS/TSX** files; isolated domain/content/identity/tenancy/persistence configurations passed with preinstalled Node types. See [Issue 9 setup](engineering/issue-9-setup.md), [owner journey contracts](engineering/onboarding/contracts.md), [verification evidence](engineering/evidence/issue-9-report.md), and [all subissue statuses](engineering/evidence/issue-9-status.json).
 
-On a trusted internet-connected machine, review and install the exact **candidate** Three.js/Anime.js packages with `npm run deps:visual`, and the outstanding Auth.js/MongoDB packages from earlier work with `npm run deps:identity`, then review the regenerated lockfile and run the full React/Next/browser tests. No new packages were silently added to the original lockfile in this offline environment.
+**Outstanding hard gates:** real Auth.js/MongoDB library installation and full Next build, Google/GitHub provider callbacks, actual MongoDB transactions and cross-tenant smoke, cookie/CSRF and browser accessibility/zoom/journey tests, Lighthouse and transfer budgets, legally reviewed privacy notice, active-release publication, DNS/TLS, font licensing and zero-charge provider eligibility. Pending functionality is not represented as live. The `verify:issue9:full` script is a checklist and will not be green until these dependencies and real tests have been proved.
 
-**Still unverified and release-blocking:** full Next.js/React/3D dependency build, true browser keyboard/zoom/screen-reader, Lighthouse and bundle budgets, actual font loading and licenses, WebGL/reduced-motion behavior on devices, real MongoDB/OAuth, immutable public releases, authoritative tenant policies, DNS/TLS, CSP, and provider zero-spend eligibility. These may not be counted as passed because synthetic tests succeed.
-
-The delivered source ZIP excludes the private uploaded `.env`, personal/prototype media assets, any `node_modules` and build caches. Prior Issue 1-7 source and engineering evidence remain available in `engineering/`.
+The delivered source ZIP excludes the uploaded private `.env`, any personal/prototype media, `node_modules`, build output and Git caches. Existing Issues 1–8 source code, specifications, engineering notes and evidence are preserved.

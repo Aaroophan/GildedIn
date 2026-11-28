@@ -1,6 +1,7 @@
 'use client';
 import {useState} from 'react';
-export default function CompleteButton(){
+import {safeDashboardReturnTo} from '@/domain/onboarding/model.ts';
+export default function CompleteButton({returnTo}:{returnTo:string}){
   const [error,setError]=useState('');const [working,setWorking]=useState(false);
   async function finish(){
     setWorking(true);setError('');
@@ -11,7 +12,7 @@ export default function CompleteButton(){
       const second=await fetch('/api/v1/accounts/me/sessions/complete',{method:'POST',credentials:'same-origin',
         cache:'no-store',headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken},body:'{}'});
       if(!second.ok)throw new Error('exchange');
-      window.location.assign('/dashboard');
+      window.location.assign(safeDashboardReturnTo(returnTo));
     }catch{setError('The sign-in exchange could not be completed. Return to sign-in and try again.');}
     finally{setWorking(false);}
   }

@@ -12,7 +12,7 @@ import type {AccountId,OperationId} from '../../shared/domain/identifiers.ts';
 import {parseAccountId,parseOperationId,parseSessionId} from '../../shared/domain/identifiers.ts';
 import {IdentityDenied,SESSION_ABSOLUTE_MS,SESSION_IDLE_MS,LINK_INTENT_MS,
   validateVerifiedIdentity,parseProfilePatch,requireRecentAuthentication} from '../../domain/identity/contracts.ts';
-import type {AuthenticatedActor,VerifiedProviderIdentity,IdentityProvider} from '../../domain/identity/contracts.ts';
+import type {AuthenticatedActor,VerifiedProviderIdentity,IdentityProvider,PrivateAccountSummary} from '../../domain/identity/contracts.ts';
 import {projectSecurityAudit} from '../../server/observability/audit.ts';
 import type {SecurityAuditKind} from '../../server/observability/audit.ts';
 
@@ -20,12 +20,7 @@ export interface LinkIntentRecord {
   intentHash:string;accountId:AccountId;sessionLookupId:string;provider:IdentityProvider;
   state:'issued'|'consumed';createdAt:Date;expiresAt:Date;consumedAt?:Date;schemaVersion:1;
 }
-export interface PrivateAccountSummary {
-  accountId:AccountId;displayName:string;verifiedEmail:string|null;status:'active';
-  isAdmin:boolean;createdAt:string;linkedProviders:readonly {identityId:string;provider:IdentityProvider;linkedAt:string}[];
-  portfolioSummaries:readonly {portfolioId:string;slug:string;status:string}[];
-  capabilities:{canCreatePortfolio:boolean;canLinkProvider:boolean;canUseEmailFeatures:boolean};
-}
+export type {PrivateAccountSummary} from '../../domain/identity/contracts.ts';
 interface IssuedSession {token:string;session:SessionRecord;}
 const uuid=()=>randomUUID();
 const lookupId=(token:string)=>createHash('sha256').update(token).digest('base64url');

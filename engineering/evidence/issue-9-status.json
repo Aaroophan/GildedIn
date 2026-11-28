@@ -1,0 +1,218 @@
+{
+  "project": "GildedIn",
+  "issue": 9,
+  "date": "2026-11-28",
+  "overall": "SOURCE_IMPLEMENTED_LOCAL_RELEASE_BLOCKED",
+  "productionDecision": "NO_GO",
+  "authority": {
+    "sourceSpecs": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12"
+    ],
+    "implementationPlan": "13-implementation-plan.md",
+    "planIdenticalToUserUpload": true
+  },
+  "checks": {
+    "issue9OfflineVerification": "PASS",
+    "totalSyntheticTests": 320,
+    "previousIssueRegressionTests": 288,
+    "issue9FocusedUnit": 13,
+    "issue9FocusedSyntheticIntegration": 10,
+    "issue9StaticSecurity": 9,
+    "testFailures": 0,
+    "domainTypecheck": "PASS",
+    "contentTypecheckWithPreinstalledTypes": "PASS",
+    "identityTypecheckWithPreinstalledTypes": "PASS",
+    "tenancyTypecheckWithPreinstalledTypes": "PASS",
+    "persistenceTypecheckWithPreinstalledTypes": "PASS",
+    "sourceSyntaxParse": "PASS",
+    "sourceAndTestFilesParsed": 182,
+    "architectureBoundaries": "PASS",
+    "requirementsAndADRInventory": "PASS",
+    "secrets": "PASS",
+    "lockedSupplyChainInventory": "PASS",
+    "licensesInventory": "PASS",
+    "ciWorkflowStatic": "PASS",
+    "staticVisualContracts": "PASS"
+  },
+  "releaseGates": {
+    "officialMongoAuthJsAndVisualDependencyInstallAndLock": "BLOCKED",
+    "fullNextReactBuildAndHydration": "BLOCKED",
+    "realGoogleGitHubOAuthCallbacks": "BLOCKED",
+    "browserSessionHostCookieAndCsrf": "BLOCKED",
+    "realMongoDbTransactionsUniqueIndexesAndAudit": "BLOCKED",
+    "browserOnboardingAndRecoveryWithNoJavascript": "BLOCKED",
+    "crossTenantBrowserAuthorization": "BLOCKED",
+    "keyboardScreenReaderMobileTouchAndZoom": "BLOCKED",
+    "realPolicyAndActiveReleaseCacheInvalidation": "BLOCKED",
+    "privacyNoticeLegalAndProviderTrainingReview": "BLOCKED",
+    "LighthouseAndCriticalBundlePerformance": "BLOCKED",
+    "realDnsWildcardTlsCsp": "BLOCKED",
+    "zeroChargeProductionProviderEligibility": "BLOCKED",
+    "publicationMediaAndAccountDeletionFutureIssues": "NOT_RUN"
+  },
+  "priorIssues": {
+    "preserved": "Issues 1-8 source and previous engineering evidence retained",
+    "draftIfMatch409Versus412": "SPEC_CONFLICT_REVIEW_REQUIRED"
+  },
+  "subissues": [
+    {
+      "id": "9.1",
+      "planTitle": "Build GildedIn marketing homepage and primary navigation",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-SEO-01",
+        "T-SEO-02",
+        "T-PRF-01"
+      ],
+      "notes": "SSR marketing CTA and filtered public directory with empty state. Owner flagship is not hardcoded or shown absent eligible released policy. Real Next and public directory runtime blocked."
+    },
+    {
+      "id": "9.2",
+      "planTitle": "Implement safe sign-in screens and OAuth provider outcomes",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-IAM-01",
+        "T-IAM-03",
+        "T-SEC-03",
+        "T-SEC-12"
+      ],
+      "notes": "Google/GitHub actions have exact apex Host/Origin server checks, safe returnTo and bounded OAuth error messaging. Real OAuth provider callbacks and browser cookies blocked."
+    },
+    {
+      "id": "9.3",
+      "planTitle": "Build first portfolio guided wizard",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-IAM-07",
+        "T-TEN-03",
+        "T-TEN-04",
+        "T-CNT-01"
+      ],
+      "notes": "Five-step accessible client wizard with local recovery, server-validated creation command and optional typed private project included in the same fake-transaction proof. Live MongoDB and browser E2E blocked."
+    },
+    {
+      "id": "9.4",
+      "planTitle": "Implement no-portfolio and unpublished dashboard states",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-IAM-07",
+        "T-EDT-08",
+        "T-PUB-04"
+      ],
+      "notes": "SSR owner summary reads account, owned portfolio, real draft revision, media quota and live release state. Restricted status visible; public inactive. Live browser session and cache tests blocked."
+    },
+    {
+      "id": "9.5",
+      "planTitle": "Implement owner dashboard navigation and progressive disclosure",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-EDT-01",
+        "T-EDT-03",
+        "T-SEC-02"
+      ],
+      "notes": "Responsive keyboard-usable owner nav with real enabled routes and accurate not-yet-available placeholders for later issue features. Manual zoom/screen reader tests blocked."
+    },
+    {
+      "id": "9.6",
+      "planTitle": "Implement owner profile and linked-login settings UI",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-IAM-03",
+        "T-IAM-04",
+        "T-IAM-05",
+        "T-IAM-08"
+      ],
+      "notes": "Owner profile and provider summary UI reuse verified server APIs for link/unlink/revoke, with latest session and recent-auth as server preconditions. OAuth proof and browser account E2E blocked."
+    },
+    {
+      "id": "9.7",
+      "planTitle": "Implement safe portfolio settings and rename UX",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-TEN-05",
+        "T-PUB-07",
+        "T-PUB-08",
+        "T-SEO-02"
+      ],
+      "notes": "Purpose-specific rename, conditional visibility, owner disable/enable and warning that unlisted is link-accessible. Cross-owner and suspended safeguards enforced server-side; live checks blocked."
+    },
+    {
+      "id": "9.8",
+      "planTitle": "Implement truthful data/backup and quota disclosures",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-OPS-01",
+        "T-OPS-05",
+        "T-OPS-06",
+        "T-SEC-12"
+      ],
+      "notes": "Shows exact known limits/current per-portfolio quota counters and no-backup notices. Legal/privacy notice review, global provider allowance and future media verification blocked."
+    },
+    {
+      "id": "9.9",
+      "planTitle": "Implement responsive onboarding and dashboard error states",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-IAM-07",
+        "T-EDT-08",
+        "T-SEC-12"
+      ],
+      "notes": "Accessible status/validation/retry copy, expired login and stale conflict guidance, recoverable local wizard input, responsive CSS. Real 320px and assistive tech E2E blocked."
+    },
+    {
+      "id": "9.10",
+      "planTitle": "Verify complete account-to-first-draft journey",
+      "sourceImplemented": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-IAM-01",
+        "T-IAM-07",
+        "T-TEN-02",
+        "T-TEN-03",
+        "T-CNT-01",
+        "T-SEC-12"
+      ],
+      "notes": "32 focused unit, fake-Mongo, static security tests and 288 regressions pass; no actual provider, Mongo transaction, browser/no-JS, release/cookie proof."
+    }
+  ]
+}

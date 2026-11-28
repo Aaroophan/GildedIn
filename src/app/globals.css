@@ -189,3 +189,63 @@ img,svg,video{max-width:100%}
   .gi-control[aria-pressed=true]{border-width:3px}.gi-notice{border:1px solid CanvasText}}
 .gi-preference-panel{position:relative;z-index:2;width:min(1260px,100%);padding:0 clamp(1rem,4vw,3rem) 2rem;margin:0 auto}
 .gi-preference-panel .gi-motion-controls{max-width:580px}
+
+/* Issue 9 — one quiet, responsive design language for public onboarding and owner workspace. */
+.gi-owner-root{min-height:100vh;background:var(--gi-canvas);color:var(--gi-text-primary)}
+.gi-owner-header{display:flex;align-items:center;gap:1.2rem;justify-content:space-between;flex-wrap:wrap;
+  width:min(1440px,100%);margin-inline:auto;padding:1.2rem clamp(1rem,3vw,2.5rem);
+  border-bottom:1px solid var(--gi-border)}
+.gi-owner-account{color:var(--gi-text-secondary);font-size:.9rem;margin:0;max-width:40ch}
+.gi-owner-header button{border:1px solid var(--gi-border);padding:.45rem .85rem;border-radius:.4rem;
+  color:var(--gi-text-primary);background:var(--gi-surface);min-height:44px}
+.gi-owner-columns{display:grid;grid-template-columns:minmax(190px,258px) minmax(0,1fr);
+  gap:clamp(1.2rem,3vw,3rem);max-width:1440px;margin-inline:auto;padding:1.5rem clamp(1rem,3vw,2.5rem) 4rem}
+.gi-owner-sidebar{min-width:0;border-right:1px solid var(--gi-border);padding:1rem .75rem 1rem 0}
+.gi-owner-menu{position:sticky;top:1rem}.gi-owner-menu summary{font-size:.78rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--gi-text-secondary);cursor:pointer;min-height:44px;padding:.8rem .6rem}
+.gi-owner-menu nav{display:flex;flex-direction:column;gap:.18rem}
+.gi-owner-menu nav a{display:block;padding:.65rem .85rem;border-radius:.4rem;color:var(--gi-text-secondary);
+  text-decoration:none;min-height:44px;overflow-wrap:anywhere}
+.gi-owner-menu nav a:hover,.gi-owner-menu nav a:focus-visible{background:var(--gi-surface-raised);color:var(--gi-text-primary)}
+.gi-owner-side-status{font-weight:650;font-size:.8rem;border-top:1px solid var(--gi-border);
+  padding:1rem .7rem;color:var(--gi-text-primary)}.gi-owner-side-status span{display:block;font-weight:400;color:var(--gi-text-secondary)}
+.gi-owner-content{min-width:0}.gi-owner-main{max-width:1050px;margin:0 auto;padding:1rem 0 3rem}
+.gi-owner-main>h1{font-size:clamp(2.3rem,4vw,4.4rem);margin:.5rem 0 1.25rem}
+.gi-owner-main>p{color:var(--gi-text-secondary)}
+.gi-owner-main :where(h2){font-size:clamp(1.45rem,2.25vw,2.2rem);margin:.2rem 0 .75rem}
+.gi-owner-panel,.gi-owner-card{background:var(--gi-surface);border:1px solid var(--gi-border);
+  border-radius:var(--gi-radius-md);padding:clamp(1.1rem,2.5vw,2rem);margin:1.2rem 0;max-width:100%;min-width:0}
+.gi-owner-card{margin:0}.gi-owner-card>p{color:var(--gi-text-secondary)}
+.gi-owner-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1rem;margin:1.6rem 0}
+.gi-owner-status-text{font-weight:700;color:var(--gi-text-primary)!important;font-size:1.2rem}
+.gi-owner-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.75rem;margin:1.1rem 0}
+.gi-owner-feedback{color:var(--gi-text-secondary);min-height:1.5rem}
+.gi-owner-footer{padding:1.8rem 1rem;text-align:center;font-size:.85rem;color:var(--gi-text-secondary);
+  border-top:1px solid var(--gi-border)}
+.gi-wizard{max-width:820px}.gi-wizard-progress{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;padding:0;margin:2rem 0}
+.gi-wizard-progress li{padding:.4rem .65rem;color:var(--gi-text-secondary);border:1px solid var(--gi-border);
+  border-radius:.4rem;font-size:.82rem;line-height:1.5}
+.gi-wizard-progress li.gi-active-step{border-color:var(--gi-accent);color:var(--gi-text-primary);
+  background:var(--gi-surface-raised);font-weight:700}
+.gi-wizard-presets,.gi-visibility-choice{display:grid;gap:.75rem;border:1px solid var(--gi-border);
+  padding:1rem;border-radius:.5rem;min-width:0}
+.gi-wizard-presets label,.gi-visibility-choice label{display:flex;align-items:start;gap:.7rem;min-height:44px;cursor:pointer}
+.gi-wizard-presets input,.gi-visibility-choice input{min-width:22px;min-height:22px;accent-color:var(--gi-accent)}
+.gi-review-grid{display:grid;grid-template-columns:minmax(120px,160px) minmax(0,1fr);gap:.6rem 1rem;
+  margin:1.5rem 0}.gi-review-grid dt{font-weight:600;color:var(--gi-text-secondary)}
+.gi-review-grid dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
+.gi-login{background:var(--gi-canvas);min-height:100vh}.gi-login form{display:inline-flex;margin:.5rem .5rem .5rem 0}
+.gi-login-error{color:var(--gi-danger)!important;padding:1rem;border-left:3px solid var(--gi-danger);
+  background:var(--gi-surface)}
+.gi-policy{max-width:1000px!important}.gi-policy h1{font-size:clamp(2.8rem,6vw,5.5rem)}
+.gi-policy section{padding:1.4rem 0;border-bottom:1px solid var(--gi-border)}
+.gi-policy section h2{font-size:clamp(1.5rem,2.5vw,2.1rem)}
+.gi-policy p{color:var(--gi-text-secondary)}
+@media (max-width:780px){.gi-owner-columns{display:block;padding:0 clamp(1rem,4vw,2rem)}
+  .gi-owner-sidebar{border-right:0;border-bottom:1px solid var(--gi-border);padding:1rem 0}
+  .gi-owner-menu nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:.1rem}
+  .gi-owner-side-status{padding:.75rem}.gi-owner-main{padding:2rem 0}}
+@media (max-width:440px){.gi-owner-header{gap:.5rem}.gi-owner-header .gi-owner-account{width:100%;order:3}
+  .gi-owner-cards{grid-template-columns:1fr}.gi-review-grid{grid-template-columns:1fr;gap:0}
+  .gi-review-grid dt{margin-top:.65rem}.gi-wizard-progress li{font-size:.73rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

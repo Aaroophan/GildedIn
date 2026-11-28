@@ -2,6 +2,13 @@
 import type {AccountId, SessionId} from '../../shared/domain/identifiers.ts';
 
 export type IdentityProvider = 'google'|'github';
+/** Owner-only allowlisted account projection, never a serialized account document. */
+export interface PrivateAccountSummary {
+  accountId:AccountId;displayName:string;verifiedEmail:string|null;status:'active';
+  isAdmin:boolean;createdAt:string;linkedProviders:readonly {identityId:string;provider:IdentityProvider;linkedAt:string}[];
+  portfolioSummaries:readonly {portfolioId:string;slug:string;status:string}[];
+  capabilities:{canCreatePortfolio:boolean;canLinkProvider:boolean;canUseEmailFeatures:boolean};
+}
 export interface VerifiedProviderIdentity {
   /** Only constructed in the Auth.js callback after its own OAuth/OIDC verification. */
   readonly provider: IdentityProvider;

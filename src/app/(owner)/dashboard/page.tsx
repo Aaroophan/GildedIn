@@ -1,27 +1,36 @@
-import {cookies,headers} from 'next/headers';
-import {redirect,notFound} from 'next/navigation';
-import {loadServerEnvironment} from '@/server/config/server.ts';
-import {requireIdentityRepository} from '@/bootstrap/identity-runtime.ts';
-import {SESSION_COOKIE_NAME} from '@/server/identity/session-cookie.ts';
-import DashboardSignOut from './sign-out.tsx';
-import AccountControls from './account-controls.tsx';
+import {requireOwnerPage} from '@/server/owner/context.ts';
+import {ownerLifecycle,ownerQuota} from '@/domain/onboarding/model.ts';
+import {TechnicalFrame} from '@/ui/design/technical-frame.tsx';
 export const dynamic='force-dynamic';
-/** Issue 4's minimal protected landing. Full owner dashboard arrives in Issue 9. */
 export default async function Dashboard(){
-  const requestHeaders=await headers();
-  let env:ReturnType<typeof loadServerEnvironment>;
-  try{env=loadServerEnvironment();}catch{notFound();}
-  if(requestHeaders.get('host')!==new URL(env.APP_CANONICAL_ORIGIN).host)notFound();
-  const value=(await cookies()).get(SESSION_COOKIE_NAME)?.value??null;
-  if(!value)redirect('/login');
-  try {
-    const repo=await requireIdentityRepository();const actor=await repo.requireSession(value);
-    const profile=await repo.readPrivateAccount(actor);
-    return <main className="centered" id="main"><span className="eyebrow">OWNER ACCOUNT</span>
-      <h1>Welcome, {profile.displayName}</h1><p>Your GildedIn account is protected by a revocable, apex-only session.</p>
-      <p>{profile.portfolioSummaries.length===0?'You have no portfolio yet. Portfolio onboarding arrives in Issue 9.':
-        'Your portfolio is available in your account record; editing will be enabled later.'}</p>
-      <p>Linked sign-in methods: {profile.linkedProviders.map(x=>x.provider).join(', ')}</p>
-      <DashboardSignOut/><AccountControls linkedProviders={profile.linkedProviders}/></main>;
-  }catch{redirect('/login');}
+  const {account,portfolio}=await requireOwnerPage();
+  if(!portfolio)return <main id="main" className="gi-owner-main"><p className="gi-eyebrow">YOUR WORKSPACE</p>
+    <h1>Create your first portfolio.</h1><p>You have an account, but no portfolio yet. Start with your name, a professional label and a short introduction. Projects and employment history are optional.</p>
+    <p><a className="gi-link-button" href="/dashboard/onboarding">Create your portfolio</a></p>
+    <p className="gi-small-copy">Creating a portfolio saves a private draft. Nothing becomes public automatically.</p></main>;
+  const status=ownerLifecycle(portfolio),quota=ownerQuota(portfolio);
+  return <main id="main" className="gi-owner-main"><p className="gi-eyebrow">PORTFOLIO OVERVIEW</p>
+    <h1>{account.displayName}&apos;s workspace</h1><p>Your portfolio: <strong>{portfolio.slug}</strong></p>
+    <div className="gi-owner-cards">
+      <TechnicalFrame as="section" className="gi-owner-card"><h2>Publication</h2><p className="gi-owner-status-text">{status.title}</p><p>{status.explanation}</p>
+        <p>{status.publiclyAccessible?<a href={portfolio.canonicalUrl}>View the published release</a>:'Public URL is not active until a release is published.'}</p>
+        <p>{portfolio.visibility==='unlisted'?'Unlisted sites can still be viewed by anyone with the link.':status.robots}</p>
+      </TechnicalFrame>
+      <TechnicalFrame as="section" className="gi-owner-card"><h2>Draft</h2><p className="gi-owner-status-text">{status.draftLabel}</p>
+        <p>Saved content stays separate from the public release. Unsaved browser edits are not represented by this server revision.</p>
+        {status.canEdit?<a className="gi-link-button" href={`/dashboard/portfolios/${portfolio.portfolioId}/editor`}>Edit your content</a>:null}
+      </TechnicalFrame>
+      <TechnicalFrame as="section" className="gi-owner-card"><h2>Limits & services</h2>
+        <p>{quota.blocksLimit} authored blocks, {quota.itemsPerCollection} items per collection, {Math.round(quota.publishedReleaseBytes/1024)} KiB per released document.</p>
+        <p>{quota.mediaFilesUsed??0} of {quota.mediaFilesLimit} original files; {Math.round((quota.mediaUsedBytes??0)/1024)} KiB used of {Math.round(quota.mediaBytesLimit/1024/1024)} MiB allowed.</p>
+        <p>Global storage capacity, inbox, analytics, publishing and AI availability must be verified separately.</p>
+      </TechnicalFrame>
+    </div>
+    <section className="gi-owner-panel"><h2>Next steps</h2><div className="gi-owner-actions">
+      {status.canEdit?<a className="gi-button gi-button-secondary" href={`/dashboard/portfolios/${portfolio.portfolioId}/editor`}>Review and edit content</a>:null}
+      <a className="gi-button gi-button-secondary" href="/dashboard/portfolio">Visibility & URLs</a>
+      <a className="gi-button gi-button-secondary" href="/dashboard/tools/publishing">Publication status</a>
+      <a className="gi-button gi-button-secondary" href="/dashboard/account">Sign-in security</a>
+    </div><p className="gi-small-copy">Publishing and protected draft preview are not enabled until their separate release and preview requirements are verified.</p></section>
+  </main>;
 }

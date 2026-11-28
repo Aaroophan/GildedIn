@@ -53,7 +53,8 @@ test('8.9 visitor preference is local-only and reduced-motion remains overriding
 });
 test('8.10 no source-exposed personal media or user code is imported for this visual foundation',()=>{
   const page=src('src/app/(platform)/page.tsx'),css=src('src/app/globals.css');
-  assert.match(page,/Implementation preview/);assert.match(page,/not enabled here/);
+  assert.match(page,/Create your portfolio/);assert.match(page,/publishedExamples/);
+  assert.match(page,/directory\(env.APP_CANONICAL_ORIGIN\)/);
   assert.doesNotMatch(page,/\/images\/|\.obj\b|\.mp4\b/);
   assert.doesNotMatch(css,/@import\b|url\(https?:/);
 });

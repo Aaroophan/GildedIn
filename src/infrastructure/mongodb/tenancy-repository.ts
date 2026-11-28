@@ -6,10 +6,12 @@ import {randomUUID,createHash} from 'node:crypto';
 import {newOpaqueToken} from '../../server/security/crypto.ts';
 import {projectSecurityAudit} from '../../server/observability/audit.ts';
 import type {SecurityAuditKind} from '../../server/observability/audit.ts';
-import {parsePortfolioId,parseAccountId,parseSectionId} from '../../shared/domain/identifiers.ts';
+import {parsePortfolioId,parseAccountId,parseSectionId,parseContentId} from '../../shared/domain/identifiers.ts';
 import type {AccountId,PortfolioId} from '../../shared/domain/identifiers.ts';
 import {parseCanonicalSlug} from '../../shared/domain/validation.ts';
 import {initialHeroSection} from '../../domain/content/model.ts';
+import {projectCollectionDefinition} from '../../domain/content/projects.ts';
+import type {SectionDefinition,ContentItem} from '../../domain/content/types.ts';
 import type {CanonicalSlug} from '../../shared/domain/validation.ts';
 import type {MongoDatabase} from './driver.ts';
 import {isMongoDuplicateKey,PersistenceUnavailable} from './driver.ts';
@@ -24,19 +26,17 @@ import {parsePortfolioRecord,parseDraftRecord,parseAccountRecord,parseReleaseRec
 import {MongoPublicReleaseReader} from './repositories.ts';
 import type {PublicReadDecision} from '../../domain/persistence/ports.ts';
 import {canonicalApexUrl,manifestIncludesRoute,parsePublicRoute} from '../../domain/tenancy/routing.ts';
-import type {PublicRouteResult,PublicDirectoryItem} from '../../domain/tenancy/ports.ts';
+import type {PublicRouteResult,PublicDirectoryItem,OwnerPortfolioSummary} from '../../domain/tenancy/ports.ts';
 import type {PublicRoute} from '../../domain/tenancy/routing.ts';
 
 interface RenameOperationRecord {operationId:string;portfolioId:PortfolioId;ownerAccountId:AccountId;
   idempotencyHash:string;requestFingerprint:string;fromSlug:string;toSlug:string;createdAt:string;schemaVersion:1;}
-export interface OwnerPortfolioSummary {portfolioId:PortfolioId;slug:string;status:PortfolioRecord['status'];
-  visibility:PortfolioRecord['visibility'];activeReleaseId:string|null;securityVersion:number;draftRevision:number|null;
-  canonicalUrl:string;aliases:string[];}
+export type {OwnerPortfolioSummary} from '../../domain/tenancy/ports.ts';
 const uuid=()=>randomUUID();
 const HASH=/^[a-f0-9]{64}$/;
 const digest=(text:string)=>createHash('sha256').update(text).digest('hex');
 const createFingerprint=(cmd:CreationCommand)=>digest(JSON.stringify([
-  cmd.slug,cmd.displayName,cmd.identityLabel,cmd.introduction,cmd.templatePreset]));
+  cmd.slug,cmd.displayName,cmd.identityLabel,cmd.introduction,cmd.templatePreset,cmd.firstProject??null]));
 export class MongoTenancyRepository {
   private readonly db:MongoDatabase;
   private readonly transactions:MongoTransactionRunner|null;
@@ -103,6 +103,17 @@ export class MongoTenancyRepository {
       const claimed=await this.db.collection<SlugClaimRecord>('slugClaims').findOne({slugNormalized:cmd.slug},{session});
       if(claimed)throw new TenancyDenied('SLUG_UNAVAILABLE');
       const portfolioId=parsePortfolioId(uuid()),sectionId=parseSectionId(uuid());
+      const projectSectionId=cmd.firstProject?parseSectionId(uuid()):undefined;
+      const projectSchema=projectSectionId?projectCollectionDefinition('projects',1,projectSectionId):undefined;
+      const projectSection:SectionDefinition|undefined=projectSectionId&&projectSchema?{
+        sectionId:projectSectionId,type:'projects',title:'Projects',order:1,visible:true,
+        searchEligible:true,aiSectionApproved:false,canvasRootId:`root_${projectSectionId}`,
+        layoutPreset:'default',publicAnchor:'projects',schemaDefinitionId:projectSchema.schemaId}:undefined;
+      const initialProject:ContentItem|undefined=cmd.firstProject&&projectSchema?{
+        contentId:parseContentId(uuid()),collectionId:'projects',schemaVersion:1,
+        fields:{title:cmd.firstProject.title,...(cmd.firstProject.summary?{summary:cmd.firstProject.summary}:{})},
+        categoryIds:[],sortOrder:0,featured:false,ownerVisibility:'draft_only',searchable:false,
+        publicFieldIds:[],aiApprovedFieldIds:[],createdAt:now.toISOString(),updatedAt:now.toISOString()}:undefined;
       const row:PortfolioRecord={portfolioId,ownerAccountId:actor.accountId,slug:cmd.slug,
         displayHandle:cmd.displayName,status:'onboarding',visibility:'public',activeReleaseId:null,
         publishSequence:0,securityVersion:0,aiAccess:{enabled:false,revocationVersion:0,deniedSourceIds:[]},
@@ -111,8 +122,9 @@ export class MongoTenancyRepository {
         createdAt:now.toISOString(),updatedAt:now.toISOString(),schemaVersion:1};
       const draft:DraftRecord={portfolioId,revision:0,schemaVersion:1,rendererVersion:'1',
         profile:{displayName:cmd.displayName,identityLabel:cmd.identityLabel,introduction:cmd.introduction},
-        sections:[initialHeroSection(sectionId)],
-        collectionDefinitions:[],contentCollections:[],nodes:[],theme:{preset:cmd.templatePreset},
+        sections:[initialHeroSection(sectionId),...(projectSection?[projectSection]:[])],
+        collectionDefinitions:projectSchema?[projectSchema]:[],
+        contentCollections:initialProject?[{collectionId:'projects',items:[initialProject]}]:[],nodes:[],theme:{preset:cmd.templatePreset},
         navigation:{},seo:{indexingEnabled:false},aiApprovals:{enabled:false},mediaRefs:[],
         createdAt:now.toISOString(),updatedAt:now.toISOString(),updatedBy:actor.accountId};
       parsePortfolioRecord(row);parseDraftRecord(draft);
@@ -142,6 +154,7 @@ export class MongoTenancyRepository {
     const revision=draft?parseDraftRecord(draft).revision:null;
     return {portfolioId:p.portfolioId,slug:p.slug,status:p.status,visibility:p.visibility,
       activeReleaseId:p.activeReleaseId,securityVersion:p.securityVersion,draftRevision:revision,
+      mediaUsage:{originalFileCount:p.quotaSummary.originalFileCount,usedBytes:p.quotaSummary.usedBytes,reservedBytes:p.quotaSummary.reservedBytes},
       canonicalUrl:canonicalApexUrl(origin,parseCanonicalSlug(p.slug),{kind:'root',path:'/'}),aliases};
   }
   async getOwned(actor:AuthenticatedActor,id:PortfolioId,origin:string):Promise<OwnerPortfolioSummary>{
@@ -157,7 +170,8 @@ export class MongoTenancyRepository {
       if(rows.length>1)throw new TenancyDenied('UNAVAILABLE');
       const result:OwnerPortfolioSummary[]=[];
       for(const raw of rows){const p=parsePortfolioRecord(raw);
-        if(p.status==='deleting'||p.status==='suspended')continue;
+        // Show the owner a restricted state rather than pretending a suspended or deleting
+        // portfolio does not exist; all mutations retain the stricter live-status gate.
         result.push(await this.summary(actor,p,origin));
       }
       return result;

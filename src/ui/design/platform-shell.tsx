@@ -19,13 +19,14 @@ export function PlatformShell({children}:{children:ReactNode}){
     <SceneBackdrop theme={theme}/>
     <header className="gi-brand-header">
       <a href="/" className="gi-brand" aria-label="GildedIn home">Gilded<span>In</span></a>
-      <nav aria-label="Platform navigation"><a href="#gi-vision">Vision</a>
-        <a href="#gi-foundations">Foundations</a><a href="/login">Account</a>
+      <nav aria-label="Platform navigation"><a href="/#gi-vision">Vision</a>
+        <a href="/#gi-foundations">How it works</a><a href="/#gi-portfolios">Portfolios</a>
+        <a href="/privacy">Privacy</a><a href="/login">Sign in</a>
         <button className="gi-control" type="button" onClick={change} aria-label={`Switch to ${appearance==='dark'?'light':'dark'} appearance`}>
           {appearance==='dark'?'Light theme':'Dark theme'}</button></nav>
     </header>
     {children}
-    <footer className="footer">GildedIn · Specification-led portfolio technology · <a href="/login">Account status</a></footer>
+    <footer className="footer">GildedIn · Specification-led portfolio technology · <a href="/privacy">Privacy</a> · <a href="/login">Account</a></footer>
     <div className="gi-preference-panel"><MotionControls/></div>
   </MotionProvider></ThemeScope>;
 }

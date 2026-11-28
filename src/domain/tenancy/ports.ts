@@ -1,7 +1,7 @@
 /** Domain-facing public resolver contract; there is no owner draft access from public paths. */
 import type {AccountId,PortfolioId,ReleaseId,SecurityVersion} from '../../shared/domain/identifiers.ts';
 import type {CanonicalSlug} from '../../shared/domain/validation.ts';
-import type {ReleaseRecord} from '../persistence/models.ts';
+import type {ReleaseRecord,PortfolioRecord} from '../persistence/models.ts';
 import type {PublicRoute} from './routing.ts';
 export type PublicRouteResult={kind:'allowed';portfolioId:PortfolioId;slug:CanonicalSlug;
   release:ReleaseRecord;route:PublicRoute;visibility:'public'|'unlisted';canonicalUrl:string;
@@ -21,3 +21,8 @@ export interface TenancyPort {
   requireOwnedPortfolio(actor:AccountId,portfolioId:PortfolioId):Promise<OwnedPortfolioContext|null>;
   resolveEligiblePublicRelease(slug:CanonicalSlug):Promise<VerifiedPublicContext|null>;
 }
+
+/** Owner-only public API DTO. The mutable portfolio database record is never serialized. */
+export interface OwnerPortfolioSummary {portfolioId:PortfolioId;slug:string;status:PortfolioRecord['status'];
+  visibility:PortfolioRecord['visibility'];activeReleaseId:string|null;securityVersion:number;draftRevision:number|null;
+  canonicalUrl:string;aliases:string[];mediaUsage:{originalFileCount:number;usedBytes:number;reservedBytes:number};}

@@ -7,9 +7,13 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const file=(p:string)=>fs.readFileSync(path.join(root,p),'utf8');
 test('issue 4 dashboard enforces live opaque session and preview remains disabled',()=>{
  const dashboard=file('src/app/(owner)/dashboard/page.tsx');
- assert.match(dashboard,/requireSession\(/);
- assert.match(dashboard,/SESSION_COOKIE_NAME/);
- assert.doesNotMatch(dashboard,/MongoClient|\.collection\s*\(/);
+ const gate=file('src/server/owner/context.ts'),layout=file('src/app/(owner)/dashboard/layout.tsx');
+ assert.match(layout,/requireOwnerPage\(/);
+ assert.match(dashboard,/requireOwnerPage\(/);
+ assert.match(gate,/requireSession\(/);
+ assert.match(gate,/SESSION_COOKIE_NAME/);
+ assert.match(gate,/x-forwarded-host/);
+ assert.doesNotMatch(dashboard+gate+layout,/MongoClient|\.collection\s*\(/);
  const preview=file('src/app/(owner)/dashboard/preview/page.tsx');
  assert.match(preview,/notFound\(\)/);
 });

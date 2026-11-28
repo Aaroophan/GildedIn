@@ -10,18 +10,29 @@ export class TenancyDenied extends Error {
 }
 export interface CreationCommand {
   slug:CanonicalSlug;displayName:string;identityLabel:string;introduction:string;
-  templatePreset:'signature'|'minimal'|'studio';
+  templatePreset:'signature'|'minimal'|'studio';firstProject?:{title:string;summary?:string};
 }
 export function parseCreationCommand(raw:unknown):CreationCommand {
   try {
-    const input=assertPlainCommand(raw,new Set(['slug','displayName','identityLabel','introduction','templatePreset']));
+    const input=assertPlainCommand(raw,new Set(['slug','displayName','identityLabel','introduction','templatePreset','firstProject']));
     if(input.templatePreset!==undefined && (typeof input.templatePreset!=='string'||!['signature','minimal','studio'].includes(input.templatePreset))) throw new Error();
     const slug=parseCanonicalSlug(input.slug);
     const displayName=parseBoundedText(input.displayName,100,1).trim();
     const identityLabel=parseBoundedText(input.identityLabel,120,1).trim();
     const introduction=parseBoundedText(input.introduction,800,1).trim();
     if(!displayName||!identityLabel||!introduction||/[<>]/.test(displayName+identityLabel+introduction))throw new Error();
-    return {slug,displayName,identityLabel,introduction,templatePreset:(input.templatePreset??'signature') as CreationCommand['templatePreset']};
+    let firstProject:CreationCommand['firstProject'];
+    if(input.firstProject!==undefined){
+      const project=assertPlainCommand(input.firstProject,new Set(['title','summary']));
+      const title=parseBoundedText(project.title,160,1).trim();
+      if(!title||/[<>]/.test(title))throw new Error();
+      let summary:string|undefined;
+      if(project.summary!==undefined){summary=parseBoundedText(project.summary,600).trim();
+        if(/[<>]/.test(summary))throw new Error();}
+      firstProject={title,...(summary?{summary}:{})};
+    }
+    return {slug,displayName,identityLabel,introduction,templatePreset:(input.templatePreset??'signature') as CreationCommand['templatePreset'],
+      ...(firstProject?{firstProject}:{})};
   }catch{throw new TenancyDenied('INVALID_COMMAND');}
 }
 export function parseRenameCommand(raw:unknown):CanonicalSlug {

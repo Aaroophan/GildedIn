@@ -19,7 +19,8 @@ check(!/@import\b|url\(https?:/i.test(css),'external style/font origin is not re
 check(!/dangerouslySetInnerHTML|eval\(|new Function\(/.test(host+scene+theme),'executable rendering primitive detected');
 check(host.includes('lazy(()=>import(')&&scene.includes("await import('three')"),'Three.js not deferred');
 check(scene.includes('webglcontextlost')&&scene.includes('cancelAnimationFrame'),'WebGL recovery or cleanup missing');
-check(app.includes('not enabled here'),'stage not truthfully labeled');
+check(app.includes('Create your portfolio')&&app.includes('separate security and reliability checks'),
+  'onboarding CTA or pre-release warning missing');
 check(existsSync('engineering/visual-fixtures/issue8-static.html'),'static QA fixture absent');
 if(errors.length){console.error('FAIL: '+errors.join('; '));process.exitCode=1;}
 else console.log('PASS: static visual contracts, no unreviewed CSS/font origins, deferred 3D and stage labeling. Browser/performance checks remain BLOCKED.');
