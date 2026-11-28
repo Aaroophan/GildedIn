@@ -75,11 +75,20 @@ export function parsePortfolioRecord(raw:unknown):PortfolioRecord{
 }
 export function parseDraftRecord(raw:unknown):DraftRecord{
   try{const r=obj(raw,['portfolioId','revision','schemaVersion','rendererVersion','draftMutationId',
-    'draftMutationFingerprint','profile','sections','collectionDefinitions','contentCollections','nodes',
+    'draftMutationFingerprint','draftMutationLedger','profile','sections','collectionDefinitions','contentCollections','nodes',
     'theme','navigation','seo','aiApprovals','mediaRefs','createdAt','updatedAt','updatedBy']);version(r);
     ids.portfolio(r.portfolioId);ids.account(r.updatedBy);integer(r.revision);text(r.rendererVersion,40);
     if(r.draftMutationId!==undefined)text(r.draftMutationId,96);
     if(r.draftMutationFingerprint!==undefined&&!/^[a-f0-9]{64}$/.test(String(r.draftMutationFingerprint)))throw new Error();
+    if(r.draftMutationLedger!==undefined){
+      const ledger=array(r.draftMutationLedger,16),seen=new Set<string>();let previous=-1;
+      for(const entry of ledger){const m=obj(entry,['clientMutationId','fingerprint','revision']);
+        if(!/^[A-Za-z0-9_-]{8,96}$/.test(String(m.clientMutationId))||
+          !/^[a-f0-9]{64}$/.test(String(m.fingerprint))||seen.has(String(m.clientMutationId)))throw new Error();
+        integer(m.revision);if((m.revision as number)<=previous||(m.revision as number)>(r.revision as number))throw new Error();
+        previous=m.revision as number;seen.add(String(m.clientMutationId));
+      }
+    }
     utc(r.createdAt);utc(r.updatedAt);validateSafeDraftNested(r);return r as unknown as DraftRecord;
   }catch{throw new PersistedRecordRejected();}
 }

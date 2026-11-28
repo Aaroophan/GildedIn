@@ -1,5 +1,13 @@
 # GildedIn engineering navigation
 
+**Current milestone: Issue 11 — autosaved drafts, optimistic concurrency and protected preview.** See [Issue 11 setup](issue-11-setup.md), [autosave and preview contracts](editor/autosave-and-preview.md), [verification report](evidence/issue-11-report.md), and [per-subissue evidence](evidence/issue-11-status.json). The private canvas autosaves acknowledged snapshots with scoped recovery, owner-only preview and prepublication checks. Full browser/Next/Mongo/OAuth gates and the 409/412 specification conflict remain **BLOCKED**; **PRODUCTION NO-GO**.
+
+The canonical 12 specifications and plan remain unchanged under `../docs/specifications/`. Prior Issues 1–10 documentation follows below for historical context; Issue 10's statement that autosave was not yet implemented is superseded by this milestone. Public routes remain release-only and never expose a draft.
+
+---
+
+# GildedIn engineering navigation
+
 **Current milestone: Issue 10 — free-positioned visual canvas editor.** Begin with [Issue 10 setup](issue-10-setup.md), [editor trust and command contracts](editor/contracts.md), [actual verification report](evidence/issue-10-report.md) and [per-subissue status ledger](evidence/issue-10-status.json). Core private canvas authoring is source-implemented with 381/381 passing synthetic tests; ADR-025 library and real-browser acceptance are still **BLOCKED** and production **NO-GO**.
 
 Prior documentation and evidence from Issues 1–9 remain in this folder. The canonical 12 specs and unchanged plan remain in `../docs/specifications/`. The editor saves only a private owned draft; Issues 11–14 must implement autosave, protected preview, approved media, immutable publication and public delivery. Do not treat source tests as OAuth/Mongo/browser proof.

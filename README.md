@@ -1,3 +1,19 @@
+# GildedIn — Issue 11 source implementation
+
+This ZIP is the **complete GildedIn source project through Issues 1–11**, preserving all **12 canonical specifications** and the unchanged `13-implementation-plan.md`. Issue 11 adds **private canvas autosave (850 ms)**, snapshot-specific server acknowledgment, revision CAS and idempotent lost-ACK retry, **owner-scoped 24-hour unsaved recovery**, explicit two-tab conflict review, **owner-only saved-draft responsive preview** and **server prepublication validation**. None of these operations publishes or changes an active release. **PRODUCTION: NO-GO**.
+
+The owner canvas is at `/dashboard/portfolios/{portfolioId}/editor`; profile-only Hero fields are edited separately at `/dashboard/portfolios/{portfolioId}/hero` using explicit typed revision-controlled manual save. The protected preview is at `/dashboard/preview?portfolioId={id}` and is owner-only, root-route-only, non-shareable, non-cacheable and non-indexable. It uses the Issue 7 semantic compiler in desktop/tablet/mobile iframe viewports with optional local animation playback; Three.js and public-route publication remain disabled. Unacknowledged edits never appear in the saved preview.
+
+## Offline verification
+
+```bash
+npm run verify:issue11:offline
+```
+
+The offline chain covers earlier Issues 1–10 tests, new synthetic Issue 11 unit/integration/security tests, module boundaries, secrets/supply chain, CI, contracts and isolated domain TypeScript. Full Next/React/NextAuth build, browser accessibility/CSP, real Mongo transaction and OAuth host checks are **NOT VERIFIED**; see [Issue 11 setup](engineering/issue-11-setup.md), [contracts](engineering/editor/autosave-and-preview.md), [report](engineering/evidence/issue-11-report.md), [subissue ledger](engineering/evidence/issue-11-status.json), and [open 409 vs 412 specification conflict](engineering/decisions/spec-conflicts.md). The artifact excludes private `.env`, personal/prototype media, dependencies and caches.
+
+---
+
 # GildedIn — Issue 10 source implementation
 
 This ZIP contains the **complete updated GildedIn source project through Issues 1–10**, all **12 normative source specifications** and the unchanged `13-implementation-plan.md` under `docs/specifications/`. It implements a private, authenticated free-positioned visual canvas editor with deterministic typed commands and explicit revision-controlled manual saving. **Production status: NO-GO.**

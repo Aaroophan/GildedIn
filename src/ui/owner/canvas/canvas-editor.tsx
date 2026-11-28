@@ -12,39 +12,55 @@ import {gestureGeometry,normalizedAbsolute,breakpointForWidth} from '../../../do
 import type {Handle,GeometryGuide} from '../../../domain/editor/geometry.ts';
 import {inspectCanvasLayout} from '../../../domain/editor/diagnostics.ts';
 import {OwnerRequestError,ownerRequest} from '../request.ts';
+import {useDraftAutosave} from './use-draft-autosave.ts';
+import type {DraftValidationReport} from '../../../domain/editor/preflight.ts';
 import CanvasStage from './canvas-stage.tsx';
 import CanvasStructure from './canvas-structure.tsx';
 import CanvasInspector from './canvas-inspector.tsx';
-interface SaveResponse {revision:number;updatedAt:string;status:'saved'|'replayed';}
 interface Gesture {nodeId:string;pointerId:number;startX:number;startY:number;parentWidth:number;parentHeight:number;
   original:AbsoluteLayout;source:SafeLayout;handle:Handle;neighbors:AbsoluteLayout[];}
 const DEVICE_WIDTHS:Record<Breakpoint,number>={desktop:1200,tablet:820,mobile:390};
 const seed=(doc:ContentDraftShape):ContentDraftShape=>JSON.parse(JSON.stringify(doc)) as ContentDraftShape;
-export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId:string;revision:number;initial:ContentDraftShape}){
+export default function CanvasEditor({portfolioId,accountId,revision,initial}:{portfolioId:string;accountId:string;revision:number;initial:ContentDraftShape}){
   const [history,setHistory]=useState(()=>initialHistory(seed(initial)));
-  const [savedFingerprint,setSavedFingerprint]=useState(()=>JSON.stringify(initial));
-  const [serverRevision,setRevision]=useState(revision);
   const [selectedIds,setSelected]=useState<string[]>([]);
   const [sectionId,setSectionId]=useState(initial.sections[0]?.sectionId??'');
   const [sideView,setSideView]=useState<'sections'|'blocks'|'collections'>('sections');
   const [width,setWidth]=useState(1200),[zoom,setZoom]=useState(100);
   const [preview,setPreview]=useState(false),[playing,setPlaying]=useState(false);
-  const [snapping,setSnapping]=useState(true),[busy,setBusy]=useState(false);
+  const [snapping,setSnapping]=useState(true);
+  const [report,setReport]=useState<DraftValidationReport|null>(null),[checking,setChecking]=useState(false);
+  const [replaceConfirmation,setReplaceConfirmation]=useState('');
   const [notice,setNotice]=useState('Local editing ready. No changes have been published.');
   const [gesture,setGesture]=useState<{nodeId:string;layout:AbsoluteLayout;guides:GeometryGuide[]} | undefined>();
   const [inlineNodeId,setInlineNodeId]=useState<string|null>(null),[inlineValue,setInlineValue]=useState('');
   const gestureRef=useRef<Gesture|null>(null);
   const inlineRef=useRef<string|null>(null);
-  const retryRef=useRef<{fingerprint:string;token:string}|null>(null);
   const doc=history.present;
   const fingerprint=JSON.stringify(doc);
-  const dirty=fingerprint!==savedFingerprint;
   const parsed=useMemo(()=>parseCompositionNodes(doc.nodes,doc.sections,{allowLegacy:true}),[doc.nodes,doc.sections]);
   const nodes=parsed.nodes;
   const current=doc.sections.find(s=>s.sectionId===sectionId)??doc.sections[0];
   const mode=breakpointForWidth(width),selected=nodes.find(n=>n.nodeId===selectedIds[0])??null;
   const diagnostics=useMemo(()=>inspectCanvasLayout(doc,width),[doc,width]);
   const unsafeLegacy=parsed.legacyNodes.length>0;
+  const autosave=useDraftAutosave({portfolioId,accountId,revision,initial,draft:doc,legacy:unsafeLegacy,
+    onRestore:next=>setHistory(initialHistory(seed(next)))});
+  const dirty=autosave.dirty,serverRevision=autosave.revision,busy=autosave.phase==='saving';
+  const saved=autosave.phase==='saved'&&!dirty;
+  const protectedPreview=`/dashboard/preview?portfolioId=${encodeURIComponent(portfolioId)}&revision=${serverRevision}&mode=${mode}&animations=paused`;
+  async function checkForPublication(){
+    if(!saved||checking)return;
+    setChecking(true);announce('Checking server-saved draft without publishing…');
+    try{
+      const answer=await ownerRequest<DraftValidationReport>(`/api/v1/portfolios/${portfolioId}/draft/validate`,'POST',{});
+      if(answer.revision!==serverRevision){announce('Server revision changed. Reconcile before reviewing validation.');return;}
+      setReport(answer);announce(answer.valid?'Prepublication checks found no static blockers. Browser and media verification still required.':
+        `${answer.blockers.length} prepublication blocker(s) found. No public release changed.`);
+    }catch(e){announce(e instanceof OwnerRequestError?e.message:'The validation request did not complete. No publication was attempted.');}
+    finally{setChecking(false);}
+  }
+  useEffect(()=>{setReport(null);},[fingerprint]);
   useEffect(()=>{
     if(!dirty)return;const leaving=(event:BeforeUnloadEvent)=>{event.preventDefault();};
     window.addEventListener('beforeunload',leaving);return()=>window.removeEventListener('beforeunload',leaving);
@@ -55,12 +71,11 @@ export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId
   },[doc,sectionId,nodes]);
   function announce(text:string){setNotice(text);}
   function execute(command:CanvasCommand):boolean{
-    if(busy){announce('Finish the current save before making another change.');return false;}
     try{
       const next=applyCanvasCommand(doc,command);
       if(JSON.stringify(next)===fingerprint)return true;
       setHistory(commitHistory(history,next));
-      retryRef.current=null;announce('Unsaved local edit. Public release unchanged.');
+      announce('Unsaved local edit. Public release unchanged.');
       return true;
     }catch(e){
       const issues=e&&typeof e==='object'&&'issues' in e?(e as {issues?:{message:string}[]}).issues:undefined;
@@ -97,7 +112,7 @@ export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId
         execute({type:'setProps',nodeId:id,props:{...node.props,text:inlineValue}});}
   }
   function pointerDown(nodeId:string,handle:Handle,event:ReactPointerEvent<HTMLButtonElement>){
-    if(busy||preview||unsafeLegacy)return;
+    if(preview||unsafeLegacy)return;
     const node=nodes.find(n=>n.nodeId===nodeId);if(!node||node.locked)return;
     const parent=event.currentTarget.closest('[data-editor-node]')?.parentElement;
     const box=parent?.getBoundingClientRect();if(!box||box.width<=0||box.height<=0)return;
@@ -130,29 +145,8 @@ export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId
     const layout:SafeLayout=active.source.mode==='hybrid'?{...active.source,placement:result.layout}:result.layout;
     execute({type:'setLayout',nodeId:active.nodeId,layout,breakpoint:mode});
   }
-  function undo(){if(busy)return;setHistory(undoHistory(history));announce('Undo applied locally. Save to acknowledge the new draft.');}
-  function redo(){if(busy)return;setHistory(redoHistory(history));announce('Redo applied locally. Save to acknowledge the new draft.');}
-  async function save(){
-    if(busy||!dirty||unsafeLegacy)return;
-    const snapshot=history.present,snapshotFingerprint=JSON.stringify(snapshot);
-    const pending=retryRef.current?.fingerprint===snapshotFingerprint?retryRef.current:
-      {fingerprint:snapshotFingerprint,token:crypto.randomUUID()};
-    retryRef.current=pending;setBusy(true);announce('Saving private editor draft with revision check…');
-    try{
-      const result=await ownerRequest<SaveResponse>(`/api/v1/portfolios/${portfolioId}/draft/workspace`,
-        'PUT',{schemaVersion:1,sections:snapshot.sections,nodes:snapshot.nodes,
-          contentCollections:snapshot.contentCollections},
-        {'If-Match':`"rev-${serverRevision}"`,'X-Client-Mutation-Id':pending.token});
-      if(!Number.isSafeInteger(result.revision)||result.revision<=serverRevision)throw new Error('Invalid revision acknowledgement');
-      setRevision(result.revision);setSavedFingerprint(snapshotFingerprint);retryRef.current=null;
-      announce(`Private draft saved · revision ${result.revision}. No public release was created.`);
-    }catch(e){
-      const conflict=e instanceof OwnerRequestError&&e.status===409;
-      announce(conflict?'Revision conflict: another saved edit changed this draft. Local work remains here; reload only after reviewing it.':
-        e instanceof OwnerRequestError?`${e.message} Your local changes were not discarded.`:
-        'Save acknowledgement not received. Your local changes remain. Retry the same operation before reloading.');
-    }finally{setBusy(false);}
-  }
+  function undo(){setHistory(undoHistory(history));announce('Undo applied locally. Save to acknowledge the new draft.');}
+  function redo(){setHistory(redoHistory(history));announce('Redo applied locally. Save to acknowledge the new draft.');}
   function keyboard(event:ReactKeyboardEvent<HTMLElement>){
     if(!(event.ctrlKey||event.metaKey)||event.altKey)return;
     const target=event.target as HTMLElement;
@@ -172,23 +166,27 @@ export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId
       <p className="gi-eyebrow">GILDEDIN / COMPOSITION WORKSPACE</p><h1>Visual canvas</h1>
       <span className="gi-canvas-draft-tag">PRIVATE DRAFT</span></div>
       <div className="gi-canvas-top-actions">
-        <button type="button" disabled={!history.past.length||busy} onClick={undo}>↶ Undo</button>
-        <button type="button" disabled={!history.future.length||busy} onClick={redo}>↷ Redo</button>
+        <button type="button" disabled={!history.past.length} onClick={undo}>↶ Undo</button>
+        <button type="button" disabled={!history.future.length} onClick={redo}>↷ Redo</button>
         <div className="gi-canvas-mode-group" role="group" aria-label="Responsive viewport">
           {(['desktop','tablet','mobile'] as const).map(target=><button key={target} type="button"
             aria-pressed={mode===target} onClick={()=>setWidth(DEVICE_WIDTHS[target])}>{target}</button>)}
         </div>
         <button type="button" aria-pressed={preview} onClick={()=>{setPreview(x=>!x);setPlaying(false);}}>
-          {preview?'Edit layout':'Preview draft'}</button>
+          {preview?'Edit layout':'Local layout preview'}</button>
         <button type="button" onClick={()=>{setPreview(true);setPlaying(false);
-          requestAnimationFrame(()=>setPlaying(true));}}>Play animation preview</button>
+          requestAnimationFrame(()=>setPlaying(true));}}>Play local animation preview</button>
+        {saved?<a className="gi-button gi-button-secondary" href={protectedPreview}>Open protected saved preview</a>:
+          <button type="button" disabled title="Save and confirm your draft before opening the owner-only preview">Protected preview requires saved draft</button>}
         <button type="button" className="gi-canvas-publish" disabled title="Publishing follows Issue 13's immutable release protocol">
           Publish · not available</button>
       </div>
     </div>
     <div className="gi-canvas-toolbar"><div className="gi-canvas-save-state" aria-live="polite" role="status">
       <span className={dirty?'gi-canvas-status-dot gi-unsaved':'gi-canvas-status-dot'} aria-hidden="true"/>
-      {busy?'Saving…':dirty?'Unsaved local changes':`Saved · revision ${serverRevision}`} · No public changes
+      {autosave.phase==='saving'?'Saving…':autosave.phase==='uncertain'?'Save outcome unknown':
+        autosave.phase==='conflict'?'Revision conflict':autosave.phase==='blocked'?'Editing access changed':
+        dirty?'Unsaved local changes':`Saved · revision ${serverRevision}`} · No public changes
     </div><div className="gi-canvas-toolbar-controls">
       <label>Width <input type="range" min="320" max="1440" step="10" value={width}
         onChange={e=>setWidth(Number(e.currentTarget.value))}/> <output>{width}px</output></label>
@@ -196,11 +194,49 @@ export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId
         onChange={e=>setZoom(Number(e.currentTarget.value))}/> <output>{zoom}%</output></label>
       <label className="gi-canvas-snap-toggle"><input type="checkbox" checked={snapping}
         onChange={e=>setSnapping(e.currentTarget.checked)}/> Snap guides</label>
-      <button className="gi-canvas-save-button" type="button" disabled={!dirty||busy||unsafeLegacy}
-        onClick={()=>void save()}>{busy?'Saving…':'Save draft'}</button>
+      <button className="gi-canvas-save-button" type="button"
+        disabled={!dirty||autosave.phase!=='unsaved'||unsafeLegacy||autosave.recovery!==null}
+        onClick={()=>void autosave.saveNow()}>Save now</button>
+      {autosave.phase==='uncertain'?<button type="button" onClick={()=>void autosave.reconcile()}>Check save outcome</button>:null}
+      <button type="button" disabled={!saved||checking} onClick={()=>void checkForPublication()}>
+        {checking?'Checking…':'Validate saved draft'}</button>
     </div></div>
     {unsafeLegacy?<p className="gi-canvas-warning" role="alert">This draft contains {parsed.legacyNodes.length} legacy reference-only node(s). They require explicit owner migration before a canonical composition can be saved. No automatic conversion will occur.</p>:null}
-    <div className="gi-canvas-notice" role="status" aria-live="polite">{notice}</div>
+    <div className="gi-canvas-notice" role="status" aria-live="polite">{notice} {autosave.message}</div>
+    {autosave.recovery?<section className="gi-owner-panel gi-editor-recovery" aria-label="Recovered local changes">
+      <h2>Unsaved work was found in this browser</h2>
+      <p>Created {new Date(autosave.recovery.createdAt).toLocaleString()} from revision {autosave.recovery.baseRevision}.
+        It has not been accepted by the server. Browser recovery is temporary and can expose private text on a shared device.</p>
+      <div className="gi-owner-actions"><button type="button" onClick={()=>void autosave.restoreRecovery()}>
+        Review recovered work in editor</button><button type="button" onClick={autosave.discardRecovery}>
+        Keep server draft and discard browser recovery</button></div></section>:null}
+    {autosave.phase==='conflict'?<section className="gi-owner-panel gi-editor-conflict" role="alert">
+      <h2>A newer draft revision exists</h2><p>Your browser edits remain intact. Autosave is paused to avoid overwriting another tab.</p>
+      {autosave.remote?<><p>Latest server revision: <strong>{autosave.remote.revision}</strong>.
+        Review these changed areas before deciding how to continue:</p>
+        <ul>{autosave.differences.length?autosave.differences.map(x=><li key={x}>{x}</li>):
+          <li>The server revision changed; no differences in the editor workspace were detected.</li>}</ul>
+        <label>Type REPLACE to explicitly replace the newer server workspace after reviewing it.
+          <input value={replaceConfirmation} onChange={e=>setReplaceConfirmation(e.currentTarget.value)}/></label>
+        <button type="button" disabled={replaceConfirmation!=='REPLACE'} onClick={()=>{
+          autosave.overrideAfterReview();setReplaceConfirmation('');}}>Use my local workspace as the next revision</button>
+      </>:<button type="button" onClick={()=>void autosave.inspectLatest()}>Retry loading latest saved draft</button>}
+      <button type="button" onClick={()=>{if(window.confirm('Discard local changes and reload the latest saved draft?'))
+        autosave.discardAndReload();}}>Discard local work and reload the server</button>
+      <p>Replacing the latest workspace is destructive. Copy the content you want to preserve before choosing it. No automatic merge occurs.</p>
+    </section>:null}
+    {autosave.phase==='blocked'?<p role="alert" className="gi-canvas-warning">This session no longer has confirmed editing permission.
+      No further saves or protected preview requests will be made. <a href="/login?returnTo=%2Fdashboard">Sign in again</a>.</p>:null}
+    {report?<section className="gi-owner-panel gi-editor-validation" aria-label="Server prepublication report">
+      <h2>Prepublication validation · revision {report.revision}</h2>
+      <p>{report.blockers.length} blocker(s), {report.warnings.length} warning(s). This is not permission to publish.</p>
+      <ul>{[...report.blockers,...report.warnings].map((issue,index)=><li key={`${index}-${issue.code}`}>
+        <button type="button" onClick={()=>{if(issue.nodeId)select(issue.nodeId,false);
+          else if(issue.sectionId)setSectionId(issue.sectionId);setPreview(false);}}>
+          <strong>{issue.severity}: {issue.code}</strong> — {issue.message}</button>
+        <p>{issue.repair}</p></li>)}</ul>
+      {!report.blockers.length&&!report.warnings.length?<p>No static issues reported. Browser and live media checks are separate.</p>:null}
+    </section>:null}
     <div className={`gi-canvas-grid${preview?' gi-preview-open':''}`}>
       {!preview?<CanvasStructure {...stageView} view={sideView} setView={setSideView} setActiveSection={id=>{
         if(inlineRef.current)endInline(true);setSectionId(id);setSelected([]);}} addBlock={addBlock}/>:null}
@@ -221,7 +257,7 @@ export default function CanvasEditor({portfolioId,revision,initial}:{portfolioId
     </div>
     <div className="gi-canvas-footer-bar"><p><strong>{nodes.length}/20</strong> authored blocks across {doc.sections.length} section(s) · depth max 3 · one shared content graph</p>
       <div><button type="button" onClick={()=>{if(window.confirm('Discard all unsaved local edits and reload the latest authorized draft?'))
-        window.location.reload();}}>Reload server draft</button>
+        autosave.discardAndReload();}}>Reload server draft</button>
         <a href="/dashboard/portfolio">Portfolio controls</a>
         <a href="/dashboard">Dashboard</a></div></div>
   </section>;

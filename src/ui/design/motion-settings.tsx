@@ -8,7 +8,7 @@ interface MotionState {motion:MotionLevel;selected:MotionLevel|null;reducedMotio
   setSelected:(choice:MotionLevel)=>void;}
 const MotionContext=createContext<MotionState|undefined>(undefined);
 const PREF_KEY='gildedin:visual-intensity:v1';
-export function MotionProvider({children,defaultMotion='standard'}:{children:ReactNode;defaultMotion?:MotionLevel}){
+export function MotionProvider({children,defaultMotion='standard',forceOff=false}:{children:ReactNode;defaultMotion?:MotionLevel;forceOff?:boolean}){
   const [selected,setSelectedState]=useState<MotionLevel|null>(null),[reduced,setReduced]=useState(true);
   useEffect(()=>{
     const query=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -26,7 +26,7 @@ export function MotionProvider({children,defaultMotion='standard'}:{children:Rea
     setSelectedState(choice);
     try{window.localStorage.setItem(PREF_KEY,choice);}catch{/* still works this session */}
   };
-  const motion=effectiveMotion(defaultMotion,selected,reduced);
+  const motion=forceOff?'off':effectiveMotion(defaultMotion,selected,reduced);
   return <MotionContext.Provider value={{motion,selected,reducedMotion:reduced,setSelected}}>
     <div className="gi-motion-scope" data-gi-motion={motion}>{children}</div>
   </MotionContext.Provider>;

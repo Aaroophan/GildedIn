@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - Issues 1-10: authenticated visual canvas editor with typed private composition and explicit revision-controlled draft save (production NO-GO)",
+  "description": "GildedIn - Issues 1-11: private canvas autosave, revision CAS, local recovery and owner-only saved-draft preview (production NO-GO)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -54,7 +54,10 @@
     "check:editor-contracts": "node scripts/check-editor-contracts.mjs",
     "typecheck:editor": "tsc --noEmit -p tsconfig.domain.json",
     "verify:issue10:offline": "npm run verify:issue9:offline && npm run check:editor-contracts && npm run typecheck:editor",
-    "verify:issue10:full": "npm run verify:issue10:offline && npm run typecheck:content && npm run typecheck:tenancy && npm run typecheck:identity && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser && npm run test:accessibility && npm run test:performance"
+    "verify:issue10:full": "npm run verify:issue10:offline && npm run typecheck:content && npm run typecheck:tenancy && npm run typecheck:identity && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser && npm run test:accessibility && npm run test:performance",
+    "check:autosave-contracts": "node scripts/check-autosave-contracts.mjs",
+    "verify:issue11:offline": "npm run verify:issue10:offline && npm run check:autosave-contracts",
+    "verify:issue11:full": "npm run verify:issue11:offline && npm run typecheck:content && npm run typecheck:tenancy && npm run typecheck:identity && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser && npm run test:accessibility && npm run test:performance"
   },
   "dependencies": {
     "next": "16.2.4",

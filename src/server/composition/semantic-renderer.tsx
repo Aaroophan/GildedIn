@@ -13,7 +13,7 @@ import {SceneBackdrop} from '../../ui/design/scene-backdrop.tsx';
 import {IntroHeading} from '../../ui/design/intro.tsx';
 import {COMPONENT_REGISTRY_VERSION,COMPOSITION_COMPILER_VERSION,COMPOSITION_SERIALIZER_VERSION} from '../../domain/composition/types.ts';
 import {TabsIsland,CarouselIsland,ActionIsland} from '../../ui/composition/client-islands.tsx';
-interface RenderOptions {plan:SemanticRenderPlan;nonce:string;basePath:string;mediaUrl?:(id:string)=>string|null;
+interface RenderOptions {plan:SemanticRenderPlan;nonce:string;basePath:string;pauseMotion?:boolean;mediaUrl?:(id:string)=>string|null;
   modalTargets?:ReadonlySet<string>;theme?:DesignTheme;sceneGraph?:SceneGraph;enableCinematic?:boolean;}
 function hrefForPlan(href:unknown,basePath:string):string|undefined{
   if(typeof href!=='string')return undefined;
@@ -136,7 +136,7 @@ function renderNode(node:SemanticNode,options:RenderOptions):ReactNode{
   if(node.role==='decorative')return <div id={id} key={node.nodeId} className={className} aria-hidden="true">{content}</div>;
   return <div id={id} key={node.nodeId} className={className}>{content}</div>;
 }
-export function SemanticComposition({plan,nonce,mediaUrl,basePath,theme,sceneGraph,enableCinematic=false}:RenderOptions){
+export function SemanticComposition({plan,nonce,mediaUrl,basePath,theme,sceneGraph,enableCinematic=false,pauseMotion=false}:RenderOptions){
   if(plan.schemaVersion!==1||plan.compilerVersion!==COMPOSITION_COMPILER_VERSION||plan.registryVersion!==COMPONENT_REGISTRY_VERSION||
     plan.serializerVersion!==COMPOSITION_SERIALIZER_VERSION||!/^[A-Za-z0-9+/=_-]{16,96}$/.test(nonce))
     throw new Error('UNSUPPORTED_SEMANTIC_RENDER_PLAN');
@@ -148,7 +148,7 @@ export function SemanticComposition({plan,nonce,mediaUrl,basePath,theme,sceneGra
     throw new Error('UNTRUSTED_RENDER_BASE_PATH');
   const options={plan,nonce,mediaUrl,basePath,modalTargets};
   const appearance=parseDesignTheme(theme??defaultTheme());
-  return <ThemeScope theme={appearance}><MotionProvider defaultMotion={appearance.defaultMotion}>
+  return <ThemeScope theme={appearance}><MotionProvider defaultMotion={appearance.defaultMotion} forceOff={pauseMotion}>
     {enableCinematic?<SceneBackdrop theme={appearance} sceneGraph={sceneGraph}/>:null}
     <div className="gi-composition">
     {/* CSS generated exclusively from validated finite tokens, with the trusted request CSP nonce. */}

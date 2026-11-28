@@ -11,11 +11,11 @@ export function makeSecurityHeaders(routeClass: RouteSecurityClass, options: {
   // No 'unsafe-eval', third-party script, wildcard iframe or owner-defined JavaScript.
   const csp=["default-src 'none'",`script-src 'self' 'nonce-${options.nonce}'`,
     `style-src 'self' 'nonce-${options.nonce}'`,"img-src 'self' data:","font-src 'self'",
-    "connect-src 'self'","form-action 'self'","frame-ancestors 'none'","base-uri 'none'","object-src 'none'",...(options.verifiedTls?['upgrade-insecure-requests']:[])].join('; ');
+    "connect-src 'self'","form-action 'self'",`frame-ancestors '${routeClass==='preview'?'self':'none'}'`,"base-uri 'none'","object-src 'none'",...(options.verifiedTls?['upgrade-insecure-requests']:[])].join('; ');
   const headers: Record<string,string>={
     'Content-Security-Policy':csp,
     'X-Content-Type-Options':'nosniff',
-    'X-Frame-Options':'DENY',
+    'X-Frame-Options':routeClass==='preview'?'SAMEORIGIN':'DENY',
     'Referrer-Policy':'strict-origin-when-cross-origin',
     'Permissions-Policy':'camera=(), microphone=(), geolocation=(), payment=()',
     'X-Robots-Tag':PRIVATE.has(routeClass)?'noindex, nofollow, noarchive':'all',
@@ -26,7 +26,7 @@ export function makeSecurityHeaders(routeClass: RouteSecurityClass, options: {
   return headers;
 }
 export function classifyRoute(path: string): RouteSecurityClass {
-  if (/^\/dashboard\/preview(?:\/|$)/.test(path))return 'preview';
+  if (/^\/(?:dashboard\/preview|owner-preview-frame)(?:\/|$)/.test(path))return 'preview';
   if (/^\/(?:dashboard|admin|settings)(?:\/|$)/.test(path))return 'owner';
   if (/^\/(?:login|auth|api\/auth)(?:\/|$)/.test(path))return 'auth';
   if (/^\/api\/v1(?:\/|$)/.test(path))return 'api';

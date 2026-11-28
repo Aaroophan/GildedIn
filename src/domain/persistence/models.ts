@@ -38,6 +38,8 @@ export interface SlugClaimRecord {
 export interface DraftRecord {
   portfolioId:PortfolioId; revision:number; schemaVersion:1; rendererVersion:string;
   draftMutationId?:string; draftMutationFingerprint?:string;
+  /** Last 16 acknowledged mutation IDs; metadata only, never stored request bodies. */
+  draftMutationLedger?:{clientMutationId:string;fingerprint:string;revision:number}[];
   profile:Record<string,unknown>; sections:unknown[]; collectionDefinitions:unknown[];
   contentCollections:unknown[]; nodes:unknown[]; theme:Record<string,unknown>;
   navigation:Record<string,unknown>; seo:Record<string,unknown>;

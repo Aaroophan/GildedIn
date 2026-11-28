@@ -29,8 +29,9 @@ export default async function Dashboard(){
     <section className="gi-owner-panel"><h2>Next steps</h2><div className="gi-owner-actions">
       {status.canEdit?<a className="gi-button gi-button-secondary" href={`/dashboard/portfolios/${portfolio.portfolioId}/editor`}>Review and edit content</a>:null}
       <a className="gi-button gi-button-secondary" href="/dashboard/portfolio">Visibility & URLs</a>
+      <a className="gi-button gi-button-secondary" href={`/dashboard/preview?portfolioId=${portfolio.portfolioId}`}>Protected draft preview</a>
       <a className="gi-button gi-button-secondary" href="/dashboard/tools/publishing">Publication status</a>
       <a className="gi-button gi-button-secondary" href="/dashboard/account">Sign-in security</a>
-    </div><p className="gi-small-copy">Publishing and protected draft preview are not enabled until their separate release and preview requirements are verified.</p></section>
+    </div><p className="gi-small-copy">Published releases are still unavailable. Protected preview shows only a server-acknowledged owner draft, never a public release.</p></section>
   </main>;
 }

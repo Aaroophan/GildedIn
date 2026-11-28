@@ -13,6 +13,9 @@ export default function DashboardSignOut(){
       if(!revoked.ok)throw new Error();
       try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);
         if(key?.startsWith('gi:onboarding:v1:'))localStorage.removeItem(key);}}catch{}
+      try{for(let i=sessionStorage.length-1;i>=0;i--){const key=sessionStorage.key(i);
+        if(key?.startsWith('gildedin:unsaved:v1:'))sessionStorage.removeItem(key);}
+        localStorage.setItem('gildedin:account-signout:v1',String(Date.now()));}catch{}
       window.location.assign('/login');
     }catch{setError('Could not revoke this session. Please try again.');}
     finally{setBusy(false);}

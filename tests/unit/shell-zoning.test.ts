@@ -5,7 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const file=(p:string)=>fs.readFileSync(path.join(root,p),'utf8');
-test('issue 4 dashboard enforces live opaque session and preview remains disabled',()=>{
+test('dashboard enforces live session and Issue 11 preview requires ownership',()=>{
  const dashboard=file('src/app/(owner)/dashboard/page.tsx');
  const gate=file('src/server/owner/context.ts'),layout=file('src/app/(owner)/dashboard/layout.tsx');
  assert.match(layout,/requireOwnerPage\(/);
@@ -15,7 +15,15 @@ test('issue 4 dashboard enforces live opaque session and preview remains disable
  assert.match(gate,/x-forwarded-host/);
  assert.doesNotMatch(dashboard+gate+layout,/MongoClient|\.collection\s*\(/);
  const preview=file('src/app/(owner)/dashboard/preview/page.tsx');
- assert.match(preview,/notFound\(\)/);
+ assert.match(preview,/ownedPreviewPage/);
+ const loader=file('src/server/editor/preview-page.ts');
+ assert.match(loader,/requireOwnerPage\(/);
+ assert.match(loader,/getOwnedEditableDraft\(/);
+ assert.match(loader,/compileComposition\(/);
+ const frame=file('src/app/(owner)/owner-preview-frame/page.tsx');
+ assert.match(frame,/ownedPreviewPage/);
+ assert.match(frame,/SemanticComposition/);
+ assert.match(file('src/proxy.ts'),/owner-preview-frame/);
 });
 test('guessed public paths and internal rewritten tenants cannot read private draft',()=>{
  for (const p of ['src/app/(public)/[slug]/page.tsx','src/app/%5Ftenant/[slug]/page.tsx']){

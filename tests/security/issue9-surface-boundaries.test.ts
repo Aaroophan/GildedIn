@@ -54,7 +54,9 @@ test('9.7 private Hero editor sends documented typed operations, not arbitrary M
   assert.match(editor,/clientMutationId/);assert.match(editor,/Unsaved changes/);
   assert.doesNotMatch(editor,/\$set|ownerAccountId|dangerouslySetInnerHTML/);
   const page=src('src/app/(owner)/dashboard/portfolios/[portfolioId]/editor/page.tsx');
-  assert.match(page,/portfolio\.portfolioId!==/);assert.match(page,/getOwnedDraft\(actor/);
+  assert.match(page,/portfolio\.portfolioId!==/);assert.match(page,/getOwnedEditableDraft\(actor/);
+  const hero=src('src/app/(owner)/dashboard/portfolios/[portfolioId]/hero/page.tsx');
+  assert.match(hero,/requireOwnerPage/);assert.match(hero,/getOwnedEditableDraft\(actor/);
 });
 test('9.8 privacy notice discloses no backups, published versus unlisted and local storage',()=>{
   const policy=src('src/app/(platform)/privacy/page.tsx');

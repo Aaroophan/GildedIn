@@ -4,11 +4,11 @@ This file records potential inconsistencies **without silently editing the autho
 
 ## SPEC-CONFLICT-001 — 409 domain conflict versus 412 failed `If-Match`
 
-- **Status:** OPEN FOR OWNER/ARCHITECT APPROVAL, blocked for draft write API implementation in Issue 11.
+- **Status:** OPEN FOR OWNER/ARCHITECT APPROVAL. Source mutation routes predate Issue 11 and currently implement domain `409`; true literal `If-Match` `412` behavior is NOT VERIFIED/NOT IMPLEMENTED. Issue 11 release closure is blocked, not the existence of its provisional private CAS adapter.
 - **Source A:** [02 §3 `EDT-009` and §16.2](../../docs/specifications/02-requirements-and-scope.md) requires a recoverable stale draft domain conflict and identifies HTTP `409`.
 - **Source B:** [06 §4.4, §11.2–11.3, §34.1](../../docs/specifications/06-api-design.md) records RFC 9110 conditional `If-Match` failure as `412`; [08 §1.2 and §8.6](../../docs/specifications/08-storage-and-sync-strategy.md) explicitly tracks the choice.
 - **Source C:** [12 ADR-032 and §1.2](../../docs/specifications/12-architecture-decision-record.md) requires deliberate reconciliation and OpenAPI/test updates.
-- **Proposed (NOT final approval):** `409 DRAFT_CONFLICT` for a domain revision conflict; `412 PRECONDITION_FAILED` for a literal failed HTTP `If-Match` precondition; `428` only where precondition is mandatory and absent. Retain separate stable codes and recovery paths. The pure `DRAFT_CONCURRENCY_STATES` *documents* this provisional distinction; no HTTP draft endpoint is enabled.
+- **Proposed (NOT final approval):** `409 DRAFT_CONFLICT` for a domain revision conflict; `412 PRECONDITION_FAILED` for a literal failed HTTP `If-Match` precondition; `428` only where precondition is mandatory and absent. Retain separate stable codes and recovery paths. The pure `DRAFT_CONCURRENCY_STATES` documents the proposed distinction. Existing owner-only Issue 6/10 draft APIs respond `409 CONTENT_CONFLICT`; the Issue 11 client also treats `412` as a terminal conflict to avoid silent overwrites. This is **not** approval to change higher-authority specifications. See `engineering/editor/autosave-and-preview.md` and `engineering/evidence/issue-11-report.md`.
 - **Approval/evidence owner:** product owner + API maintainer. Update 02/06/08/09/11 acceptance contracts and tests before implementation, or record an approved exception.
 
 ## SPEC-QUALITY-002 — Unescaped pipe in source requirements table

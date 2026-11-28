@@ -33,7 +33,7 @@ export class MongoContentRepository {
     this.db=db;this.transactions=transactions;this.now=now;
   }
   private validTime():string{const d=this.now();if(!Number.isFinite(d.valueOf()))throw new ContentDenied('CONTENT_UNAVAILABLE');return d.toISOString();}
-  private async readOwned(actor:AuthenticatedActor,id:PortfolioId,session?:unknown):Promise<DraftRecord>{
+  private async readOwned(actor:AuthenticatedActor,id:PortfolioId,session?:unknown,allowDisabled=true):Promise<DraftRecord>{
     if(!actor||typeof actor.accountId!=='string'||typeof actor.sessionId!=='string'||
       typeof actor.sessionLookupId!=='string'||!Number.isSafeInteger(actor.securityVersion))
       throw new ContentDenied('CONTENT_NOT_AUTHORIZED');
@@ -50,12 +50,31 @@ export class MongoContentRepository {
       idleExpiresAt:{$gt:now},absoluteExpiresAt:{$gt:now}},options);
     if(!foundSession)throw new ContentDenied('CONTENT_NOT_AUTHORIZED');
     const portfolio=await this.db.collection<PortfolioRecord>('portfolios').findOne({
-      portfolioId:id,ownerAccountId:actor.accountId,status:{$in:['onboarding','active','owner_disabled']}},options);
+      portfolioId:id,ownerAccountId:actor.accountId,status:{$in:allowDisabled?['onboarding','active','owner_disabled']:['onboarding','active']}},options);
     if(!portfolio)throw new ContentDenied('CONTENT_NOT_FOUND');
     parsePortfolioRecord(portfolio);
     const raw=await this.db.collection<DraftRecord>('drafts').findOne({portfolioId:id},options);
     if(!raw)throw new ContentDenied('CONTENT_NOT_FOUND');
     return parseDraftRecord(raw);
+  }
+  /** Owner-scoped, read-only reconciliation after a lost response. An absent entry is
+   * unknown, not proof that the server rejected a request; callers compare revisions. */
+  async readMutationStatus(actor:AuthenticatedActor,id:PortfolioId,clientMutationId:string):Promise<{
+    status:'acknowledged'|'unrecognized';revision:number;acknowledgedRevision?:number}>{
+    if(!/^[A-Za-z0-9_-]{8,96}$/.test(clientMutationId))throw new ContentDenied('CONTENT_INVALID');
+    try{
+      const stored=await this.readOwned(actor,id,undefined,false);
+      const match=stored.draftMutationLedger?.find(m=>m.clientMutationId===clientMutationId);
+      const prior=match?.revision??(stored.draftMutationId===clientMutationId?stored.revision:undefined);
+      return prior===undefined?{status:'unrecognized',revision:stored.revision}:
+        {status:'acknowledged',revision:stored.revision,acknowledgedRevision:prior};
+    }catch(e){if(e instanceof ContentDenied)throw e;throw new ContentDenied('CONTENT_UNAVAILABLE');}
+  }
+  /** Editing/preview cannot continue after an owner disable or suspension. */
+  async getOwnedEditableDraft(actor:AuthenticatedActor,id:PortfolioId):Promise<DraftRecord>{
+    try{const raw=await this.readOwned(actor,id,undefined,false);
+      return {...raw,...parseContentDraft(raw)};
+    }catch(e){if(e instanceof ContentDenied)throw e;throw new ContentDenied('CONTENT_UNAVAILABLE');}
   }
   async getOwnedDraft(actor:AuthenticatedActor,id:PortfolioId):Promise<DraftRecord>{
     try{
@@ -63,6 +82,26 @@ export class MongoContentRepository {
       return {...raw,...parseContentDraft(raw)};
     }catch(e){if(e instanceof ContentDenied)throw e;
       throw new ContentDenied('CONTENT_UNAVAILABLE');}
+  }
+  /** Read-only verified media eligibility for owner prepublication checks and previews.
+   * The media state is live, not inferred from a saved draft reference. */
+  async readReleaseReadyMediaIds(actor:AuthenticatedActor,id:PortfolioId):Promise<Set<string>>{
+    try{
+      const draft=await this.readOwned(actor,id,undefined,false);
+      const source=parseContentDraft(draft);
+      const ids=new Set<string>(source.mediaRefs);
+      for(const node of parseCompositionNodes(source.nodes,source.sections,{allowLegacy:true}).nodes){
+        if(node.componentType==='image')ids.add(String(node.props.mediaId));
+        if(node.componentType==='gallery')for(const item of node.props.items as {mediaId:string}[])ids.add(item.mediaId);
+      }
+      const approved=new Set<string>();
+      for(const mediaId of ids){
+        const raw=await this.db.collection<MediaRecord>('mediaAssets').findOne({mediaId,portfolioId:id,
+          uploadedByAccountId:actor.accountId,state:'ready_public'});
+        if(raw&&parseMediaRecord(raw).state==='ready_public')approved.add(mediaId);
+      }
+      return approved;
+    }catch(e){if(e instanceof ContentDenied)throw e;throw new ContentDenied('CONTENT_UNAVAILABLE');}
   }
   private async transaction<T>(fn:(session:unknown)=>Promise<T>):Promise<T>{
     if(!this.transactions)throw new ContentDenied('CONTENT_UNAVAILABLE');
@@ -159,8 +198,8 @@ export class MongoContentRepository {
       return parseContentDraft({...stored,nodes:normalized});
     });
   }
-  /** Issue 10 explicit editor save: one CAS for owned section/layer/content-item layout.
-   * No automatic saving, publication or preview route is authorized by this method. */
+  /** Owner-scoped composition workspace CAS. Issue 11's autosave uses this unchanged
+   * authoritative mutation, and no publication or preview is authorized by it. */
   async putEditorWorkspace(actor:AuthenticatedActor,id:PortfolioId,raw:unknown,
     expectedRevision:number,clientMutationId:string):Promise<ContentSaveResult>{
     if(!Number.isSafeInteger(expectedRevision)||expectedRevision<0||
@@ -183,9 +222,11 @@ export class MongoContentRepository {
     make:(stored:DraftRecord)=>Promise<ContentDraftShape & {theme?:Record<string,unknown>}>):Promise<ContentSaveResult>{
     const fingerprint=sha256({expectedRevision:cmd.expectedRevision,operations:cmd.operations});
     return this.transaction(async session=>{
-      const stored=await this.readOwned(actor,id,session);
-      if(stored.draftMutationId===cmd.clientMutationId){
-        if(stored.draftMutationFingerprint!==fingerprint)throw new ContentDenied('CONTENT_CONFLICT');
+      const stored=await this.readOwned(actor,id,session,false);
+      const prior=stored.draftMutationLedger?.find(m=>m.clientMutationId===cmd.clientMutationId);
+      if(prior||stored.draftMutationId===cmd.clientMutationId){
+        if((prior?.fingerprint??stored.draftMutationFingerprint)!==fingerprint)
+          throw new ContentDenied('CONTENT_CONFLICT');
         return {kind:'replayed',draft:{...stored,...parseContentDraft(stored)}};
       }
       if(stored.revision!==cmd.expectedRevision)return {kind:'conflict',currentRevision:stored.revision};
@@ -199,6 +240,8 @@ export class MongoContentRepository {
         collectionDefinitions:candidate.collectionDefinitions,contentCollections:candidate.contentCollections,
         nodes:candidate.nodes,mediaRefs:candidate.mediaRefs,theme,revision:stored.revision+1,
         draftMutationId:cmd.clientMutationId,draftMutationFingerprint:fingerprint,
+        draftMutationLedger:[...(stored.draftMutationLedger??[]),
+          {clientMutationId:cmd.clientMutationId,fingerprint,revision:stored.revision+1}].slice(-16),
         updatedAt:timestamp,updatedBy:actor.accountId};
       parseDraftRecord(normalized);
       const updated=await this.db.collection<DraftRecord>('drafts').findOneAndUpdate({

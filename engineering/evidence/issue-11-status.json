@@ -1,0 +1,265 @@
+{
+  "project": "GildedIn",
+  "issue": 11,
+  "date": "2026-11-29",
+  "overall": "LOCAL_SOURCE_AND_SYNTHETIC_CHECKS_PASSED_CLOSURE_BLOCKED",
+  "productionDecision": "NO_GO",
+  "sourceSpecificationsPreserved": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12"
+  ],
+  "implementationPlan": "13-implementation-plan.md",
+  "checks": {
+    "offlineCommand": "npm run verify:issue11:offline",
+    "offline": "PASS",
+    "totalSyntheticTests": 412,
+    "priorIssueRegressions": 381,
+    "newUnitTests": 14,
+    "newFakeMongoIntegrationTests": 10,
+    "newSourceSecurityTests": 7,
+    "testFailures": 0,
+    "domainTypecheck": "PASS",
+    "contentTypecheckWithPreinstalledNodeTypes": "PASS",
+    "tenancyTypecheckWithPreinstalledNodeTypes": "PASS",
+    "identityTypecheckWithPreinstalledNodeTypes": "PASS",
+    "persistenceTypecheckWithPreinstalledNodeTypes": "PASS",
+    "sourceSyntaxCheck": "PASS",
+    "sourceAndTestFilesParsed": 214,
+    "sourceAndTestSyntaxErrors": 0,
+    "requirementsInventory": "PASS",
+    "sourceBoundaries": "PASS",
+    "secrets": "PASS",
+    "lockedSupplyChain": "PASS",
+    "licensesInventory": "PASS",
+    "ciStatic": "PASS",
+    "visualAndEditorContracts": "PASS",
+    "issue11AutosaveSourceContracts": "PASS"
+  },
+  "releaseGates": {
+    "fullReactNextBuildAndHydration": "BLOCKED",
+    "realMongoTransactionsAndFreeTier": "BLOCKED",
+    "realOAuthAndCookieCsrf": "BLOCKED",
+    "browserPreviewCrossOriginCspAxeAndZoom": "BLOCKED",
+    "realDeviceTouchAndAssistiveTechnology": "BLOCKED",
+    "409versus412NormativeResolution": "BLOCKED",
+    "nonrootRoutePreview": "PARTIAL",
+    "realMediaApprovedDelivery": "BLOCKED",
+    "immutablePublication": "NOT_RUN",
+    "zeroChargeProviderAndLegalPrivacyReview": "BLOCKED"
+  },
+  "openSpecConflict": "SPEC-CONFLICT-001",
+  "subissues": [
+    {
+      "id": "11.1",
+      "planTitle": "Implement draft read and typed mutation API contracts",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-008",
+        "EDT-009",
+        "SEC-002",
+        "SEC-004"
+      ],
+      "canonicalChecks": [
+        "T-EDT-08",
+        "T-EDT-09",
+        "T-SEC-02",
+        "T-SEC-04"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.2",
+      "planTitle": "Implement debounced autosave with mutation ledger",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-008",
+        "EDT-009"
+      ],
+      "canonicalChecks": [
+        "T-EDT-08",
+        "T-EDT-09"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.3",
+      "planTitle": "Implement retry-safe lost acknowledgments and offline failure UI",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-008",
+        "EDT-009",
+        "OPS-005"
+      ],
+      "canonicalChecks": [
+        "T-EDT-08",
+        "T-EDT-09",
+        "T-OPS-05"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.4",
+      "planTitle": "Implement two-tab optimistic conflict handling",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-009",
+        "PUB-001"
+      ],
+      "canonicalChecks": [
+        "T-EDT-09",
+        "T-PUB-01"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": "SPEC-CONFLICT-001 open for 409/412"
+    },
+    {
+      "id": "11.5",
+      "planTitle": "Implement scoped browser-local unsaved recovery",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-008",
+        "EDT-009",
+        "SEC-012"
+      ],
+      "canonicalChecks": [
+        "T-EDT-08",
+        "T-EDT-09",
+        "T-SEC-12"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.6",
+      "planTitle": "Implement owner-only draft preview route and isolation",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-010",
+        "TEN-002",
+        "SEC-002"
+      ],
+      "canonicalChecks": [
+        "T-EDT-10",
+        "T-TEN-02",
+        "T-SEC-02"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.7",
+      "planTitle": "Implement preview device modes and Play Animation Preview",
+      "sourceImplementation": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-003",
+        "EDT-010",
+        "PRF-003"
+      ],
+      "canonicalChecks": [
+        "T-EDT-03",
+        "T-EDT-10",
+        "T-PRF-03"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": "Root preview only, WebGL not active, device-browser proof unavailable"
+    },
+    {
+      "id": "11.8",
+      "planTitle": "Implement prepublication validation report and issue navigation",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "PUB-001",
+        "EDT-010",
+        "CNT-005"
+      ],
+      "canonicalChecks": [
+        "T-PUB-01",
+        "T-EDT-10",
+        "T-CNT-05"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.9",
+      "planTitle": "Implement draft recovery across owner navigation and sensitive state changes",
+      "sourceImplementation": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-008",
+        "EDT-009",
+        "TEN-009",
+        "ACC-002"
+      ],
+      "canonicalChecks": [
+        "T-EDT-08",
+        "T-EDT-09",
+        "T-TEN-09",
+        "T-ACC-02"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    },
+    {
+      "id": "11.10",
+      "planTitle": "Verify autosave, conflict and preview acceptance suite",
+      "sourceImplementation": "PARTIAL_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "realBrowserAndProviderAcceptance": "BLOCKED",
+      "releaseClosure": "BLOCKED",
+      "requirements": [
+        "EDT-008",
+        "EDT-009",
+        "EDT-010",
+        "PUB-001"
+      ],
+      "canonicalChecks": [
+        "T-EDT-08",
+        "T-EDT-09",
+        "T-EDT-10",
+        "T-PUB-01"
+      ],
+      "evidence": "engineering/evidence/issue-11-report.md",
+      "exception": null
+    }
+  ]
+}

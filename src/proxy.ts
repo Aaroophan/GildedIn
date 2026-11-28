@@ -27,7 +27,7 @@ export function proxy(request:NextRequest){
     const to=new URL(path,origin);
     return NextResponse.redirect(to,308);
   }
-  if(decision.kind==='tenant-host' && /^\/(?:api|dashboard|admin|login|auth|settings|_next|_tenant)(?:\/|$)/.test(path))
+  if(decision.kind==='tenant-host' && /^\/(?:api|dashboard|owner-preview-frame|admin|login|auth|settings|_next|_tenant)(?:\/|$)/.test(path))
     return denied();
   const bytes=new Uint8Array(18);crypto.getRandomValues(bytes);
   const nonce=btoa(String.fromCharCode(...bytes));
