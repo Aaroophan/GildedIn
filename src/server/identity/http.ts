@@ -55,17 +55,22 @@ function guardHost(req:Request,mutating=false):ReturnType<typeof loadServerEnvir
   }
   return env;
 }
+/** Shared server-only entry for Issue 5 named commands; never accepts actor from JSON. */
+export async function requireApexActor(req:Request,mutation:boolean):Promise<AuthenticatedActor>{
+  const env=guardHost(req,mutation),repo=await requireIdentityRepository();
+  const cookie=parseCookie(req.headers.get('cookie'),SESSION_COOKIE_NAME);
+  const actor=await repo.requireSession(cookie);
+  if(mutation){const expected=await repo.csrfHash(actor);
+    assertApexMutation(req,{canonicalOrigin:env.APP_CANONICAL_ORIGIN,
+      allowLocalhost:env.APP_ENV==='local',csrfExpectedHash:expected});
+  }
+  return actor;
+}
 async function withActor(req:Request,mutation:boolean,
   operation:(repo:Awaited<ReturnType<typeof requireIdentityRepository>>,actor:AuthenticatedActor)=>Promise<Response>):Promise<Response>{
   try{
-    const env=guardHost(req,mutation),repo=await requireIdentityRepository();
-    const cookie=parseCookie(req.headers.get('cookie'),SESSION_COOKIE_NAME);
-    const actor=await repo.requireSession(cookie);
-    if(mutation){
-      const expected=await repo.csrfHash(actor);
-      assertApexMutation(req,{canonicalOrigin:env.APP_CANONICAL_ORIGIN,
-        allowLocalhost:env.APP_ENV==='local',csrfExpectedHash:expected});
-    }
+    const actor=await requireApexActor(req,mutation);
+    const repo=await requireIdentityRepository();
     return await operation(repo,actor);
   }catch(e){return mapError(e);}
 }

@@ -1,23 +1,17 @@
-# Change summary
+## Requirements and threat references
+- Canonical requirement/test IDs:
+- Applicable threat/ADR IDs:
 
-## Scope and traceability
-- Issue/sub-issue:
-- Canonical requirements (e.g., TEN-002):
-- Test cases (e.g., T-TEN-02):
-- Threats / ADRs / SPEC-CONFLICT records:
+## Change and explicit non-goals
+- Source/files changed:
+- Data migration / rollback effect:
+- Security, privacy, and audit transaction boundaries:
 
-## Evidence (never include private data)
-- Unit/contract tests PASS/FAIL/BLOCKED/NOT RUN:
-- Two-tenant negative tests and observed side effects:
-- Local database or provider-specific proof and exact environment:
-- Accessibility/browser evidence, if applicable:
+## Evidence
+- Local unit/integration tests (commands + results):
+- Browser/real provider evidence:
+- Mongo tier capability and rollback evidence:
+- BLOCKED / NOT RUN / INCONCLUSIVE:
 
-## Security and compatibility review
-- Ownership / policy / API projection impact:
-- Database migration and index impact:
-- Client bundle, private data, secrets and audit impact:
-- Deploy cost / quota / zero-charge impact:
-- Rollback and legacy version compatibility:
-- Unverified provider/hosting evidence and NO-GO gates:
-
-No production deployment, dataset, provider credentials or billable infrastructure may be enabled by this PR alone.
+## Launch decision
+- External eligibility, costs and DNS/TLS gates remain NOT VERIFIED unless attached.

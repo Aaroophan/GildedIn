@@ -1,41 +1,38 @@
-# GildedIn — Issue 4 implementation candidate
+# GildedIn — Issue 5 implementation candidate
 
-GildedIn is the spec-driven Next.js/TypeScript modular-monolith portfolio platform. This archive **preserves Issues 1–3** and adds the code, infrastructure boundaries, HTTP routes and synthetic security tests for **Issue 4 — Google/GitHub authentication, session security and account controls**. It includes the 12 authoritative specifications and `13-implementation-plan.md` under `docs/specifications/`.
+This is the **full GildedIn source project**, preserving the Issue 1–4 foundations and implementing the **Issue 5 domain and route layer**: authenticated portfolio creation, permanent slug claims, historical alias redirects, strict host resolution, live publication/moderation checks, and owner-only controls. The 12 authoritative specifications plus the implementation plan remain in `docs/specifications/`.
 
-**Important:** This is **not** a verified login deployment or ready-to-publish SaaS. The official `next-auth` and `mongodb` packages are **not installed or added to the lockfile in this environment**, so the Next.js app cannot yet build/run its new OAuth routes. The documented `npm run deps:identity` step must be performed on a connected, trusted workstation followed by typecheck, full build and actual database/provider/browser tests. No paid services or production connections were configured.
+**Release status: NO-GO.** The baseline ZIP did not have the official `next-auth` and `mongodb` packages installed or locked; real Next.js runtime, Google/GitHub callbacks, local Mongo replica-set transactions, wildcard DNS/TLS and browser-host cookie proofs could not be run here. No production host, media service or OAuth registration is activated. All optional features and wildcard subdomain routing default to off. In particular this archive is a source implementation, **not a proven working SaaS or live login application**.
 
-## Issue 4 implementation
+## Issue 5 behavior
 
-- Stable Google OIDC `sub` and authenticated GitHub numeric-ID identity, with **no email-based account merging** and no broad GitHub repository scope.
-- Short-lived Auth.js provider-verification handshake; single-use, CSRF-bound exchange to a separate `__Host-` cookie backed by a revocable MongoDB session/verifier hash. Security-generation revocation, idle/absolute timeouts, audit records and host-only cookies.
-- Complete same-origin account API surface: `GET/PATCH /api/v1/accounts/me`, linked-provider summaries, CSRF, session completion, revoke-current/revoke-all and provider link/unlink. Account UI has a minimal sign-in, completion and protected dashboard/security controls; full onboarding/dashboard UX remains in Issue 9.
-- Provider linking uses an explicit session/account/provider-bound five-minute intent and a **new verified provider OAuth callback**. Unlink requires fresh authentication via the provider that will remain, preventing simultaneous removal of all usable linked methods.
-- Offline operator-only administrator bootstrap with verified provider subject, specific approval and mandatory transactional audit; no first-user admin grant, public admin mutation or unverified email recovery.
-- Hard origin/Fetch Metadata/CSRF checks inside route handlers and Server Actions. All app actions are denied on untrusted/sibling tenant hostnames. Protected pages remain no-store; public drafts/previews and editing remain off.
-- New restricted MongoDB `authLinkIntents` and `authOAuthExchanges` journals, unique indexes, BSON validators and synthetic rollback/concurrency tests. No production identity data or OAuth tokens in test fixtures.
+- One **authenticated, active account** can create one unpublished portfolio, one **globally unique** normalized ASCII slug, and one private **Hero draft**, atomically with a durable audit entry; `Idempotency-Key` replay cannot create a second draft. Collisions are enforced by unique-index declarations (real index installation requires live verification).
+- Renaming is transactional: the old name stays permanently claimed as an alias and redirects (308) to the current canonical apex path, including a validated detail suffix. A separate `renameOperations` journal covers replay and recovery without releasing historical names.
+- Owner `GET /api/v1/portfolios`, `GET /api/v1/portfolios/:portfolioId`, `GET /api/v1/portfolios/slug-availability?slug=…`, `POST /api/v1/portfolios`, and named rename/visibility/disable/enable commands are **apex-only**. All mutations demand exact Origin, session-bound CSRF, live account/session checks, and, for policy changes, an `If-Match` security version. The advisory slug check never substitutes for the actual unique insert.
+- Visibility `public`/`unlisted` may be selected **before or after** publication; unlisted is still accessible by direct link once a release exists, but absent from the directory. Disable works before publication and returns to onboarding when re-enabled without a release; admin moderation cannot be overridden.
+- Apex `/{slug}` and verified tenant hostname `{slug}.aaroophan.dev` share one repository-based live policy+release gate. Public detail path grammar covers `/projects`, `/projects/{projectSlug}`, `/experience`, `/references`. Authoritative policy, owner account status, current release pointer, moderation and route manifest are checked independently of caches. Unknown, suspended or disabled tenants get no release. The public page is intentionally only a **safe metadata/routing shell**, since the full renderer belongs to Issues 7/13/14.
+- Wildcard routing remains disabled until **all three** gates are true: `APP_ENV=production`, `APP_WILDCARD_ENABLED=true`, and `APP_WILDCARD_TLS_VERIFIED=true`. `_tenant` is an internal rewritten route whose Next file-system folder is encoded `%5Ftenant`; direct apex entry is denied. Real Next routing must still be proven after dependencies are installed.
+- The obsolete unaudited `MongoTenantRepository.comparePolicy` write path now **fails closed**. Only `MongoTenancyRepository.changePolicy`, with atomic audit persistence, can mutate current policy.
 
-## Commands
-
-From project root on a trusted, connected developer workstation (Node >=22.16):
+## Verify
 
 ```bash
-# First install and review the real adapter dependencies; this updates package.json + package-lock.json
+# Offline, dependency-free policy, domain, and synthetic multi-tenant checks
+npm run verify:issue5:offline
+
+# On a trusted connected workstation, install and review official dependencies.
+# This changes package.json and the package lock; do not pretend they are currently installed.
 npm run deps:identity
 npm ci --ignore-scripts
-npm run verify:issue4:offline
+npm run typecheck:tenancy
 npm run typecheck
 npm run build
+
+# OPTIONAL: only a disposable local loopback transaction-capable MongoDB replica set
+# with all provider, production and database env variables UNSET
+npm run db:prove-issue5-local
 ```
 
-The **dependency-free, isolated** check suite also runs without real OAuth/DB connections:
+Synthetic Node tests check concurrent owner/slug claims, rename alias permanence, typed conflicts, audit failure rollback, session revocation, malicious hostnames, public/hidden transitions, stale policy, and constrained directory projection. They **cannot verify** real Mongo transaction or App Router/host rewrites. For precise status and blocked gates, see [Issue 5 setup](engineering/issue-5-setup.md), [host and policy design](engineering/tenancy/host-and-policy.md), [test evidence](engineering/evidence/issue-5-report.md), and [per-subissue status](engineering/evidence/issue-5-status.json).
 
-```bash
-npm test
-npm run check:boundaries
-npm run check:secrets
-npm run check:ci
-```
-
-Run `npm run db:prove-local` only against its **randomly generated, disposable loopback MongoDB test database**, after the real driver is installed. Test bootstrap refuses production settings. See [Issue 4 setup](engineering/issue-4-setup.md), [identity security boundaries](engineering/identity/security-boundaries.md), [evidence](engineering/evidence/issue-4-report.md) and [status register](engineering/evidence/issue-4-status.json) for the exact code/verification/blocked matrix.
-
-**Release status: NO-GO.** Actual MongoDB transactions, Auth.js v5/Next.js 16 package compatibility, Google/GitHub callbacks, live session cookie/browser behavior, environment/DNS/TLS, production zero-charge eligibility and full build remain unverified. The original `.env`, personal prototype media, production files and credentials were excluded. Licensing ADR-031 is still pending.
+The original `.env` and prototype personal media are not included. Licensing ADR-031, no-spend eligibility, real trusted-edge host configuration and current deployment gates remain pending.

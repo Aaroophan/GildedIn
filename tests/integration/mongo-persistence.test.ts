@@ -58,7 +58,7 @@ const setup=async()=>{
 };
 
 test('3.1/3.2 inventory fixed; indexes include aliases and tenant uniqueness; no unsafe reservation TTL',async()=>{
-  assert.equal(MONGO_COLLECTIONS.length,21);
+  assert.equal(MONGO_COLLECTIONS.length,22); // Issue 5 adds renameOperations journal.
   const db=new FakeMongoDatabase();
   await assert.rejects(applyMongoSchemaAndIndexes(db,false));
   await applyMongoSchemaAndIndexes(db,true);
@@ -114,12 +114,14 @@ test('3.6 revision CAS allows exactly one writer, conflicting second writer neve
   await assert.rejects(r.compareAndSave(actor(),PA,1,state!.draftMutationId!,{
     ...snapshot,profile:{different:true}}),PersistenceConflict);
 });
-test('3.5 live policy CAS refuses stale revision or owner suspension override',async()=>{
+test('3.5 legacy unaudited policy mutation refuses foreign access and fails closed for the owner',async()=>{
   const db=await setup(),r=new MongoTenantRepository(db,()=>NOW);
   assert.equal((await r.comparePolicy(actor(B),PA,0,{status:'active',visibility:'unlisted'})),null);
-  await assert.rejects(r.comparePolicy(actor(),PA,0,{status:'suspended',visibility:'public'}));
-  assert.equal((await r.comparePolicy(actor(),PA,0,{status:'owner_disabled',visibility:'unlisted'}))?.securityVersion,1);
-  assert.equal((await r.comparePolicy(actor(),PA,0,{status:'active',visibility:'public'})),null);
+  await assert.rejects(r.comparePolicy(actor(),PA,0,{status:'suspended',visibility:'public'}),PersistenceConflict);
+  await assert.rejects(r.comparePolicy(actor(),PA,0,{status:'owner_disabled',visibility:'unlisted'}),PersistenceUnavailable);
+  const row=await db.collection<PortfolioRecord>('portfolios').findOne({portfolioId:PA});
+  assert.equal(row?.securityVersion,0);assert.equal(row?.status,'active');
+  // Issue 5 supersedes this port with mandatory audited MongoTenancyRepository.changePolicy.
 });
 test('3.7 prepared releases never serve publicly; only authoritative pointer activation makes eligible',async()=>{
   const db=await setup(),pr=new MongoPublicationRepository(db,()=>NOW),view=new MongoPublicReleaseReader(db,()=>NOW);

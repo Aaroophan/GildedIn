@@ -1,0 +1,315 @@
+{
+  "project": "GildedIn",
+  "milestone": "Issue 5 \u2014 portfolio ownership, slug claims and dual-host routing",
+  "sourceAuthority": "docs/specifications/01..12; docs/specifications/13-implementation-plan.md \u00a75",
+  "date": "2026-11-28",
+  "overall": "PARTIAL_IMPLEMENTATION__RELEASE_NO_GO",
+  "syntheticTests": {
+    "status": "PASS",
+    "testsPassed": 154,
+    "testsFailed": 0,
+    "command": "npm test",
+    "whatWasProven": "Isolated injected fake Mongo transactions, strict domain/parser and security checks; NOT live Mongo, Next or OAuth"
+  },
+  "typechecks": {
+    "status": "PASS",
+    "scope": "Issue 3/4/5 typed persistence and domain modules only",
+    "command": "tsc --noEmit -p tsconfig.tenancy.json --typeRoots <locally-available-node-typings>",
+    "notProven": "Full Next.js / Auth.js/Mongo installed module typecheck"
+  },
+  "blocked": {
+    "officialAuthAndMongoDependencies": "Missing from baseline package-lock; npm registry unavailable; run npm run deps:identity on trusted connected workstation",
+    "localMongo": "Actual disposable local replica-set transaction and index proof NOT RUN",
+    "realOAuth": "Google and GitHub provider callback journeys NOT RUN",
+    "nextBuild": "Next.js full production build and App Router rewrite not run",
+    "browsers": "Cookie/CSRF, apex/subdomain equivalence, redirects and real caching NOT RUN",
+    "deployment": "No actual DNS/wildcard TLS, edge host trust, zero-charge eligibility or live configuration evidence"
+  },
+  "subissues": [
+    {
+      "issue": "5.1",
+      "title": "Canonical ASCII slug grammar and reserved namespace",
+      "requirements": [
+        "TEN-004",
+        "TEN-007",
+        "SEC-004"
+      ],
+      "canonicalTests": [
+        "T-TEN-04",
+        "T-TEN-07",
+        "T-SEC-04"
+      ],
+      "codeFiles": [
+        "src/shared/domain/validation.ts",
+        "src/domain/tenancy/commands.ts",
+        "src/shared/domain/host.ts"
+      ],
+      "threatIds": [
+        "TH-07"
+      ],
+      "adrIds": [],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Actual host and public-path tests require live Next and trusted edge"
+    },
+    {
+      "issue": "5.2",
+      "title": "Concurrency-safe private portfolio and initial Hero",
+      "requirements": [
+        "TEN-001",
+        "TEN-003",
+        "TEN-004",
+        "CNT-001"
+      ],
+      "canonicalTests": [
+        "T-TEN-01",
+        "T-TEN-03",
+        "T-TEN-04",
+        "T-CNT-01"
+      ],
+      "codeFiles": [
+        "src/infrastructure/mongodb/tenancy-repository.ts",
+        "src/app/api/v1/portfolios/route.ts"
+      ],
+      "threatIds": [],
+      "adrIds": [
+        "ADR-020"
+      ],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Actual Mongo multi-document transaction / unique index proof blocked"
+    },
+    {
+      "issue": "5.3",
+      "title": "Trusted host and owner-scoped resolver",
+      "requirements": [
+        "TEN-006",
+        "TEN-007",
+        "TEN-008",
+        "SEC-003"
+      ],
+      "canonicalTests": [
+        "T-TEN-06",
+        "T-TEN-07",
+        "T-TEN-08",
+        "T-SEC-03"
+      ],
+      "codeFiles": [
+        "src/shared/domain/host.ts",
+        "src/proxy.ts",
+        "src/server/tenancy/public.ts"
+      ],
+      "threatIds": [
+        "TH-07"
+      ],
+      "adrIds": [
+        "ADR-011"
+      ],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Actual Next rewrite, DNS and TLS not tested"
+    },
+    {
+      "issue": "5.4",
+      "title": "Permanent slug aliases and transaction-protected rename",
+      "requirements": [
+        "TEN-004",
+        "TEN-005",
+        "TEN-006"
+      ],
+      "canonicalTests": [
+        "T-TEN-04",
+        "T-TEN-05",
+        "T-TEN-06"
+      ],
+      "codeFiles": [
+        "src/infrastructure/mongodb/tenancy-repository.ts",
+        "src/infrastructure/mongodb/manifest.ts",
+        "src/app/api/v1/portfolios/[portfolioId]/rename/route.ts"
+      ],
+      "threatIds": [],
+      "adrIds": [],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Real Mongo transaction rollback and 308 browser redirects blocked"
+    },
+    {
+      "issue": "5.5",
+      "title": "Separate current visibility and owner disable/enable",
+      "requirements": [
+        "PUB-007",
+        "PUB-008",
+        "SEO-002",
+        "TEN-009"
+      ],
+      "canonicalTests": [
+        "T-PUB-07",
+        "T-PUB-08",
+        "T-SEO-02",
+        "T-TEN-09"
+      ],
+      "codeFiles": [
+        "src/infrastructure/mongodb/tenancy-repository.ts",
+        "src/app/api/v1/portfolios/[portfolioId]/visibility/route.ts",
+        "src/app/api/v1/portfolios/[portfolioId]/enable/route.ts"
+      ],
+      "threatIds": [],
+      "adrIds": [
+        "ADR-036"
+      ],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Authenticated HTTP browser tests and production current-policy enforcement unverified"
+    },
+    {
+      "issue": "5.6",
+      "title": "Mandatory live public read gate",
+      "requirements": [
+        "TEN-009",
+        "ADM-001",
+        "PUB-007",
+        "SEC-002"
+      ],
+      "canonicalTests": [
+        "T-TEN-09",
+        "T-ADM-01",
+        "T-PUB-07",
+        "T-SEC-02"
+      ],
+      "codeFiles": [
+        "src/infrastructure/mongodb/repositories.ts",
+        "src/infrastructure/mongodb/tenancy-repository.ts",
+        "src/server/tenancy/public.ts"
+      ],
+      "threatIds": [
+        "TH-17",
+        "TH-29"
+      ],
+      "adrIds": [
+        "ADR-012"
+      ],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Actual CDN/cache, media, OG and full artifact entrypoints deferred/blocked"
+    },
+    {
+      "issue": "5.7",
+      "title": "Equivalent safe detail routes and canonical mappings",
+      "requirements": [
+        "TEN-006",
+        "TEN-008",
+        "SEO-001",
+        "CNT-009"
+      ],
+      "canonicalTests": [
+        "T-TEN-06",
+        "T-TEN-08",
+        "T-SEO-01",
+        "T-CNT-09"
+      ],
+      "codeFiles": [
+        "src/domain/tenancy/routing.ts",
+        "src/server/tenancy/page.tsx",
+        "src/app/(public)/[slug]/[...rest]/page.tsx",
+        "src/app/%5Ftenant/[slug]/[...rest]/page.tsx"
+      ],
+      "threatIds": [],
+      "adrIds": [],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Current pages intentionally safe shell; full compiled content belongs to Issues 7/13/14, browser behavior blocked"
+    },
+    {
+      "issue": "5.8",
+      "title": "Protected apex account origin and reserved routes",
+      "requirements": [
+        "IAM-005",
+        "TEN-007",
+        "SEC-003"
+      ],
+      "canonicalTests": [
+        "T-IAM-05",
+        "T-TEN-07",
+        "T-SEC-03"
+      ],
+      "codeFiles": [
+        "src/proxy.ts",
+        "src/server/identity/http.ts",
+        "src/server/tenancy/http.ts"
+      ],
+      "threatIds": [],
+      "adrIds": [],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Browser host-only cookies and real TLS proof unavailable"
+    },
+    {
+      "issue": "5.9",
+      "title": "Eligible directory metadata only",
+      "requirements": [
+        "SEO-002",
+        "TEN-009",
+        "ADM-001"
+      ],
+      "canonicalTests": [
+        "T-SEO-02",
+        "T-TEN-09",
+        "T-ADM-01"
+      ],
+      "codeFiles": [
+        "src/infrastructure/mongodb/tenancy-repository.ts",
+        "src/app/api/v1/public/directory/route.ts"
+      ],
+      "threatIds": [],
+      "adrIds": [],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Only synthetic allowed release SEO titles tested, full public UI/SEO in later issues"
+    },
+    {
+      "issue": "5.10",
+      "title": "Host, ownership and policy negative matrix",
+      "requirements": [
+        "TEN-001",
+        "TEN-002",
+        "TEN-003",
+        "TEN-004",
+        "TEN-005",
+        "TEN-006",
+        "TEN-007",
+        "TEN-008",
+        "TEN-009"
+      ],
+      "canonicalTests": [
+        "T-TEN-01",
+        "T-TEN-02",
+        "T-TEN-03",
+        "T-TEN-04",
+        "T-TEN-05",
+        "T-TEN-06",
+        "T-TEN-07",
+        "T-TEN-08",
+        "T-TEN-09"
+      ],
+      "codeFiles": [
+        "tests/integration/issue5-tenancy.test.ts",
+        "scripts/prove-issue5-local.mjs"
+      ],
+      "threatIds": [],
+      "adrIds": [],
+      "sourceAndSyntheticCheck": "PASS \u2014 source implemented, isolated tests and guard checks; live provider/database status separate",
+      "liveHostAndPersistence": "BLOCKED / NOT RUN",
+      "closure": "NOT COMPLETE \u2014 external and end-to-end acceptance proof still required",
+      "outstandingEvidence": "Real provider, Next build, actual Mongo, browser CSRF and wildcard TLS tests BLOCKED"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/domain/tenancy/**/*.ts",
+    "src/domain/persistence/**/*.ts",
+    "src/domain/identity/**/*.ts",
+    "src/infrastructure/mongodb/**/*.ts",
+    "src/server/identity/session-cookie.ts",
+    "src/server/identity/oauth-handshake.ts",
+    "src/server/identity/provider-proof.ts",
+    "src/testing/mongo-transactions.ts",
+    "src/shared/domain/**/*.ts"
+  ]
+}

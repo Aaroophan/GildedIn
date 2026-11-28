@@ -90,18 +90,22 @@ export class MongoTenantRepository implements TenantRepositories {
     const raw=await this.db.collection<ReleaseRecord>('releases').findOne({portfolioId:id,releaseId:parseReleaseId(releaseId)});
     return raw?parseReleaseRecord(raw):null;
   }
-  /** Owner may only enable/disable own portfolio, not undo admin suspension/deletion. */
+  /** Retired pre-Issue-5 mutation port. An unaudited policy CAS is unsafe even if
+   * its caller scoped the actor correctly: an admin moderation change can race it.
+   * All policy changes MUST go through MongoTenancyRepository.changePolicy with a
+   * live session, single Mongo transaction, mandatory audit event and moderation check.
+   */
   async comparePolicy(actor:VerifiedActor,id:PortfolioId,expectedSecurityVersion:number,
     change:Pick<PortfolioRecord,'visibility'|'status'>):Promise<PortfolioRecord|null>{
     const owner=verified(actor);
     if(!['active','owner_disabled'].includes(change.status)||!['public','unlisted'].includes(change.visibility)||
       !Number.isSafeInteger(expectedSecurityVersion)||expectedSecurityVersion<0)throw new PersistenceConflict();
-    const raw=await this.db.collection<PortfolioRecord>('portfolios').findOneAndUpdate({portfolioId:id,
-      ownerAccountId:owner,status:{$in:['active','owner_disabled']},securityVersion:expectedSecurityVersion},
-      {$set:{status:change.status,visibility:change.visibility,updatedAt:this.now().toISOString()},
-        $inc:{securityVersion:1}}, {returnDocument:'after'});
-    return raw?parsePortfolioRecord(raw):null;
+    const owned=await this.db.collection<PortfolioRecord>('portfolios').findOne({
+      portfolioId:checkedId(id),ownerAccountId:owner});
+    if(!owned)return null; // Do not disclose another tenant's existence.
+    throw new PersistenceUnavailable(); // Fail closed: this port cannot supply audit transaction guarantees.
   }
+
 }
 
 export class MongoPublicReleaseReader implements PublicReleaseReader {

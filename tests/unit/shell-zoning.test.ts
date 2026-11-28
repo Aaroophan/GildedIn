@@ -14,14 +14,17 @@ test('issue 4 dashboard enforces live opaque session and preview remains disable
  assert.match(preview,/notFound\(\)/);
 });
 test('guessed public paths and internal rewritten tenants cannot read private draft',()=>{
- for (const p of ['src/app/(public)/[slug]/page.tsx','src/app/_tenant/[slug]/page.tsx']){
-  assert.match(file(p),/notFound\(\)/);
+ for (const p of ['src/app/(public)/[slug]/page.tsx','src/app/%5Ftenant/[slug]/page.tsx']){
+  assert.match(file(p),/publicPage\(/);
   assert.doesNotMatch(file(p),/getDraft|getOwnedDraft|MongoClient/);
+  assert.match(file('src/server/tenancy/page.tsx'),/notFound\(\)/);
  }
 });
 test('proxy wildcard cannot be enabled by unreviewed environment flag',()=>{
  const proxy=file('src/proxy.ts');
- assert.match(proxy,/wildcardTlsVerified:\s*false/);
+ assert.match(proxy,/APP_WILDCARD_TLS_VERIFIED/);
+ assert.match(proxy,/APP_WILDCARD_ENABLED/);
+ assert.match(proxy,/APP_ENV==='production'/);
  assert.match(proxy,/421/);
 });
 test('API v1 placeholder uses no-store Problem Details and never connects a provider',()=>{

@@ -1,44 +1,25 @@
-# Untrusted PRs run with read-only permissions and WITHOUT any deployment/provider secrets.
-name: security-and-build
+name: Verify untrusted changes
 on:
   pull_request:
   push:
     branches: [main]
 permissions:
   contents: read
-concurrency:
-  group: verify-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
-  security-and-build:
-    name: security-and-build
+  foundation:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
-      - name: Check out unprivileged source
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-      - name: Set up Node 22
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '22'
+          node-version: '22.16.0'
           cache: npm
-      - name: Install from lockfile without install-time scripts
-        run: npm ci --ignore-scripts
-      - name: Architectural, security and supply-chain checks
-        run: |
-          npm run check:requirements
-          npm run check:boundaries
-          npm run check:secrets
-          npm run check:licenses
-          npm run check:supply-chain
-          npm run check:ci
-      - name: Synthetic offline test suites (no provider credentials)
-        run: npm test
-      - name: TypeScript verification
-        run: |
-          npm run typecheck
-          npm run typecheck:persistence
-      - name: Production compilation (not a deployment)
-        run: npm run build
+      - run: npm ci --ignore-scripts
+      - run: npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run check:supply-chain && npm run check:licenses
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=high

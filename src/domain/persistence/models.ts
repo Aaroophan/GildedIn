@@ -26,11 +26,13 @@ export interface PortfolioRecord {
   publishSequence:number; securityVersion:number; lastActivatedOperationId?:OperationId;
   aiAccess:{enabled:boolean; revocationVersion:number; deniedSourceIds:string[]; disabledAt?:UTC};
   publicStatisticsEnabled:boolean; quotaSummary:{originalFileCount:number;usedBytes:number;reservedBytes:number};
+  creationIdempotencyHash?:string; creationRequestFingerprint?:string;
+  lastRenameRequestHash?:string; lastRenameTargetSlug?:string;
   createdAt:UTC; updatedAt:UTC; schemaVersion:1;
 }
 export interface SlugClaimRecord {
   slugNormalized:string; portfolioId:PortfolioId; kind:'current'|'alias'|'reserved';
-  claimedAt:UTC; schemaVersion:1;
+  claimedAt:UTC; retiredAt?:UTC; redirectStatus?:308; schemaVersion:1;
 }
 /** Draft is ONE bounded document. No activeReleaseId or other control-plane fields. */
 export interface DraftRecord {

@@ -51,7 +51,7 @@ export function parseAccountRecord(raw:unknown):AccountRecord{
 export function parsePortfolioRecord(raw:unknown):PortfolioRecord{
   try{const r=obj(raw,['portfolioId','ownerAccountId','slug','displayHandle','status','visibility','activeReleaseId',
     'publishSequence','securityVersion','lastActivatedOperationId','aiAccess','publicStatisticsEnabled',
-    'quotaSummary','createdAt','updatedAt','schemaVersion']);version(r);
+    'quotaSummary','creationIdempotencyHash','creationRequestFingerprint','lastRenameRequestHash','lastRenameTargetSlug','createdAt','updatedAt','schemaVersion']);version(r);
     ids.portfolio(r.portfolioId);ids.account(r.ownerAccountId);
     if(parseCanonicalSlug(r.slug)!==r.slug)throw new Error();text(r.displayHandle,100);
     en(r.status,['onboarding','active','owner_disabled','suspended','deleting']);en(r.visibility,['public','unlisted']);
@@ -66,6 +66,9 @@ export function parsePortfolioRecord(raw:unknown):PortfolioRecord{
     integer(quota.originalFileCount,PRODUCT_LIMITS.originalMediaFilesPerPortfolio);
     integer(quota.usedBytes,PRODUCT_LIMITS.mediaOriginalBytesPerPortfolio);
     integer(quota.reservedBytes,PRODUCT_LIMITS.mediaOriginalBytesPerPortfolio);
+    for(const hashKey of ['creationIdempotencyHash','creationRequestFingerprint','lastRenameRequestHash'])
+      if(r[hashKey]!==undefined && !/^[a-f0-9]{64}$/.test(String(r[hashKey])))throw new Error();
+    if(r.lastRenameTargetSlug!==undefined && parseCanonicalSlug(r.lastRenameTargetSlug)!==r.lastRenameTargetSlug)throw new Error();
     bool(r.publicStatisticsEnabled);utc(r.createdAt);utc(r.updatedAt);
     return r as unknown as PortfolioRecord;
   }catch{throw new PersistedRecordRejected();}

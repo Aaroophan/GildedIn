@@ -3,7 +3,7 @@
  */
 import type {MongoDatabase,MongoFilter} from './driver.ts';
 export const MONGO_COLLECTIONS = [
-  'accounts','providerIdentities','sessions','portfolios','slugClaims','drafts','releases',
+  'accounts','providerIdentities','sessions','portfolios','slugClaims','renameOperations','drafts','releases',
   'publishOperations','mediaAssets','uploadReservations','quotaBuckets','aiContexts',
   'contactMessages','analyticsDaily','moderationPolicies','abuseReports','auditEvents',
   'externalFeeds','deletionOperations','authLinkIntents','authOAuthExchanges',
@@ -26,8 +26,10 @@ export const INDEX_MANIFEST:readonly IndexSpec[] = Object.freeze([
   idx('sessions','ttl_sessions',{expiresAt:1},{expireAfterSeconds:0}),
   idx('portfolios','uq_portfolio_id',{portfolioId:1},{unique:true}),
   idx('portfolios','uq_single_owner_portfolio',{ownerAccountId:1},{unique:true}),
+  idx('portfolios','ix_public_discovery',{status:1,visibility:1,createdAt:-1}),
   idx('slugClaims','uq_slug_all_claims',{slugNormalized:1},{unique:true}),
   idx('slugClaims','ix_slug_owner_kind',{portfolioId:1,kind:1}),
+  idx('renameOperations','uq_rename_key',{portfolioId:1,idempotencyHash:1},{unique:true}),
   idx('slugClaims','uq_one_current_claim',{portfolioId:1,kind:1},{unique:true,partialFilterExpression:{kind:'current'}}),
   idx('drafts','uq_draft_portfolio',{portfolioId:1},{unique:true}),
   idx('releases','uq_release_id',{releaseId:1},{unique:true}),
@@ -88,9 +90,13 @@ export const COLLECTION_SCHEMAS:Readonly<Partial<Record<MongoCollectionName,Reco
     visibility:{enum:['public','unlisted']},activeReleaseId:{bsonType:['null','string']},
     publishSequence:number(),securityVersion:number(),lastActivatedOperationId:uuid,
     aiAccess:{bsonType:'object'},quotaSummary:{bsonType:'object'},publicStatisticsEnabled:{bsonType:'bool'},
-    createdAt:utc,updatedAt:utc}),
+    creationIdempotencyHash:str(64),creationRequestFingerprint:str(64),
+    lastRenameRequestHash:str(64),lastRenameTargetSlug:str(30),createdAt:utc,updatedAt:utc}),
   slugClaims:fixedRecord(['slugNormalized','portfolioId','kind','claimedAt','schemaVersion'],{
-    slugNormalized:str(30),portfolioId:uuid,kind:{enum:['current','alias','reserved']},claimedAt:utc}),
+    slugNormalized:str(30),portfolioId:uuid,kind:{enum:['current','alias','reserved']},claimedAt:utc,retiredAt:utc,redirectStatus:{enum:[308]}}),
+  renameOperations:fixedRecord(['operationId','portfolioId','ownerAccountId','idempotencyHash','requestFingerprint','fromSlug','toSlug','createdAt','schemaVersion'],{
+    operationId:uuid,portfolioId:uuid,ownerAccountId:uuid,idempotencyHash:str(64),requestFingerprint:str(64),
+    fromSlug:str(30),toSlug:str(30),createdAt:utc}),
   drafts:fixedRecord(['portfolioId','revision','profile','sections','contentCollections','nodes','schemaVersion'],{
     portfolioId:uuid,revision:number(),rendererVersion:str(80),draftMutationId:str(96),
     draftMutationFingerprint:str(64),profile:{bsonType:'object'},sections:{bsonType:'array',maxItems:100},

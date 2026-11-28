@@ -2,6 +2,7 @@
 import type { AccountId, PortfolioId, OperationId } from '../../shared/domain/identifiers.ts';
 export type SecurityAuditKind =
   'session.issue'|'provider.register'|'provider.link'|'provider.unlink'|'session.revoke'|'account.delete'|'publication.activate'|
+  'portfolio.create'|'portfolio.rename'|'portfolio.visibility.change'|'portfolio.disable'|'portfolio.enable'|
   'ai.approval.change'|'moderation.change'|'admin.access'|'admin.role.change'|'secret.rotate';
 export type SecurityAuditOutcome = 'intent'|'accepted'|'denied'|'failed';
 export interface SecurityAuditEvent {
@@ -19,6 +20,7 @@ export class AuditStorageUnavailable extends Error {
   constructor() {super('AUDIT_STORAGE_UNAVAILABLE');this.name='AuditStorageUnavailable';}
 }
 const securityKinds=new Set(['session.issue','provider.register','provider.link','provider.unlink','session.revoke','account.delete','publication.activate',
+'portfolio.create','portfolio.rename','portfolio.visibility.change','portfolio.disable','portfolio.enable',
 'ai.approval.change','moderation.change','admin.access','admin.role.change','secret.rotate']);
 export function projectSecurityAudit(source:SecurityAuditEvent):SecurityAuditEvent {
   if (!securityKinds.has(source.kind)||!/^evt_[A-Za-z0-9_-]{8,64}$/.test(source.eventId)||
