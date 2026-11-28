@@ -8,13 +8,14 @@ import type {MongoDatabase} from '../infrastructure/mongodb/driver.ts';
 import type {MongoTransactionRunner} from '../infrastructure/mongodb/audit.ts';
 import {MongoAuthRepository} from '../infrastructure/mongodb/auth-repository.ts';
 import {MongoTenancyRepository} from '../infrastructure/mongodb/tenancy-repository.ts';
+import {MongoContentRepository} from '../infrastructure/mongodb/content-repository.ts';
 interface DriverClient {
   connect():Promise<unknown>;
   db(name:string):MongoDatabase;
   startSession():{withTransaction<T>(cb:()=>Promise<T>,options?:Record<string,unknown>):Promise<T>;
     endSession():Promise<void>};
 }
-interface RuntimeRepositories {identity:MongoAuthRepository;tenancy:MongoTenancyRepository;}
+interface RuntimeRepositories {identity:MongoAuthRepository;tenancy:MongoTenancyRepository;content:MongoContentRepository;}
 let cached:Promise<RuntimeRepositories>|undefined;
 function approvedLocalMongoUri(uri:string,db:string):boolean{
   return /^mongodb:\/\/(?:127\.0\.0\.1|localhost):27017\/[a-z][a-z0-9_]{2,60}$/.test(uri)&&
@@ -41,7 +42,8 @@ async function start():Promise<RuntimeRepositories>{
     }finally{await session.endSession();}
   }};
   return {identity:new MongoAuthRepository(db,transactionRunner),
-    tenancy:new MongoTenancyRepository(db,transactionRunner)};
+    tenancy:new MongoTenancyRepository(db,transactionRunner),
+    content:new MongoContentRepository(db,transactionRunner)};
 }
 async function loadRuntime():Promise<RuntimeRepositories>{
   cached??=start();
@@ -54,3 +56,7 @@ export async function requireTenancyRepository():Promise<MongoTenancyRepository>
   return (await loadRuntime()).tenancy;
 }
 
+
+export async function requireContentRepository():Promise<MongoContentRepository>{
+  return (await loadRuntime()).content;
+}

@@ -9,6 +9,7 @@ import type {SecurityAuditKind} from '../../server/observability/audit.ts';
 import {parsePortfolioId,parseAccountId,parseSectionId} from '../../shared/domain/identifiers.ts';
 import type {AccountId,PortfolioId} from '../../shared/domain/identifiers.ts';
 import {parseCanonicalSlug} from '../../shared/domain/validation.ts';
+import {initialHeroSection} from '../../domain/content/model.ts';
 import type {CanonicalSlug} from '../../shared/domain/validation.ts';
 import type {MongoDatabase} from './driver.ts';
 import {isMongoDuplicateKey,PersistenceUnavailable} from './driver.ts';
@@ -110,8 +111,7 @@ export class MongoTenancyRepository {
         createdAt:now.toISOString(),updatedAt:now.toISOString(),schemaVersion:1};
       const draft:DraftRecord={portfolioId,revision:0,schemaVersion:1,rendererVersion:'1',
         profile:{displayName:cmd.displayName,identityLabel:cmd.identityLabel,introduction:cmd.introduction},
-        sections:[{sectionId,type:'hero',order:0,fields:{displayName:cmd.displayName,
-          identityLabel:cmd.identityLabel,introduction:cmd.introduction},visibility:'draft_private'}],
+        sections:[initialHeroSection(sectionId)],
         collectionDefinitions:[],contentCollections:[],nodes:[],theme:{preset:cmd.templatePreset},
         navigation:{},seo:{indexingEnabled:false},aiApprovals:{enabled:false},mediaRefs:[],
         createdAt:now.toISOString(),updatedAt:now.toISOString(),updatedBy:actor.accountId};

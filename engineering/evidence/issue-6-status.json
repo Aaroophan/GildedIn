@@ -1,0 +1,173 @@
+{
+  "project": "GildedIn",
+  "issue": 6,
+  "date": "2026-11-28",
+  "overall": "SOURCE_IMPLEMENTED_LOCAL_RELEASE_BLOCKED",
+  "productionDecision": "NO_GO",
+  "tests": {
+    "runner": "npm test",
+    "status": "PASS",
+    "count": 204,
+    "failed": 0,
+    "note": "Injected synthetic MongoDB and earlier isolated tests; no browser or real provider run"
+  },
+  "sourceSpecs": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12"
+  ],
+  "releaseGates": {
+    "fullNextBuild": "BLOCKED",
+    "actualMongoDbTransactions": "BLOCKED",
+    "realOAuthCallbacks": "BLOCKED",
+    "browserCookieCsrfAndStoredXss": "BLOCKED",
+    "compiledActiveRelease": "NOT_RUN",
+    "realDnsTls": "BLOCKED",
+    "zeroChargeProviderEligibility": "BLOCKED",
+    "T-CNT-10": "NOT_RUN",
+    "T-CNT-11": "BLOCKED"
+  },
+  "subissues": [
+    {
+      "id": "6.1",
+      "planTitle": "Define built-in section types and mandatory Hero invariant",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-01"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.2",
+      "planTitle": "Implement versioned primitive field types and validators",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-02"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.3",
+      "planTitle": "Implement custom schema authoring and safe import",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-07"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.4",
+      "planTitle": "Implement collection and content-item ID lifecycle",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-03",
+        "T-CNT-09"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.5",
+      "planTitle": "Implement owner-scoped relationships and deletion impact analysis",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-05"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.6",
+      "planTitle": "Implement content visibility and AI/search permissions",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-06"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.7",
+      "planTitle": "Implement rich-text AST, safe links and diagrams",
+      "sourceImplemented": "PARTIAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-02",
+        "T-SEC-07"
+      ],
+      "notes": "Inert AST and limited Markdown implemented; selected WYSIWYG, renderer and browser XSS proof not integrated."
+    },
+    {
+      "id": "6.8",
+      "planTitle": "Implement structured project case study and category content",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-09"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.9",
+      "planTitle": "Implement built-in derived values and schema migration checks",
+      "sourceImplemented": "IMPLEMENTED_LOCAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-08"
+      ],
+      "notes": "Full provider/Next browser and real MongoDB proof must be completed before closure."
+    },
+    {
+      "id": "6.10",
+      "planTitle": "Verify content projection and schema adversarial suite",
+      "sourceImplemented": "PARTIAL",
+      "deterministicLocalTests": "PASS",
+      "canonicalLiveEndToEnd": "BLOCKED",
+      "closure": "BLOCKED",
+      "applicableCanonicalChecks": [
+        "T-CNT-01",
+        "T-CNT-02",
+        "T-CNT-03",
+        "T-CNT-04",
+        "T-CNT-05",
+        "T-CNT-06",
+        "T-CNT-07",
+        "T-CNT-08",
+        "T-CNT-09",
+        "T-CNT-10",
+        "T-CNT-11"
+      ],
+      "notes": "T-CNT-10 feed fetch is NOT RUN until Issue 15; T-CNT-11 generated release-only index is BLOCKED until Issues 13-14."
+    }
+  ]
+}

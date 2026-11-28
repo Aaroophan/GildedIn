@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.tenancy.json",
+  "include": [
+    "src/shared/domain/**/*.ts",
+    "src/domain/**/*.ts",
+    "src/infrastructure/mongodb/**/*.ts",
+    "src/server/identity/session-cookie.ts",
+    "src/server/identity/oauth-handshake.ts",
+    "src/server/identity/provider-proof.ts",
+    "src/testing/mongo-transactions.ts"
+  ]
+}

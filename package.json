@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - Issues 1-5; authenticated ownership, permanent slug claims, gated dual-host routing (release blocked)",
+  "description": "GildedIn - Issues 1-6: isolated identity/tenancy and typed reusable private-draft content (not production ready)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -37,7 +37,10 @@
     "verify:issue5:offline": "npm run verify:issue3 && npm run check:ci",
     "typecheck:tenancy": "tsc --noEmit -p tsconfig.tenancy.json",
     "db:prove-issue5-local": "node --experimental-strip-types scripts/prove-issue5-local.mjs",
-    "verify:issue5:full": "npm run verify:issue5:offline && npm run typecheck:persistence && npm run typecheck:identity && npm run typecheck:tenancy && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser"
+    "verify:issue5:full": "npm run verify:issue5:offline && npm run typecheck:persistence && npm run typecheck:identity && npm run typecheck:tenancy && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser",
+    "typecheck:content": "tsc --noEmit -p tsconfig.content.json",
+    "verify:issue6:offline": "npm run verify:issue5:offline && npm run typecheck:domain",
+    "verify:issue6:full": "npm run verify:issue6:offline && npm run typecheck:content && npm run typecheck && npm run build && npm run db:prove-issue5-local && npm run test:browser"
   },
   "dependencies": {
     "next": "16.2.4",

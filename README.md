@@ -1,38 +1,27 @@
-# GildedIn — Issue 5 implementation candidate
+# GildedIn — Issue 6 implementation candidate
 
-This is the **full GildedIn source project**, preserving the Issue 1–4 foundations and implementing the **Issue 5 domain and route layer**: authenticated portfolio creation, permanent slug claims, historical alias redirects, strict host resolution, live publication/moderation checks, and owner-only controls. The 12 authoritative specifications plus the implementation plan remain in `docs/specifications/`.
+This is the **complete GildedIn source project** with Issues 1–5 carried forward and the **Issue 6 typed content engine** implemented in the existing modular Next.js/TypeScript architecture. The 12 normative project specifications and current `13-implementation-plan.md` remain in `docs/specifications`.
 
-**Release status: NO-GO.** The baseline ZIP did not have the official `next-auth` and `mongodb` packages installed or locked; real Next.js runtime, Google/GitHub callbacks, local Mongo replica-set transactions, wildcard DNS/TLS and browser-host cookie proofs could not be run here. No production host, media service or OAuth registration is activated. All optional features and wildcard subdomain routing default to off. In particular this archive is a source implementation, **not a proven working SaaS or live login application**.
+**Release status: NO-GO.** Local code and synthetic tests pass, but no genuine production users, OAuth providers, external MongoDB, browser routing, public publishing, WYSIWYG interface or working deployed SaaS are claimed. The uploaded ZIP does not lock the official `next-auth`/`mongodb` packages; no fictitious npm dependencies were added. Provider, DNS/TLS, cost and full Next.js checks remain open.
 
-## Issue 5 behavior
+## Issue 6 — what is implemented
 
-- One **authenticated, active account** can create one unpublished portfolio, one **globally unique** normalized ASCII slug, and one private **Hero draft**, atomically with a durable audit entry; `Idempotency-Key` replay cannot create a second draft. Collisions are enforced by unique-index declarations (real index installation requires live verification).
-- Renaming is transactional: the old name stays permanently claimed as an alias and redirects (308) to the current canonical apex path, including a validated detail suffix. A separate `renameOperations` journal covers replay and recovery without releasing historical names.
-- Owner `GET /api/v1/portfolios`, `GET /api/v1/portfolios/:portfolioId`, `GET /api/v1/portfolios/slug-availability?slug=…`, `POST /api/v1/portfolios`, and named rename/visibility/disable/enable commands are **apex-only**. All mutations demand exact Origin, session-bound CSRF, live account/session checks, and, for policy changes, an `If-Match` security version. The advisory slug check never substitutes for the actual unique insert.
-- Visibility `public`/`unlisted` may be selected **before or after** publication; unlisted is still accessible by direct link once a release exists, but absent from the directory. Disable works before publication and returns to onboarding when re-enabled without a release; admin moderation cannot be overridden.
-- Apex `/{slug}` and verified tenant hostname `{slug}.aaroophan.dev` share one repository-based live policy+release gate. Public detail path grammar covers `/projects`, `/projects/{projectSlug}`, `/experience`, `/references`. Authoritative policy, owner account status, current release pointer, moderation and route manifest are checked independently of caches. Unknown, suspended or disabled tenants get no release. The public page is intentionally only a **safe metadata/routing shell**, since the full renderer belongs to Issues 7/13/14.
-- Wildcard routing remains disabled until **all three** gates are true: `APP_ENV=production`, `APP_WILDCARD_ENABLED=true`, and `APP_WILDCARD_TLS_VERIFIED=true`. `_tenant` is an internal rewritten route whose Next file-system folder is encoded `%5Ftenant`; direct apex entry is denied. Real Next routing must still be proven after dependencies are installed.
-- The obsolete unaudited `MongoTenantRepository.comparePolicy` write path now **fails closed**. Only `MongoTenancyRepository.changePolicy`, with atomic audit persistence, can mutate current policy.
+- **Typed sections and content:** One mandatory first Hero; reusable optional About, Projects, Experience, Education, Skills, Blog, References, Contact, certifications, achievements, services, testimonials, publications, résumé and custom sections. A minimum display name/role/introduction is validated before publication, without forcing a project or employment history.
+- **Field schemas:** Text, rich text, email, HTTPS URL, date, number, boolean, image, PDF, select, object, list and owned relation, including strict per-field validation. **Three-level** schema depth; **20** custom fields/section; **20** items/collection; 20 authored visual blocks/portfolio. Imports accept only a closed safe JSON Schema subset, not executable `$ref`, remote validation, raw HTML, CSS or JavaScript.
+- **Reusable owner data:** Stable content IDs, linked collections, categories, project case-study records, deterministic project slugs, featured flags, order, update, delete and explicit reference-detachment. Every content item is embedded in the one private, revisioned draft. Editing it updates draft bindings only; a published release remains unchanged.
+- **Privacy-safe projections:** Field-level public/search/AI approvals, restrictive defaults and **independent approvals down each nested object/list path**. Hidden reference emails and unapproved media never appear in positive-list candidate projections. These are **not** public/AI endpoints: future publication must compile an immutable eligible release and check live policy.
+- **Inert rich text:** Small, versioned AST, safe HTML-escaped text fallback, bounded Markdown import/export, restricted inert Mermaid text, code, lists, quotes and tables. No owner-written JavaScript or live diagram execution. Full WYSIWYG and browser XSS evidence remain later gates.
+- **Derived values and migration:** UTC calendar duration/date formatting, safe-compatible schema changes, explicit preview and revision-scoped confirmation for destructive changes; no active release edited by schema migration.
+- **Secure draft operations:** `GET`, `PATCH`, `PUT`, validate, schema import/impact and deletion-impact under authenticated apex-only `/api/v1/portfolios/{portfolioId}/draft`. Read responses use allowlisted owner fields; writes require exact Origin/CSRF, rechecked session and ownership, typed operations, a **single draft CAS** and client-mutation replay protection. Missing transaction support fails closed.
 
-## Verify
+### Verification (synthetic, offline)
 
 ```bash
-# Offline, dependency-free policy, domain, and synthetic multi-tenant checks
-npm run verify:issue5:offline
-
-# On a trusted connected workstation, install and review official dependencies.
-# This changes package.json and the package lock; do not pretend they are currently installed.
-npm run deps:identity
-npm ci --ignore-scripts
-npm run typecheck:tenancy
-npm run typecheck
-npm run build
-
-# OPTIONAL: only a disposable local loopback transaction-capable MongoDB replica set
-# with all provider, production and database env variables UNSET
-npm run db:prove-issue5-local
+npm run verify:issue6:offline
 ```
 
-Synthetic Node tests check concurrent owner/slug claims, rename alias permanence, typed conflicts, audit failure rollback, session revocation, malicious hostnames, public/hidden transitions, stale policy, and constrained directory projection. They **cannot verify** real Mongo transaction or App Router/host rewrites. For precise status and blocked gates, see [Issue 5 setup](engineering/issue-5-setup.md), [host and policy design](engineering/tenancy/host-and-policy.md), [test evidence](engineering/evidence/issue-5-report.md), and [per-subissue status](engineering/evidence/issue-5-status.json).
+As tested on the preparation environment: **204 / 204 tests PASS** with no failures, including 50 focused Issue 6 tests. Domain, tenancy, identity and persistence TypeScript checks plus requirement, dependency, secret and CI inventory checks passed using locally available compiler/types. This is **not** real database, browser, OAuth, App Router, WYSIWYG or public release proof.
 
-The original `.env` and prototype personal media are not included. Licensing ADR-031, no-spend eligibility, real trusted-edge host configuration and current deployment gates remain pending.
+For exact implementation and limitations see [Issue 6 setup](engineering/issue-6-setup.md), [content and privacy contracts](engineering/content/contracts.md), [test evidence](engineering/evidence/issue-6-report.md), and [subissue statuses](engineering/evidence/issue-6-status.json). The preliminary `npm run verify:issue6:full` remains **BLOCKED** until required dependencies and isolated real Mongo/Next/browser prerequisites are available.
+
+Earlier issue documentation and security foundation remain in `engineering/`. The uploaded private `.env` and personal media files are deliberately not included in this source ZIP. No live production deployment, provider charges, token sharing or customer-data tests were performed.
