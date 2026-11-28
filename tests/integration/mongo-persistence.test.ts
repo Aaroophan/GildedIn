@@ -58,7 +58,7 @@ const setup=async()=>{
 };
 
 test('3.1/3.2 inventory fixed; indexes include aliases and tenant uniqueness; no unsafe reservation TTL',async()=>{
-  assert.equal(MONGO_COLLECTIONS.length,19);
+  assert.equal(MONGO_COLLECTIONS.length,21);
   const db=new FakeMongoDatabase();
   await assert.rejects(applyMongoSchemaAndIndexes(db,false));
   await applyMongoSchemaAndIndexes(db,true);

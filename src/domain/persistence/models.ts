@@ -16,6 +16,8 @@ export interface ProviderIdentityRecord {
 export interface SessionRecord {
   sessionId:string; accountId:AccountId; sessionLookupId:string; verifierHash:string;
   securityVersion:number; expiresAt:Date; revokedAt?:Date; createdAt:Date; schemaVersion:1;
+  authenticatedAt?:Date; lastSeenAt?:Date; idleExpiresAt?:Date; absoluteExpiresAt?:Date;
+  authProvider?:'google'|'github'; csrfProofHash?:string;
 }
 export type PortfolioStatus = 'onboarding'|'active'|'owner_disabled'|'suspended'|'deleting';
 export interface PortfolioRecord {

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
-import {assertIsolatedTestEnvironment,assertNoUnsafeProductionAdapters,assertNoPublicSecrets,assertLocalTestMongoUri} from '../../src/server/config/preflight.ts';
+import {assertIsolatedTestEnvironment,assertNoUnsafeProductionAdapters,assertNoPublicSecrets,assertLocalTestMongoUri,assertOAuthConfiguration} from '../../src/server/config/preflight.ts';
 const safe={APP_ENV:'test',MONGODB_DB:'gildedin_test_12345678',APP_DOMAIN:'localhost',APP_CANONICAL_ORIGIN:'http://localhost:3000',MEDIA_PROVIDER:'memory'};
 test('synthetic test identity passes without network credentials',()=>assert.doesNotThrow(()=>assertIsolatedTestEnvironment(safe)));
 test('explicit environment cannot be silently inferred from NODE_ENV',()=>{
@@ -46,4 +46,19 @@ test('test bootstrap exits before launching test runner on poisoned environment'
  env:{...process.env,APP_ENV:'production',MONGODB_DB:'production',GROQ_API_KEY:'fake'},
  });
  assert.notEqual(r.status,0);assert.match(r.stderr,/BLOCKED/);assert.doesNotMatch(r.stdout,/Subtest|tests 1/);
+});
+
+test('T-IAM-01 OAuth env refuses missing secrets, split provider pairs and callback mismatch before I/O',()=>{
+ const localUri='mongodb://127.0.0.1:27017/gildedin_local';
+ const basic={APP_ENV:'local',APP_CANONICAL_ORIGIN:'http://localhost:3000',AUTH_URL:'http://localhost:3000',
+  MONGODB_URI:localUri,AUTH_SECRET:'X'.repeat(64)};
+ assert.doesNotThrow(()=>assertOAuthConfiguration({...basic,AUTH_GOOGLE_ID:'local-synthetic-id',AUTH_GOOGLE_SECRET:'local-synthetic-value'}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GOOGLE_ID:'orphan-id'}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GOOGLE_SECRET:'orphan-secret'}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GOOGLE_ID:'i',AUTH_GOOGLE_SECRET:'s',AUTH_URL:'https://other.example'}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GOOGLE_ID:'i',AUTH_GOOGLE_SECRET:'s',AUTH_SECRET:undefined}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GOOGLE_ID:'i',AUTH_GOOGLE_SECRET:'s',AUTH_URL:undefined}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GITHUB_ID:'i',AUTH_GITHUB_SECRET:'s',APP_ENV:'preview'}));
+ assert.throws(()=>assertOAuthConfiguration({...basic,AUTH_GITHUB_ID:'i',AUTH_GITHUB_SECRET:'s',MONGODB_URI:undefined}));
+ assert.throws(()=>assertIsolatedTestEnvironment({...safe,AUTH_URL:'https://aaroophan.dev'}));
 });

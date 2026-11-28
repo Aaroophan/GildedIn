@@ -45,6 +45,25 @@ export function assertLocalTestMongoUri(uri: string | undefined, databaseName: s
   }
 }
 
+/** OAuth origins are exact and credentials must be complete pairs; never infer callback host
+ * from a forwarded header or fall back to a library's auto-generated secret.
+ */
+export function assertOAuthConfiguration(env:EnvironmentFields):void {
+  const google=Boolean(env.AUTH_GOOGLE_ID),googleSecret=Boolean(env.AUTH_GOOGLE_SECRET);
+  const github=Boolean(env.AUTH_GITHUB_ID),githubSecret=Boolean(env.AUTH_GITHUB_SECRET);
+  if(google!==googleSecret||github!==githubSecret)throw new ConfigurationDenied('oauth-provider-pair-required');
+  const active=google||github;
+  if(env.AUTH_URL && env.AUTH_URL!==env.APP_CANONICAL_ORIGIN)
+    throw new ConfigurationDenied('oauth-auth-url-must-match-canonical-origin');
+  if(active){
+    if(!['local','production'].includes(env.APP_ENV??''))throw new ConfigurationDenied('oauth-not-allowed-in-nonlive-env');
+    if(!env.AUTH_SECRET||env.AUTH_SECRET.length<43)throw new ConfigurationDenied('oauth-secret-required');
+    if(!env.AUTH_URL||env.AUTH_URL!==env.APP_CANONICAL_ORIGIN)
+      throw new ConfigurationDenied('oauth-explicit-callback-origin-required');
+    if(!env.MONGODB_URI)throw new ConfigurationDenied('oauth-persistence-required');
+  }
+}
+
 /** No test can open a provider connection by accident, even when NODE_ENV is changed. */
 export function assertIsolatedTestEnvironment(env: EnvironmentFields): void {
   assertNoPublicSecrets(env);
@@ -52,6 +71,7 @@ export function assertIsolatedTestEnvironment(env: EnvironmentFields): void {
   if (env.NODE_ENV === 'production' || env.VERCEL === '1' || env.VERCEL_ENV === 'production' || env.GI_ALLOW_PRODUCTION_TESTS) {
     throw new ConfigurationDenied('production-runtime-or-override-in-test');
   }
+  if (env.AUTH_URL) throw new ConfigurationDenied('oauth-callback-disabled-in-test');
   if (forbiddenTestKeys.some(name => Boolean(env[name])) || Object.keys(env).some(key =>
       /^(PROD_|PRODUCTION_|LIVE_)/i.test(key) && Boolean(env[key]))) {
     throw new ConfigurationDenied('provider-secret-present-in-test');
@@ -68,6 +88,7 @@ export function assertIsolatedTestEnvironment(env: EnvironmentFields): void {
 
 export function assertNoUnsafeProductionAdapters(env: EnvironmentFields): void {
   assertNoPublicSecrets(env);
+  assertOAuthConfiguration(env);
   if (!['local','test','preview','production'].includes(env.APP_ENV ?? '')) throw new ConfigurationDenied('explicit-app-environment-required');
   if (env.APP_ENV === 'test') { assertIsolatedTestEnvironment(env); return; }
   if (env.APP_ENV === 'preview' && (

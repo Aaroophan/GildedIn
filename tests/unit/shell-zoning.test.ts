@@ -5,11 +5,13 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const file=(p:string)=>fs.readFileSync(path.join(root,p),'utf8');
-test('protected dashboard and preview deny before any data entrypoints exist',()=>{
- for (const p of ['src/app/(owner)/dashboard/page.tsx','src/app/(owner)/dashboard/preview/page.tsx']){
-  assert.match(file(p),/notFound\(\)/);
-  assert.doesNotMatch(file(p),/mongodb|next-auth|collection\s*\(/);
- }
+test('issue 4 dashboard enforces live opaque session and preview remains disabled',()=>{
+ const dashboard=file('src/app/(owner)/dashboard/page.tsx');
+ assert.match(dashboard,/requireSession\(/);
+ assert.match(dashboard,/SESSION_COOKIE_NAME/);
+ assert.doesNotMatch(dashboard,/MongoClient|\.collection\s*\(/);
+ const preview=file('src/app/(owner)/dashboard/preview/page.tsx');
+ assert.match(preview,/notFound\(\)/);
 });
 test('guessed public paths and internal rewritten tenants cannot read private draft',()=>{
  for (const p of ['src/app/(public)/[slug]/page.tsx','src/app/_tenant/[slug]/page.tsx']){

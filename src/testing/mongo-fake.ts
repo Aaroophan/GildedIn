@@ -61,6 +61,11 @@ class FakeCollection<T> implements CollectionLike<T> {
     const stored={...copy(row as Doc),_id:randomUUID()};this.checkUnique(stored);this.entries.push(stored);
     return {acknowledged:true,insertedId:stored._id};
   }
+  async deleteOne(filter:MongoFilter):Promise<{deletedCount:number}>{
+    this.assertAvailable();if(this.failNextUpdate){this.failNextUpdate=false;throw new Error('FAKE_DELETE_FAILED');}
+    const index=this.entries.findIndex(x=>matches(x,filter));if(index===-1)return {deletedCount:0};
+    this.entries.splice(index,1);return {deletedCount:1};
+  }
   async findOne(filter:MongoFilter,options?:Record<string,unknown>):Promise<T|null>{
     this.assertAvailable();const found=this.entries.find(doc=>matches(doc,filter));return found?copy(this.project(found,options)):null;
   }

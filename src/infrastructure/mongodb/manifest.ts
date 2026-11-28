@@ -6,7 +6,7 @@ export const MONGO_COLLECTIONS = [
   'accounts','providerIdentities','sessions','portfolios','slugClaims','drafts','releases',
   'publishOperations','mediaAssets','uploadReservations','quotaBuckets','aiContexts',
   'contactMessages','analyticsDaily','moderationPolicies','abuseReports','auditEvents',
-  'externalFeeds','deletionOperations',
+  'externalFeeds','deletionOperations','authLinkIntents','authOAuthExchanges',
 ] as const;
 export type MongoCollectionName = typeof MONGO_COLLECTIONS[number];
 export interface IndexSpec {readonly collection:MongoCollectionName;readonly name:string;
@@ -18,6 +18,11 @@ export const INDEX_MANIFEST:readonly IndexSpec[] = Object.freeze([
   idx('providerIdentities','uq_provider_subject',{provider:1,providerSubject:1},{unique:true}),
   idx('providerIdentities','ix_provider_account',{accountId:1}),
   idx('sessions','uq_session_lookup',{sessionLookupId:1},{unique:true}),
+  idx('authLinkIntents','uq_link_intent_hash',{intentHash:1},{unique:true}),
+  idx('authLinkIntents','ix_link_actor',{accountId:1,sessionLookupId:1,state:1}),
+  idx('authOAuthExchanges','uq_oauth_exchange',{oauthHash:1},{unique:true}),
+  idx('authOAuthExchanges','ttl_oauth_exchange',{expiresAt:1},{expireAfterSeconds:0}),
+  idx('authLinkIntents','ttl_link_intent',{expiresAt:1},{expireAfterSeconds:0}),
   idx('sessions','ttl_sessions',{expiresAt:1},{expireAfterSeconds:0}),
   idx('portfolios','uq_portfolio_id',{portfolioId:1},{unique:true}),
   idx('portfolios','uq_single_owner_portfolio',{ownerAccountId:1},{unique:true}),
@@ -75,7 +80,8 @@ export const COLLECTION_SCHEMAS:Readonly<Partial<Record<MongoCollectionName,Reco
     identityId:str(100),accountId:uuid,provider:{enum:['google','github']},providerSubject:str(200),issuer:str(300),linkedAt:utc}),
   sessions:fixedRecord(['sessionId','accountId','sessionLookupId','verifierHash','expiresAt','schemaVersion'],{
     sessionId:str(100),accountId:uuid,sessionLookupId:str(160),verifierHash:str(160),securityVersion:number(),
-    expiresAt:date,revokedAt:date,createdAt:date}),
+    expiresAt:date,revokedAt:date,createdAt:date,authenticatedAt:date,lastSeenAt:date,
+    idleExpiresAt:date,absoluteExpiresAt:date,authProvider:{enum:['google','github']},csrfProofHash:str(64)}),
   portfolios:fixedRecord(['portfolioId','ownerAccountId','slug','status','visibility','securityVersion','schemaVersion'],{
     portfolioId:uuid,ownerAccountId:uuid,slug:str(30),displayHandle:str(100),
     status:{enum:['onboarding','active','owner_disabled','suspended','deleting']},
@@ -139,6 +145,11 @@ export const COLLECTION_SCHEMAS:Readonly<Partial<Record<MongoCollectionName,Reco
     previews:{bsonType:'array',maxItems:20}}),
   deletionOperations:fixedRecord(['operationId','accountId','stage','schemaVersion'],{
     operationId:uuid,accountId:uuid,stage:str(40),updatedAt:utc}),
+  authLinkIntents:fixedRecord(['intentHash','accountId','sessionLookupId','provider','state','expiresAt','schemaVersion'],{
+    intentHash:str(64),accountId:uuid,sessionLookupId:str(160),provider:{enum:['google','github']},
+    state:{enum:['issued','consumed']},createdAt:date,expiresAt:date,consumedAt:date}),
+  authOAuthExchanges:fixedRecord(['oauthHash','accountId','provider','createdAt','expiresAt','schemaVersion'],{
+    oauthHash:str(64),accountId:uuid,provider:{enum:['google','github']},createdAt:date,expiresAt:date}),
 };
 
 /** Explicit manual migration only. Caller has already run test-mode/local preflight and has review approval.

@@ -1,0 +1,315 @@
+{
+  "project": "GildedIn",
+  "issue": "4",
+  "verificationDate": "2026-11-28",
+  "sourcePlan": "docs/specifications/13-implementation-plan.md",
+  "overall": "PARTIAL IMPLEMENTATION / NO-GO (source code + synthetic verification PASS, real adapter and provider evidence BLOCKED)",
+  "previousIssuesRetained": "Issues 1–3 source/specs and tests included",
+  "localTestCommand": "npm run verify:issue3",
+  "localTestOutcome": "PASS - 124/124 synthetic Node tests, 0 failures, requirements/boundaries/secret/supply-chain/license/CI policy/domain TS passed",
+  "identityTypecheck": "PASS - TypeScript identity/persistence surface using supplied global Node typings, not full Next.js/next-auth types",
+  "typeScriptParse": "PASS - 73 source TypeScript/TSX files syntactically parsed, 0 errors",
+  "officialAuthJsInLockedDependencyGraph": false,
+  "officialMongoDBDriverInLockedDependencyGraph": false,
+  "npmInstallNextBuild": "BLOCKED - external npm registry inaccessible; missing vetted next-auth and mongodb packages; full Next.js app cannot build",
+  "actualMongoDBTransactions": "BLOCKED - no official Mongo driver or disposable replica-set instance",
+  "realGoogleOIDCCallback": "BLOCKED - no credentials/registered callbacks/browser",
+  "realGitHubOAuthCallback": "BLOCKED - no credentials/registered callbacks/browser",
+  "providerAndSessionBrowserE2E": "BLOCKED",
+  "production": "NO-GO",
+  "credentialHandling": "No populated .env, OAuth tokens, prototype media, or real provider identities included",
+  "subissues": [
+    {
+      "issue": "4.1",
+      "title": "Configure Google OIDC with validated callback and account mapping",
+      "files": [
+        "src/auth.ts",
+        "src/server/identity/provider-proof.ts",
+        "src/infrastructure/mongodb/auth-repository.ts",
+        "src/app/api/auth/[...nextauth]/route.ts"
+      ],
+      "source11RequirementIds": [
+        "IAM-001",
+        "IAM-002",
+        "SEC-003"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-01",
+        "T-IAM-02",
+        "T-SEC-03"
+      ],
+      "architecturalDecisions": [
+        "ADR-004"
+      ],
+      "threats": [
+        "TH-02"
+      ],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Live Auth.js v5 + Next.js 16 build and Google OIDC (state/nonce/PKCE/issuer/callback) are BLOCKED."
+    },
+    {
+      "issue": "4.2",
+      "title": "Configure GitHub OAuth and email-minimizing signup",
+      "files": [
+        "src/auth.ts",
+        "src/server/identity/provider-proof.ts",
+        "src/infrastructure/mongodb/auth-repository.ts"
+      ],
+      "source11RequirementIds": [
+        "IAM-001",
+        "IAM-002",
+        "IAM-009"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-01",
+        "T-IAM-02",
+        "T-IAM-09"
+      ],
+      "architecturalDecisions": [],
+      "threats": [],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "GitHub OAuth provider-scope, stable ID, verified/no-email browser flow and real callback are BLOCKED."
+    },
+    {
+      "issue": "4.3",
+      "title": "Implement revocable apex-only authenticated sessions",
+      "files": [
+        "src/server/identity/session-cookie.ts",
+        "src/server/identity/oauth-handshake.ts",
+        "src/infrastructure/mongodb/auth-repository.ts",
+        "src/app/api/v1/accounts/me/sessions/complete/route.ts"
+      ],
+      "source11RequirementIds": [
+        "IAM-005",
+        "SEC-003",
+        "TEN-002"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-05",
+        "T-SEC-03",
+        "T-TEN-02"
+      ],
+      "architecturalDecisions": [
+        "ADR-010"
+      ],
+      "threats": [
+        "TH-03"
+      ],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Real MongoDB transaction, cookie delivery, idle/absolute browser behavior, actual logout and cross-host cookie scope are BLOCKED."
+    },
+    {
+      "issue": "4.4",
+      "title": "Implement cross-subdomain CSRF and origin hardening",
+      "files": [
+        "src/server/http/ingress.ts",
+        "src/server/identity/http.ts",
+        "src/app/api/auth/[...nextauth]/route.ts",
+        "src/app/(account)/login/page.tsx"
+      ],
+      "source11RequirementIds": [
+        "IAM-005",
+        "SEC-002",
+        "SEC-003"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-05",
+        "T-SEC-02",
+        "T-SEC-03"
+      ],
+      "architecturalDecisions": [],
+      "threats": [
+        "TH-04",
+        "TH-41"
+      ],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Real apex/subdomain cookie, SameSite, browser CSRF/CORS, trusted edge and Server Action tests are BLOCKED."
+    },
+    {
+      "issue": "4.5",
+      "title": "Implement explicit authenticated provider linking",
+      "files": [
+        "src/infrastructure/mongodb/auth-repository.ts",
+        "src/server/identity/http.ts",
+        "src/app/(account)/login/link/page.tsx",
+        "src/app/(owner)/dashboard/account-controls.tsx"
+      ],
+      "source11RequirementIds": [
+        "IAM-002",
+        "IAM-003",
+        "SEC-010"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-02",
+        "T-IAM-03",
+        "T-SEC-10"
+      ],
+      "architecturalDecisions": [],
+      "threats": [
+        "TH-01"
+      ],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Real verified OAuth provider-link callback, multi-tab navigation and driver conflict behavior are BLOCKED."
+    },
+    {
+      "issue": "4.6",
+      "title": "Implement unlink, last-provider protection and reauthentication",
+      "files": [
+        "src/infrastructure/mongodb/auth-repository.ts",
+        "src/app/api/v1/accounts/me/providers/[identityId]/route.ts",
+        "src/app/(owner)/dashboard/account-controls.tsx"
+      ],
+      "source11RequirementIds": [
+        "IAM-004",
+        "IAM-008",
+        "SEC-010"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-04",
+        "T-IAM-08",
+        "T-SEC-10"
+      ],
+      "architecturalDecisions": [],
+      "threats": [],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Real concurrent MongoDB unlink transactions and fresh-login browser recovery are BLOCKED."
+    },
+    {
+      "issue": "4.7",
+      "title": "Add recent-auth checks for sensitive owner operations",
+      "files": [
+        "src/domain/identity/contracts.ts",
+        "src/infrastructure/mongodb/auth-repository.ts",
+        "src/server/identity/http.ts"
+      ],
+      "source11RequirementIds": [
+        "ACC-002",
+        "IAM-008",
+        "SEC-003"
+      ],
+      "source11AcceptanceTests": [
+        "T-ACC-02",
+        "T-IAM-08",
+        "T-SEC-03"
+      ],
+      "architecturalDecisions": [],
+      "threats": [],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Real Auth.js recent-provider proof, session replay and browser logout are BLOCKED."
+    },
+    {
+      "issue": "4.8",
+      "title": "Implement account profile and no-portfolio state",
+      "files": [
+        "src/domain/identity/contracts.ts",
+        "src/server/identity/http.ts",
+        "src/app/api/v1/accounts/me/route.ts",
+        "src/app/(owner)/dashboard/page.tsx"
+      ],
+      "source11RequirementIds": [
+        "IAM-007",
+        "SEC-002",
+        "SEC-004"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-07",
+        "T-SEC-02",
+        "T-SEC-04"
+      ],
+      "architecturalDecisions": [],
+      "threats": [
+        "TH-06"
+      ],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Real HTTP owner profile DTO and database session/roles assertions on installed app are BLOCKED."
+    },
+    {
+      "issue": "4.9",
+      "title": "Provision platform administrator with trusted audited bootstrap",
+      "files": [
+        "src/infrastructure/mongodb/auth-repository.ts",
+        "scripts/bootstrap-admin.mjs"
+      ],
+      "source11RequirementIds": [
+        "IAM-006",
+        "SEC-002",
+        "SEC-010"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-06",
+        "T-SEC-02",
+        "T-SEC-10"
+      ],
+      "architecturalDecisions": [],
+      "threats": [],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Actual operator bootstrap with approved local replica and role audit evidence is BLOCKED."
+    },
+    {
+      "issue": "4.10",
+      "title": "Verify identity, session and account negative matrix",
+      "files": [
+        "tests/integration/issue4-auth.test.ts",
+        "tests/security/issue4-boundaries.test.ts",
+        "engineering/identity/security-boundaries.md",
+        "engineering/evidence/issue-4-report.md"
+      ],
+      "source11RequirementIds": [
+        "IAM-001",
+        "IAM-002",
+        "IAM-003",
+        "IAM-004",
+        "IAM-005",
+        "IAM-006",
+        "IAM-007",
+        "IAM-008",
+        "IAM-009"
+      ],
+      "source11AcceptanceTests": [
+        "T-IAM-01",
+        "T-IAM-02",
+        "T-IAM-03",
+        "T-IAM-04",
+        "T-IAM-05",
+        "T-IAM-06",
+        "T-IAM-07",
+        "T-IAM-08",
+        "T-IAM-09"
+      ],
+      "architecturalDecisions": [],
+      "threats": [],
+      "sourceAndSyntheticCheck": "PASS - source code and isolated synthetic tests; not an actual OAuth or MongoDB service proof",
+      "realProviderAndDatabase": "BLOCKED",
+      "browserAndDeployment": "BLOCKED",
+      "closure": "BLOCKED - mandatory real adapter, transaction, runtime and provider proof incomplete",
+      "outstandingEvidence": "Live providers, exact callbacks, browser cookie/CSRF matrix, Mongo tier and full Next.js build are BLOCKED."
+    }
+  ]
+}

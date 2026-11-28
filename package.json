@@ -2,7 +2,7 @@
   "name": "gildedin",
   "version": "0.1.0",
   "private": true,
-  "description": "GildedIn - issue 3 typed MongoDB persistence and tenant-safe domain repository foundation",
+  "description": "GildedIn - Issues 1-4 foundations with tenant-safe authentication, sessions and guarded provider integration",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -29,7 +29,11 @@
     "typecheck:persistence": "tsc --noEmit -p tsconfig.persistence.json",
     "db:prove-local": "node --experimental-strip-types scripts/prove-mongodb-local.mjs",
     "verify:issue3": "npm run check:requirements && npm run check:boundaries && npm run check:secrets && npm run check:supply-chain && npm run check:licenses && npm run check:ci && npm test && npm run typecheck:domain",
-    "verify:issue3:full": "npm run verify:issue3 && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-local"
+    "verify:issue3:full": "npm run verify:issue3 && npm run typecheck:persistence && npm run typecheck && npm run build && npm run db:prove-local",
+    "typecheck:identity": "tsc --noEmit -p tsconfig.identity.json",
+    "verify:issue4:offline": "npm run verify:issue3 && npm run typecheck:persistence && npm run typecheck:identity",
+    "deps:identity": "npm install --save-exact next-auth@5.0.0-beta.32 mongodb@6.22.0",
+    "verify:issue4:full": "npm run verify:issue4:offline && npm run typecheck && npm run build && npm run db:prove-local"
   },
   "dependencies": {
     "next": "16.2.4",

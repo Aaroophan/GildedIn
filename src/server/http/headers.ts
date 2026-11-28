@@ -28,7 +28,7 @@ export function makeSecurityHeaders(routeClass: RouteSecurityClass, options: {
 export function classifyRoute(path: string): RouteSecurityClass {
   if (/^\/dashboard\/preview(?:\/|$)/.test(path))return 'preview';
   if (/^\/(?:dashboard|admin|settings)(?:\/|$)/.test(path))return 'owner';
-  if (/^\/(?:login|auth)(?:\/|$)/.test(path))return 'auth';
+  if (/^\/(?:login|auth|api\/auth)(?:\/|$)/.test(path))return 'auth';
   if (/^\/api\/v1(?:\/|$)/.test(path))return 'api';
   if (/^\/audit(?:\/|$)/.test(path))return 'audit';
   if (/^\/contact(?:\/|$)/.test(path))return 'contact';

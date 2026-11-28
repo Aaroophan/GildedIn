@@ -7,6 +7,7 @@ export type MongoMutation = Readonly<Record<string,unknown>>;
 export interface CollectionLike<T> {
   findOne(filter:MongoFilter, options?:Record<string,unknown>):Promise<T|null>;
   insertOne(record:T,options?:Record<string,unknown>):Promise<{acknowledged:boolean;insertedId:unknown}>;
+  deleteOne(filter:MongoFilter,options?:Record<string,unknown>):Promise<{deletedCount:number}>;
   findOneAndUpdate(filter:MongoFilter,update:MongoMutation,options?:Record<string,unknown>):Promise<T|null>;
   updateOne(filter:MongoFilter,update:MongoMutation,options?:Record<string,unknown>):Promise<{matchedCount:number;modifiedCount:number;upsertedCount?:number}>;
   find(filter:MongoFilter,options?:Record<string,unknown>):{sort(order:MongoFilter):{limit(max:number):{toArray():Promise<T[]>}}};

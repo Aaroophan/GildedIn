@@ -1,7 +1,7 @@
-# GildedIn engineering handoff
+# Engineering navigation
 
-Start with the canonical twelve docs and `docs/specifications/13-implementation-plan.md`, followed by the [Issue 1 walkthrough](issue-1-walkthrough.md) and [Issue 2 setup](issue-2-setup.md). For the current work, read [Issue 3 setup](issue-3-setup.md) and the three records under [persistence](persistence/): `collection-ownership.md`, `consistency.md`, and `migration-and-proofs.md`.
+Start with the [twelve canonical specifications and the implementation plan](../docs/specifications/). For the current work read [Issue 4 setup](issue-4-setup.md), [identity security boundaries](identity/security-boundaries.md), [Issue 4 execution report](evidence/issue-4-report.md) and [per-subissue statuses](evidence/issue-4-status.json).
 
-The original [architecture](architecture.md), [prototype audit](prototype-audit.md), [verification matrix](verification-matrix.md), [decision/change control](decisions/change-control.md), [spec conflicts](decisions/spec-conflicts.md) and [feasibility gates](registers/feasibility-gates.json) remain authoritative. Issue 3's exact evidence is [issue-3-report.md](evidence/issue-3-report.md) and [issue-3-status.json](evidence/issue-3-status.json).
+Prior issue foundations remain intact: [Issue 1 walkthrough](issue-1-walkthrough.md), [Issue 2 setup](issue-2-setup.md), [Issue 3 setup](issue-3-setup.md), [Issue 3 evidence](evidence/issue-3-report.md), [architecture](architecture.md), [prototype audit](prototype-audit.md), [verification matrix](verification-matrix.md), [decision/change control](decisions/change-control.md) and [deployment gates](registers/feasibility-gates.json).
 
-`PASS` for synthetic/local checks **is not** `PASS` for an external MongoDB tier, host, credentials, TLS, or publishing safety. A required `BLOCKED` or `NOT RUN` gate remains a NO-GO. No production environment or deployment is authorized by this package.
+Actual OAuth provider registration, Mongo tier transactions, exact browser/host cookies, full installed-library Next.js build and approved production deployment all remain **BLOCKED**. Do not substitute synthetic driver tests for provider evidence or claim the package lock contains packages that have not been installed.

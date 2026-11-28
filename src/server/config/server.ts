@@ -18,6 +18,7 @@ export const serverEnvironmentSchema = z.object({
   APP_DEPLOY_COMMIT_SHA: z.string().optional(),
   APP_RELEASE_VERSION: z.string().max(120).optional(),
   AUTH_SECRET: z.string().optional(),
+  AUTH_URL: origin.optional(),
   AUTH_GOOGLE_ID: z.string().optional(),
   AUTH_GOOGLE_SECRET: z.string().optional(),
   AUTH_GITHUB_ID: z.string().optional(),
